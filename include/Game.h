@@ -2,11 +2,25 @@
 #define GAME_H
 
 #include "utils.h"
-#include "DisplayManager.h"
-#include "GameTime.h"
+#include "display.h"
+
+class GameTime {
+private:
+    GLuint vao;
+    GLuint vbo;
+
+public:
+    double DeltaTime;
+    double TotalElapsedSeconds;
+
+    GameTime() {
+        this->DeltaTime = 0;
+        this->TotalElapsedSeconds = 0;
+    }
+};
 
 class Game {
-protected:
+private:
     int InitialWindowWidth;
     int InitialWindowHeight;
     char * InitialWindowTitle;
@@ -18,7 +32,7 @@ public:
         this->InitialWindowTitle = (char *)title;
     }
 
-protected:
+private:
     void Initalize();
     void LoadContent();
 
