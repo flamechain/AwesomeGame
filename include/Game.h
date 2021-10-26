@@ -4,11 +4,15 @@
 #include "utils.h"
 #include "display.h"
 
-class GameTime {
-private:
-    GLuint vao;
-    GLuint vbo;
+#include "GL/glew.h"
+#include <GL/GL.h>
+// #define GLFW_INCLUDE_NONE
+#include "GLFW/glfw3.h"
+// #include <GL/GLU.h>
+// #include <GL/glut.h>
+// #include "GL/freeglut.h"
 
+class GameTime {
 public:
     double DeltaTime;
     double TotalElapsedSeconds;
@@ -21,6 +25,10 @@ public:
 
 class Game {
 private:
+    GLuint vao;
+    GLuint vbo;
+    GLuint shader;
+
     int InitialWindowWidth;
     int InitialWindowHeight;
     char * InitialWindowTitle;
@@ -34,7 +42,7 @@ public:
 
 private:
     void Initalize();
-    void LoadContent();
+    int LoadContent();
 
     void Update();
     void Render(GameTime gameTime, DisplayManager displayManager);

@@ -1,9 +1,13 @@
 #include "display.h"
 
-int DisplayManager::CreateWindow(int width, int height, char * title) {
+#include <GL/glew.h>
+#include <GL/GL.h>
+
+int DisplayManager::CreateWinC(int width, int height, char * title) {
     this->WindowSize = Vector2(width, height);
 
     glfwInit();
+    glewInit();
 
     // opengl 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -33,6 +37,6 @@ int DisplayManager::CreateWindow(int width, int height, char * title) {
     return 1;
 }
 
-void DisplayManager::CloseWindow() {
+void DisplayManager::CloseWinC() {
     glfwTerminate();
 }

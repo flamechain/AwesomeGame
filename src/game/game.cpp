@@ -2,21 +2,23 @@
 
 #include "display.h"
 #include <math.h>
+#include <stdio.h>
 
-void Game::Run() {  
+void Game::Run() {
     this->Initalize();
 
     DisplayManager display;
     GameTime gameTime;
 
-    if (!display.CreateWindow(InitialWindowWidth, InitialWindowHeight, InitialWindowTitle)) {
-        display.CloseWindow();
+    if (!display.CreateWinC(InitialWindowWidth, InitialWindowHeight, InitialWindowTitle)) {
+        display.CloseWinC();
     }
 
     if (!this->LoadContent()) {
-        display.CloseWindow();
+        display.CloseWinC();
     }
 
+    // here
     while (!glfwWindowShouldClose(display.Window)) {
         gameTime.DeltaTime = glfwGetTime() - gameTime.TotalElapsedSeconds;
         gameTime.TotalElapsedSeconds = glfwGetTime();
@@ -27,73 +29,83 @@ void Game::Run() {
 
         this->Render(gameTime, display);
     }
+    // here
 
-    display.CloseWindow();
+    display.CloseWinC();
 }
 
 void Game::Initalize() {
+    // glewInit();
 }
 
 int Game::LoadContent() {
-    string vertexShader;
-    string ln;
-    ifstream file ("./src/shaders/vertex.vert");
+    printf("finding shaders\n");
+    char vertexShader[] = "#version 330 core\n"
+                          "layout (location = 0) in vec2 aPosition;\n"
+                          "layout (location = 1) in vec3 aColor;\n"
+                          "out vec4 vertexColor;\n"
+                          "void main() {\n"
+                          "vertexColor = vec4(aColor.rgb, 1.0);\n"
+                          "gl_Position = vec4(aPosition.xy, 0, 1.0);}\n";
 
-    if (file.is_open()) {
-        while (std::getline(file, ln)) {
-            vertexShader += ln.c_str();
-            vertexShader += "\n";
-        }
+    char fragmentShader[] = "#version 330 core\n"
+                            "out vec4 FragColor;\n"
+                            "in vec4 vertexColor;\n"
+                            "void main() {\n"
+                            "FragColor = vertexColor;}\n";
 
-        file.close();
-    } else {
-        return 0;
-    }
+    printf("defining shaders\n");
+    const char * v = vertexShader;
+    const char * f = fragmentShader;
 
-    delete(file);
+    printf("creating shaders\n");
+    // create shaders
+    // GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+    // glShaderSource(vs, 1, &v, NULL);
+    // glCompileShader(vs);
 
-    string fragmentShader;
-    ifstream file ("./src/shaders/fragment.vert");
+    // GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+    // glShaderSource(fs, 1, &f, NULL);
+    // glCompileShader(fs);
 
-    if (file.is_open()) {
-        while (std::getline(file, ln)) {
-            fragmentShader += ln.c_str();
-            fragmentShader += "\n";
-        }
+//     printf("attaching shaders\n");
+//     // link shaders
+//     this->shader = glCreateProgram();
+//     glAttachShader(shader, vs);
+//     glAttachShader(shader, fs);
 
-        file.close();
-    } else {
-        return 0;
-    }
+//     printf("linking shaders\n");
+//     glLinkProgram(shader);
 
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
+//     printf("creating vao\n");
+//     // create vao and vbo
+//     glGenVertexArrays(1, &this->vao);
+//     glGenBuffers(1, &this->vbo);
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//     glBindVertexArray(this->vao);
+//     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 
-    float * vertices = {
-        -0.5f, 0.5f, 1f, 0f, 0f, // top left
-        0.5f, 0.5f, 0f, 1f, 0f,// top right
-        -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
+//     std::vector<float> vertices = {
+//         -0.5, 0.5, 1, 0, 0, // top left
+//         0.5, 0.5, 0, 1, 0,// top right
+//         -0.5, -0.5, 0, 0, 1, // bottom left
 
-        0.5f, 0.5f, 0f, 1f, 0f,// top right
-        0.5f, -0.5f, 0f, 1f, 1f, // bottom right
-        -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
-    };
+//         0.5, 0.5, 0, 1, 0,// top right
+//         0.5, -0.5, 0, 1, 1, // bottom right
+//         -0.5, -0.5, 0, 0, 1, // bottom left
+//     };
 
-    std::vector<float> v_vert = vertices
+//     printf("finishing vao\n");
+//     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * v_vert.size(), vertices, GL_STATIC_DRAW);
+//     glVertexAttribPointer(0, 2, GL_FLOAT, false, 5 * sizeof(float), (void *)0);
+//     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, false, 5 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
+//     glVertexAttribPointer(1, 3, GL_FLOAT, false, 5 * sizeof(float), (void *)(2 * sizeof(float)));
+//     glEnableVertexAttribArray(1);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, flase, 5 * sizeof(float), (void *)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+//     glBindBuffer(GL_ARRAY_BUFFER, 0);
+//     glBindVertexArray(0);
 
     return 1;
 }
@@ -102,12 +114,14 @@ void Game::Update() {
 }
 
 void Game::Render(GameTime gameTime, DisplayManager displayManager) {
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
+//     glClearColor(0, 0, 0, 0);
+//     glClear(GL_COLOR_BUFFER_BIT);
 
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
+//     glUseProgram(this->shader);
 
-    glfwSwapBuffers(displayManager.Window);
+//     glBindVertexArray(this->vao);
+//     glDrawArrays(GL_TRIANGLES, 0, 6);
+//     glBindVertexArray(0);
+
+//     glfwSwapBuffers(displayManager.Window);
 }
