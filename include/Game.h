@@ -17,20 +17,17 @@ public:
 
 class Game {
 private:
-    GLuint VAO;
-    GLuint VBO;
-    GLuint shaderProgram;
+    VAO vao;
+    VBO vbo;
+    EBO ebo;
+    Shader shaderProgram;
 
     int InitialWindowWidth;
     int InitialWindowHeight;
     char * InitialWindowTitle;
 
 public:
-    Game(int width, int height, const char * title) {
-        this->InitialWindowWidth = width;
-        this->InitialWindowHeight = height;
-        this->InitialWindowTitle = (char *)title;
-    }
+    Game(int width, int height, const char * title);
 
 private:
     void Initalize();

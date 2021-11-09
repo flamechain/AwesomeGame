@@ -2,6 +2,10 @@
 #define DISPLAYMANAGER_H
 
 #include "utils.h"
+#include "shader.h"
+#include "vbo.h"
+#include "vao.h"
+#include "ebo.h"
 
 #define GLFW_INCLUDE_NONE
 // #define GLEW_STATIC

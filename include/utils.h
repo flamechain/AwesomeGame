@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <cerrno>
+#include <unistd.h>
 
 #include "GLM/vec2.hpp"
 
