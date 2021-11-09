@@ -51,13 +51,13 @@ void Game::Initalize() {
 int Game::LoadContent() {
     // coordinates of vertices
     GLfloat vertices[] = {
-        -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // lower left corner
-        0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // lower right corner
-        0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // upper corner
+        -0.5f,     -0.5f * float(sqrt(3)) / 3,    0.0f, 0.8f, 0.3f, 0.02f, // lower left corner
+        0.5f,      -0.5f * float(sqrt(3)) / 3,    0.0f, 0.8f, 0.3f, 0.02f, // lower right corner
+        0.0f,      0.5f * float(sqrt(3)) * 2 / 3, 0.0f, 1.0f, 0.6, 0.32f, // upper corner
 
-        -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // inner left corner
-        0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // inner right corner
-        0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // inner down corner
+        -0.5f / 2, 0.5f * float(sqrt(3)) / 6,     0.0f, 0.9f, 0.45f, 0.17f, // inner left corner
+        0.5f / 2,  0.5f * float(sqrt(3)) / 6,     0.0f, 0.9f, 0.45f, 0.17f, // inner right corner
+        0.0f,      -0.5f * float(sqrt(3)) / 3,    0.0f, 0.8f, 0.3f, 0.02f,  // inner down corner
     };
 
     GLuint indices[] = {
@@ -66,7 +66,7 @@ int Game::LoadContent() {
         5, 4, 1 // upper triangle
     };
 
-    this->shaderProgram = Shader("../rendering/shaders/default.vert", "../rendering/shaders/default.frag");
+    this->shaderProgram = Shader("default.vert", "default.frag");
 
     this->vao = VAO(true);
     this->vao.Bind();

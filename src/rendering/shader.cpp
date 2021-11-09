@@ -19,9 +19,8 @@ std::string FileReadAllText(const char * filename) {
 }
 
 Shader::Shader(const char * vertexFilename, const char * fragmentFilename) {
-
-    char path[512];
-    getcwd(path, 512);
+    LPSTR l_path = new char[256];
+    GetCurrentDirectory(256, l_path);
     std::string vertexPath;
     std::string fragmentPath;
 
@@ -32,16 +31,14 @@ Shader::Shader(const char * vertexFilename, const char * fragmentFilename) {
         fragmentCode = FileReadAllText(fragmentFilename);
     } catch (...) {
         try {
-            vertexPath = (std::string)path + vertexFilename;
-            fragmentPath = (std::string)path + fragmentFilename;
+            vertexPath = (std::string)l_path + vertexFilename;
+            fragmentPath = (std::string)l_path + fragmentFilename;
             vertexCode = FileReadAllText(vertexPath.c_str());
             fragmentCode = FileReadAllText(fragmentPath.c_str());
         } catch (...) {
             try {
-                vertexPath = (std::string)path + (std::string)"/src/rendering/shaders/" + vertexFilename;
-                fragmentPath = (std::string)path + (std::string)"/src/rendering/shaders/" + fragmentFilename;
-                printf("vertex: %s\n", vertexPath.c_str());
-                printf("fragment: %s\n", fragmentPath.c_str());
+                vertexPath = (std::string)l_path + (std::string)"/src/rendering/shaders/" + vertexFilename;
+                fragmentPath = (std::string)l_path + (std::string)"/src/rendering/shaders/" + fragmentFilename;
                 vertexCode = FileReadAllText(vertexPath.c_str());
                 fragmentCode = FileReadAllText(fragmentPath.c_str());
             } catch (...) {

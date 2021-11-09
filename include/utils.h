@@ -5,13 +5,14 @@
 #include <assert.h>
 #include <stdio.h>
 #include <math.h>
+#include <Windows.h>
+#include <WinBase.h>
 
 #include <string>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <cerrno>
-#include <unistd.h>
 
 #include "GLM/vec2.hpp"
 

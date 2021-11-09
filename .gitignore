@@ -4,8 +4,6 @@
 *.exe
 !bin/release/*
 
+.*/
 # *.a
 # *.lib
-
-# *.exe
-# *.out
