@@ -1,8 +1,6 @@
 #include "game.h"
 
 #include "display.h"
-#include <math.h>
-#include <stdio.h>
 
 void Game::Run() {
     this->Initalize();
@@ -11,15 +9,18 @@ void Game::Run() {
     GameTime gameTime;
 
     if (!display.CreateWinC(InitialWindowWidth, InitialWindowHeight, InitialWindowTitle)) {
-        display.CloseWinC();
+        glfwTerminate();
+        printf("Failed to create window\n");
+        return;
     }
 
     if (!this->LoadContent()) {
         display.CloseWinC();
+        printf("Failed to load resources\n");
+        return;
     }
 
-    // here
-    while (!glfwWindowShouldClose(display.Window)) {
+    while (!glfwWindowShouldClose(display.window)) {
         gameTime.DeltaTime = glfwGetTime() - gameTime.TotalElapsedSeconds;
         gameTime.TotalElapsedSeconds = glfwGetTime();
 
@@ -29,7 +30,11 @@ void Game::Run() {
 
         this->Render(gameTime, display);
     }
-    // here
+
+    // cleanup
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
 
     display.CloseWinC();
 }
@@ -39,73 +44,72 @@ void Game::Initalize() {
 }
 
 int Game::LoadContent() {
-    printf("finding shaders\n");
-    char vertexShader[] = "#version 330 core\n"
-                          "layout (location = 0) in vec2 aPosition;\n"
-                          "layout (location = 1) in vec3 aColor;\n"
-                          "out vec4 vertexColor;\n"
-                          "void main() {\n"
-                          "vertexColor = vec4(aColor.rgb, 1.0);\n"
-                          "gl_Position = vec4(aPosition.xy, 0, 1.0);}\n";
+// shader handling
+    const char * const vertexShaderSource = "#version 330 core\n"
+        "layout (location = 0) in vec3 aPos;\n"
+        "void main() {\n"
+        "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n}\0";
 
-    char fragmentShader[] = "#version 330 core\n"
-                            "out vec4 FragColor;\n"
-                            "in vec4 vertexColor;\n"
-                            "void main() {\n"
-                            "FragColor = vertexColor;}\n";
+    const char * const fragmentShaderSource = "#version 330 core\n"
+        "out vec4 FragColor;\n"
+        "void main() {\n"
+        "    FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n}\0";
 
-    printf("defining shaders\n");
-    const char * v = vertexShader;
-    const char * f = fragmentShader;
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    // reference, screen count, source, extra
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
 
-    printf("creating shaders\n");
-    // create shaders
-    // GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    // glShaderSource(vs, 1, &v, NULL);
-    // glCompileShader(vs);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
 
-    // GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-    // glShaderSource(fs, 1, &f, NULL);
-    // glCompileShader(fs);
+    this->shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
 
-//     printf("attaching shaders\n");
-//     // link shaders
-//     this->shader = glCreateProgram();
-//     glAttachShader(shader, vs);
-//     glAttachShader(shader, fs);
+    glLinkProgram(shaderProgram);
 
-//     printf("linking shaders\n");
-//     glLinkProgram(shader);
+    // cleans stuff up, shader is stored in the program so this wont affect it
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 
-//     printf("creating vao\n");
-//     // create vao and vbo
-//     glGenVertexArrays(1, &this->vao);
-//     glGenBuffers(1, &this->vbo);
+// VAO and VBO
+    // vbo = vertex buffer object (collection of things for GPU to draw)
+    // vao = vertex array object (collection of vbo's)
 
-//     glBindVertexArray(this->vao);
-//     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    // coordinates of vertices
+    GLfloat vertices[] = {
+        -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // lower left corner
+        0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // lower right corner
+        0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // upper corner
+    };
 
-//     std::vector<float> vertices = {
-//         -0.5, 0.5, 1, 0, 0, // top left
-//         0.5, 0.5, 0, 1, 0,// top right
-//         -0.5, -0.5, 0, 0, 1, // bottom left
+    // object count, reference
+    glGenVertexArrays(1, &this->VAO); // has to generate before VBO
+    glGenBuffers(1, &this->VBO);
+    // attachs buffer/vertex-array to be read and changed
+    glBindVertexArray(this->VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 
-//         0.5, 0.5, 0, 1, 0,// top right
-//         0.5, -0.5, 0, 1, 1, // bottom right
-//         -0.5, -0.5, 0, 0, 1, // bottom left
-//     };
+    // type, size, vertices, type (for performance)
+        //  types: stream (changed once and read a few times)
+        //         static (changed once and read many times)
+        //         dynamic (changed multiple times, read many times)
+        //   draw: vertices modified and used to draw
+        //   read: read the vertices
+        //   copy: copy the vertices
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-//     printf("finishing vao\n");
-//     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    // gives info about the vertex to the shader
+    // index of vertex, amount of values for that vertex, value type,
+    //  integer stuff, size, offset of vertex where the data starts
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-//     glVertexAttribPointer(0, 2, GL_FLOAT, false, 5 * sizeof(float), (void *)0);
-//     glEnableVertexAttribArray(0);
-
-//     glVertexAttribPointer(1, 3, GL_FLOAT, false, 5 * sizeof(float), (void *)(2 * sizeof(float)));
-//     glEnableVertexAttribArray(1);
-
-//     glBindBuffer(GL_ARRAY_BUFFER, 0);
-//     glBindVertexArray(0);
+    // unbind (bind to 0) vao and vbo so accidently changing it wont change the copy in openGL
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     return 1;
 }
@@ -113,15 +117,16 @@ int Game::LoadContent() {
 void Game::Update() {
 }
 
-void Game::Render(GameTime gameTime, DisplayManager displayManager) {
-//     glClearColor(0, 0, 0, 0);
-//     glClear(GL_COLOR_BUFFER_BIT);
+void Game::Render(GameTime gameTime, DisplayManager display) {
+    // r g b a (alpha/transparency)
+    glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-//     glUseProgram(this->shader);
+    glUseProgram(this->shaderProgram);
+    glBindVertexArray(this->VAO);
+    // primitive type, starting index of vertices, amount of vertices to draw
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
-//     glBindVertexArray(this->vao);
-//     glDrawArrays(GL_TRIANGLES, 0, 6);
-//     glBindVertexArray(0);
-
-//     glfwSwapBuffers(displayManager.Window);
+    // screen has 2 frame buffers, so it can display one while writing to the other and switching
+    glfwSwapBuffers(display.window);
 }

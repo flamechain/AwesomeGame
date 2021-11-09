@@ -4,14 +4,6 @@
 #include "utils.h"
 #include "display.h"
 
-#include "GL/glew.h"
-#include <GL/GL.h>
-// #define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
-// #include <GL/GLU.h>
-// #include <GL/glut.h>
-// #include "GL/freeglut.h"
-
 class GameTime {
 public:
     double DeltaTime;
@@ -25,9 +17,9 @@ public:
 
 class Game {
 private:
-    GLuint vao;
-    GLuint vbo;
-    GLuint shader;
+    GLuint VAO;
+    GLuint VBO;
+    GLuint shaderProgram;
 
     int InitialWindowWidth;
     int InitialWindowHeight;
