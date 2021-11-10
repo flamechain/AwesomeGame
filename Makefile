@@ -43,10 +43,10 @@ link:
 	$(CC) $(OBJECT_FILES) $(LDFLAGS) -o $(OUTFILE)
 
 dirs:
-	mkdir bin
-	mkdir bin/temp
-	mkdir bin/debug
-	mkdir bin/release
+	mkdir -p bin
+	mkdir -p bin/temp
+	mkdir -p bin/debug
+	mkdir -p bin/release
 
 clean:
 	rm -f bin/*.o
