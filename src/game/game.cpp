@@ -74,7 +74,12 @@ int Game::LoadContent() {
     this->vbo = VBO(vertices, sizeof(vertices));
     this->ebo = EBO(indices, sizeof(indices));
 
-    this->vao.LinkVBO(this->vbo, 0);
+    // were the vertex coords are
+    this->vao.LinkAttrib(this->vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+    // were the vertex colors are
+    // when vertices in a primitive have different colors, openGL automatically interpolates them to create a gradiant
+    this->vao.LinkAttrib(this->vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+
     this->vao.Unbind();
     this->vbo.Unbind();
     this->ebo.Unbind();

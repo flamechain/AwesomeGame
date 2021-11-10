@@ -13,7 +13,7 @@ public:
     VAO() {}
     VAO(bool init);
 
-    void LinkVBO(VBO vbo, GLuint layout);
+    void LinkAttrib(VBO vbo, GLuint layout, GLuint components, GLenum type, GLsizeiptr stride, void * offset);
     void Bind();
     void Unbind();
     void Delete();
