@@ -37,8 +37,8 @@ Shader::Shader(const char * vertexFilename, const char * fragmentFilename) {
             fragmentCode = FileReadAllText(fragmentPath.c_str());
         } catch (...) {
             try {
-                vertexPath = (std::string)l_path + (std::string)"/src/rendering/shaders/" + vertexFilename;
-                fragmentPath = (std::string)l_path + (std::string)"/src/rendering/shaders/" + fragmentFilename;
+                vertexPath = (std::string)l_path + (std::string)"/src/engine/rendering/shaders/" + vertexFilename;
+                fragmentPath = (std::string)l_path + (std::string)"/src/engine/rendering/shaders/" + fragmentFilename;
                 vertexCode = FileReadAllText(vertexPath.c_str());
                 fragmentCode = FileReadAllText(fragmentPath.c_str());
             } catch (...) {
