@@ -1,29 +1,42 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
+#include <windows.h>
 #include <stdio.h>
 
 int main(int argc, char ** argv) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         printf("error initializing SDL: %s\n", SDL_GetError());
+        return 1;
+    }
+    int imgflags = IMG_INIT_PNG|IMG_INIT_JPG;
+    if ((IMG_Init(imgflags)&imgflags) != imgflags) {
+        printf("error initializing SDL_image: %s\n", IMG_GetError());
+        return 2;
     }
 
     const int SCREEN_HEIGHT = 1000;
     const int SCREEN_WIDTH = 1000;
 
     SDL_Window* window = SDL_CreateWindow("AwesomeGame",
-                                       SDL_WINDOWPOS_CENTERED,
-                                       SDL_WINDOWPOS_CENTERED,
-                                       SCREEN_HEIGHT, SCREEN_WIDTH, 0);
+                            SDL_WINDOWPOS_CENTERED,
+                            SDL_WINDOWPOS_CENTERED,
+                            SCREEN_HEIGHT, SCREEN_WIDTH, SDL_WINDOW_OPENGL); // SDL_WINDOW_OPENGL replaced 0
 
     // triggers program that controls graphics hardware
     Uint32 render_flags = SDL_RENDERER_ACCELERATED;
 
     // renderer
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, render_flags);
+    // background color
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
     SDL_Surface* surface; // surface to load sprites
-    surface = IMG_Load("img/sprites/test.png");
+    surface = IMG_Load("C:/Users/wilsr394/Documents/Programming/C++/AwesomeGame/img/sprites/test.png"); // temp
+    if (surface == NULL) {
+        printf("error finding images\n");
+        return 3;
+    }
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); // make image usable
     SDL_FreeSurface(surface);
@@ -42,6 +55,8 @@ int main(int argc, char ** argv) {
     int speed = 300;
 
     bool running = true;
+
+    printf("running\n");
 
     while (running) {
         SDL_Event event;
