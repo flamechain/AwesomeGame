@@ -32,7 +32,7 @@ int main(int argc, char ** argv) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
     SDL_Surface* surface; // surface to load sprites
-    surface = IMG_Load("C:/Users/wilsr394/Documents/Programming/C++/AwesomeGame/img/sprites/test.png"); // temp
+    surface = IMG_Load("img/sprites/test.png"); // temp
     if (surface == NULL) {
         printf("error finding images\n");
         return 3;
@@ -55,8 +55,6 @@ int main(int argc, char ** argv) {
     int speed = 300;
 
     bool running = true;
-
-    printf("running\n");
 
     while (running) {
         SDL_Event event;

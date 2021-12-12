@@ -2,8 +2,8 @@
 *.obj
 *.out
 *.exe
-!bin/release/*
+*.dll
+!bin/release/*.exe
+!bin/lib/*.dll
 
 .*/
-# *.a
-# *.lib
