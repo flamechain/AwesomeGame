@@ -6,9 +6,9 @@ OBJECT_FILES:=$(patsubst src/%.cpp, bin/temp/%.o, $(SOURCE_FILES))
 OUTFILE:="bin/$(VERSION)/game.exe"
 
 CC=g++
-CCFLAGS=-Iinclude -Ilib/SDL # general
+CCFLAGS=-Iinclude -Ilib/SDL -Wall -Wextra# general
 CCFLAGS+=-Dmain=SDL_main # sdl specific
-LDFLAGS=-L./lib/SDL/lib -lSDL2_image -Wl,-Bdynamic # general
+LDFLAGS=-L./lib/SDL/lib -lSDL2_image -Wl,-Bdynamic -Wall -Wextra# general
 # LDFLAGS+=-mwindows
 LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 -ldxguid -ldxerr8 \
@@ -17,7 +17,7 @@ LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 
 all: $(SOURCE_FILES) link
 
-setup: dirs libs
+setup: dirs dlibs rlibs
 
 .PHONY: $(SOURCE_FILES)
 
@@ -33,14 +33,14 @@ dirs:
 	mkdir -p bin/release
 
 libs:
-	cp bin/lib/libjpeg-9.dll bin/debug
-	cp bin/lib/libpng16-16.dll bin/debug
-	cp bin/lib/libtiff-5.dll bin/debug
-	cp bin/lib/libwebp-4.dll bin/debug
-	cp bin/lib/libjpeg-9.dll bin/release
-	cp bin/lib/libpng16-16.dll bin/release
-	cp bin/lib/libtiff-5.dll bin/release
-	cp bin/lib/libwebp-4.dll bin/release
+	cp -u bin/lib/libjpeg-9.dll bin/debug
+	cp -u bin/lib/libpng16-16.dll bin/debug
+	cp -u bin/lib/libtiff-5.dll bin/debug
+	cp -u bin/lib/libwebp-4.dll bin/debug
+	cp -u bin/lib/libjpeg-9.dll bin/release
+	cp -u bin/lib/libpng16-16.dll bin/release
+	cp -u bin/lib/libtiff-5.dll bin/release
+	cp -u bin/lib/libwebp-4.dll bin/release
 
 clean:
 	rm -f bin/**/*.o
