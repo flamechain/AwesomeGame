@@ -17,7 +17,7 @@ LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 
 all: $(SOURCE_FILES) link
 
-setup: dirs dlibs rlibs
+setup: dirs libs
 
 .PHONY: $(SOURCE_FILES)
 
