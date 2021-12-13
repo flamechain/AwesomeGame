@@ -6,9 +6,9 @@ OBJECT_FILES:=$(patsubst src/%.cpp, bin/temp/%.o, $(SOURCE_FILES))
 OUTFILE:="bin/$(VERSION)/game.exe"
 
 CC=g++
-CCFLAGS=-Iinclude -Ilib/SDL -Wall -Wextra# general
+CCFLAGS=-Iinclude -Ilib/SDL -Wall -Wextra # general
 CCFLAGS+=-Dmain=SDL_main # sdl specific
-LDFLAGS=-L./lib/SDL/lib -lSDL2_image -Wl,-Bdynamic -Wall -Wextra# general
+LDFLAGS=-L./lib/SDL/lib -lSDL2_image -Wl,-Bdynamic -Wall -Wextra # general
 # LDFLAGS+=-mwindows
 LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 -ldxguid -ldxerr8 \
@@ -16,7 +16,6 @@ LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -lsetupapi -lversion -luuid -lz # sdl specific
 
 all: $(SOURCE_FILES) link
-
 setup: dirs libs
 
 .PHONY: $(SOURCE_FILES)
