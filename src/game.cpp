@@ -96,7 +96,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     hitbox.x = (Width - hitbox.w) / 2;
     hitbox.y = (Height - hitbox.h) / 2;
 
-    int speed = 300;
+    int speed = 10;
     int x_moment = 0;
     int y_moment = 0;
 
@@ -112,19 +112,19 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                     switch (event.key.keysym.scancode) {
                         case SDL_SCANCODE_W:
                         case SDL_SCANCODE_UP:
-                            y_moment = speed / 30;
+                            y_moment = speed;
                             break;
                         case SDL_SCANCODE_A:
                         case SDL_SCANCODE_LEFT:
-                            x_moment = 0 - speed / 30;
+                            x_moment = -speed;
                             break;
                         case SDL_SCANCODE_S:
                         case SDL_SCANCODE_DOWN:
-                            y_moment = 0 - speed / 30;
+                            y_moment = -speed;
                             break;
                         case SDL_SCANCODE_D:
                         case SDL_SCANCODE_RIGHT:
-                            x_moment = speed / 30;
+                            x_moment = speed;
                             break;
                         case SDL_SCANCODE_Q:
                             running = false;
