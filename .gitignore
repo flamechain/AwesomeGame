@@ -1,8 +1,11 @@
+# binaries
 *.o
 *.obj
 *.out
 *.exe
 *.dll
+
+# important binaries
 !bin/release/*.exe
 !bin/lib/*.dll
 

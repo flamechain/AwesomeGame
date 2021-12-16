@@ -1,0 +1,5 @@
+# ignores
+lib/*   linguist-vendored
+docs/*  linguist-documentation=true
+
+*.h     linguist-language=cpp
