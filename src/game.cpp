@@ -17,6 +17,8 @@ int InitializeEngine() {
         return GAME_ERROR_IMAGE_FAIL;
     }
 
+    SDL_setenv("SDL_VIDEODRIVER", "directx", 1);
+
     return 0;
 }
 
