@@ -76,7 +76,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     bool running = true;
 
     SDL_Surface * surface; // surface to load sprites
-    surface = IMG_Load("resources/img/sprites/test2.png"); // temp
+    surface = IMG_Load("resources/img/sprites/Test2.png"); // temp
     if (surface == NULL) {
         ConsoleOutput("Failed loading images: %s\n", IMG_GetError());
         return GAME_ERROR_GENERAL_FAIL;
