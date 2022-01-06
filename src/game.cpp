@@ -1,4 +1,7 @@
 #include "game.h"
+#include "tile.h"
+
+extern GameState gameState;
 
 void ConsoleOutput(const char * Format, ...) {
     va_list argptr;
@@ -55,6 +58,8 @@ SDL_Window * CreateWindow(int Width, int Height, const char * Title, int Flags, 
 }
 
 int RunGame(int Width, int Height, const char * Title, int Flags) {
+    gameState = GameState();
+
     int error = 0;
     error = InitializeEngine();
 
@@ -75,61 +80,65 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     SDL_Renderer * renderer = CreateRenderer(window, Flags, &error);
     if (error) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
-    bool running = true;
+    Object testTile = CreateObjectFromImage("Test2.png", 64, 64); // path, resize
+    testTile.SetPhysicsEngine(MovingTile(10, Width, Height)); // speed, bounds
 
-    SDL_Surface * surface; // surface to load sprites
-    surface = IMG_Load("resources/img/sprites/Test2.png"); // temp
-    if (surface == NULL) {
-        ConsoleOutput("Failed loading images: %s\n", IMG_GetError());
-        return GAME_ERROR_GENERAL_FAIL;
-    }
+    WASDController testController = WASDController();
 
-    SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface); // make image usable
-    SDL_FreeSurface(surface);
+    // SDL_Surface * surface; // surface to load sprites
+    // surface = IMG_Load("resources/img/sprites/Test2.png"); // temp
+    // if (surface == NULL) {
+    //     ConsoleOutput("Failed loading images: %s\n", IMG_GetError());
+    //     return GAME_ERROR_GENERAL_FAIL;
+    // }
 
-    SDL_Rect hitbox; // rectangle that we control
-    SDL_QueryTexture(texture, NULL, NULL, &hitbox.w, &hitbox.h);
+    // SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface); // make image usable
+    // SDL_FreeSurface(surface);
 
-    // change size of hitbox
-    hitbox.w /= 6;
-    hitbox.h /= 6;
+    // SDL_Rect hitbox; // rectangle that we control
+    // SDL_QueryTexture(texture, NULL, NULL, &hitbox.w, &hitbox.h);
 
-    // position hitbox on the screen
-    hitbox.x = (Width - hitbox.w) / 2;
-    hitbox.y = (Height - hitbox.h) / 2;
+    // // change size of hitbox
+    // hitbox.w /= 6;
+    // hitbox.h /= 6;
 
-    int speed = 10;
-    int x_moment = 0;
-    int y_moment = 0;
+    // // position hitbox on the screen
+    // hitbox.x = (Width - hitbox.w) / 2;
+    // hitbox.y = (Height - hitbox.h) / 2;
 
-    while (running) {
+    // int speed = 10;
+    // int x_moment = 0;
+    // int y_moment = 0;
+
+    while (gameState.IsRunning()) {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
-                    running = false;
+                    gameState.StopGame();
                     break;
+
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.scancode) {
                         case SDL_SCANCODE_W:
                         case SDL_SCANCODE_UP:
-                            y_moment = speed;
+                            testController.MovingUp(true);
                             break;
                         case SDL_SCANCODE_A:
                         case SDL_SCANCODE_LEFT:
-                            x_moment = -speed;
+                            testController.MovingLeft(true);
                             break;
                         case SDL_SCANCODE_S:
                         case SDL_SCANCODE_DOWN:
-                            y_moment = -speed;
+                            testController.MovingDown(true);
                             break;
                         case SDL_SCANCODE_D:
                         case SDL_SCANCODE_RIGHT:
-                            x_moment = speed;
+                            testController.MovingRight(true);
                             break;
                         case SDL_SCANCODE_Q:
-                            running = false;
+                            gameState.StopGame();
                             break;
                         default:
                             break;
@@ -139,19 +148,19 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                     switch(event.key.keysym.scancode) {
                         case SDL_SCANCODE_W:
                         case SDL_SCANCODE_UP:
-                            y_moment = 0;
+                            testController.MovingUp(false);
                             break;
                         case SDL_SCANCODE_A:
                         case SDL_SCANCODE_LEFT:
-                            x_moment = 0;
+                            testController.MovingLeft(false);
                             break;
                         case SDL_SCANCODE_S:
                         case SDL_SCANCODE_DOWN:
-                            y_moment = 0;
+                            testController.MovingDown(false);
                             break;
                         case SDL_SCANCODE_D:
                         case SDL_SCANCODE_RIGHT:
-                            x_moment = 0;
+                            testController.MovingRight(false);
                             break;
                         default:
                             break;
@@ -162,29 +171,35 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             }
         }
 
-        hitbox.x += x_moment;
-        hitbox.y -= y_moment;
+        testTile.Physics.PosX += testTile.Physics.MomentX;
+        testTile.Physics.PosY -= testTile.Physics.MomentY;
 
-        // right boundary
-        if (hitbox.x + hitbox.w > Width)
-            hitbox.x = Width - hitbox.w;
+        // hitbox.x += x_moment;
+        // hitbox.y -= y_moment;
+
+        // // right boundary
+        // if (hitbox.x + hitbox.w > Width)
+        //     hitbox.x = Width - hitbox.w;
  
-        // left boundary
-        if (hitbox.x < 0)
-            hitbox.x = 0;
+        // // left boundary
+        // if (hitbox.x < 0)
+        //     hitbox.x = 0;
  
-        // bottom boundary
-        if (hitbox.y + hitbox.h > Height)
-            hitbox.y = Height - hitbox.h;
+        // // bottom boundary
+        // if (hitbox.y + hitbox.h > Height)
+        //     hitbox.y = Height - hitbox.h;
  
-        // upper boundary
-        if (hitbox.y < 0)
-            hitbox.y = 0;
+        // // upper boundary
+        // if (hitbox.y < 0)
+        //     hitbox.y = 0;
 
         // clear the screen
         SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, texture, NULL, &hitbox);
- 
+
+        testTile.Render(renderer);
+
+        // SDL_RenderCopy(renderer, texture, NULL, &hitbox);
+
         // triggers the double buffers for multiple rendering
         SDL_RenderPresent(renderer);
  
