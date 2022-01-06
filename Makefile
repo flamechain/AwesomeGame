@@ -29,17 +29,12 @@ link:
 dirs:
 	mkdir -p bin/temp
 	mkdir -p bin/debug
-	mkdir -p bin/release
 
 libs:
-	cp -u bin/lib/libjpeg-9.dll bin/debug
-	cp -u bin/lib/libpng16-16.dll bin/debug
-	cp -u bin/lib/libtiff-5.dll bin/debug
-	cp -u bin/lib/libwebp-4.dll bin/debug
-	cp -u bin/lib/libjpeg-9.dll bin/release
-	cp -u bin/lib/libpng16-16.dll bin/release
-	cp -u bin/lib/libtiff-5.dll bin/release
-	cp -u bin/lib/libwebp-4.dll bin/release
+	cp -u bin/release/libjpeg-9.dll bin/debug
+	cp -u bin/release/libpng16-16.dll bin/debug
+	cp -u bin/release/libtiff-5.dll bin/debug
+	cp -u bin/release/libwebp-4.dll bin/debug
 
 clean:
 	rm -f bin/**/*.o

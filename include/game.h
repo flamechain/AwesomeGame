@@ -13,8 +13,6 @@
 #define GAME_ERROR_RENDERER_FAIL 4
 #define GAME_ERROR_GENERAL_FAIL 5
 
-void ConsoleOutput(char * Message);
-
 int InitializeEngine();
 
 int CreateWindow(int Width, int Height, const char * Title, int Flags, SDL_Window * Window);

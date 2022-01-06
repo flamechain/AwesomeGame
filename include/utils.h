@@ -9,5 +9,14 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
 #include <stdio.h>
+#include <string>
+#include <errno.h>
+
+inline void ConsoleOutput(const char * Format, ...) {
+    va_list argptr;
+    va_start(argptr, Format);
+    vfprintf(stderr, Format, argptr);
+    va_end(argptr);
+}
 
 #endif
