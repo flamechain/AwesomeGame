@@ -66,6 +66,7 @@ private:
     int speed_;
     int rotation_;
     SDL_Point rotate_axis_;
+    int moment_bounds_[4];
 
 public:
 
@@ -76,14 +77,32 @@ public:
         SDL_DestroyTexture(this->texture_);
     }
 
+    GameObject() {
+    }
+
     GameObject(SDL_Renderer * renderer) {
         this->renderer_ = renderer;
         this->rotate_axis_ = {-1, -1};
         this->rotation_ = 0;
     }
 
+    void Destroy() {
+        this->~GameObject();
+    }
+
+    void SetRenderer(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
     void SetSpeed(int speed) {
         this->speed_ = speed;
+    }
+
+    void SetMomentBounds(int xLower, int xUpper, int yLower, int yUpper) {
+        this->moment_bounds_[0] = xLower;
+        this->moment_bounds_[1] = xUpper;
+        this->moment_bounds_[2] = yLower;
+        this->moment_bounds_[3] = yUpper;
     }
 
     int GetX() {
@@ -102,11 +121,11 @@ public:
         return this->hitbox_.h;
     }
 
-    void CheckMomentBounds(int xLower, int xUpper, int yLower, int yUpper) {
-        if (this->MomentX > xUpper) this->MomentX = xUpper;
-        if (this->MomentX < xLower) this->MomentX = xLower;
-        if (this->MomentY > yUpper) this->MomentY = yUpper;
-        if (this->MomentY < yLower) this->MomentY = yLower;
+    void CheckMomentBounds() {
+        if (this->MomentX < this->moment_bounds_[0]) this->MomentX = this->moment_bounds_[0];
+        if (this->MomentX > this->moment_bounds_[1]) this->MomentX = this->moment_bounds_[1];
+        if (this->MomentY < this->moment_bounds_[2]) this->MomentY = this->moment_bounds_[2];
+        if (this->MomentY > this->moment_bounds_[3]) this->MomentY = this->moment_bounds_[3];
     }
 
     void CheckPositionBounds(int width, int height) {
@@ -158,6 +177,11 @@ public:
         this->hitbox_.y = y;
     }
 
+    void UpdatePosition() {
+        this->hitbox_.x += this->MomentX;
+        this->hitbox_.y += this->MomentY;
+    }
+
     void Rotate(int angle, SDL_Point center = {-1, -1}) {
         this->rotate_axis_ = center;
         this->rotation_ = angle;
@@ -175,7 +199,7 @@ public:
 
 };
 
-GameObject CreateObjectFromImage(SDL_Renderer * renderer, const char * path, int width = 0, int height = 0, int cropx = 0, int cropy = 0, int cropw = 0, int croph = 0) {
+inline GameObject CreateObjectFromImage(SDL_Renderer * renderer, const char * path, int width = 0, int height = 0, int cropx = 0, int cropy = 0, int cropw = 0, int croph = 0) {
     GameObject object (renderer);
     object.CreateImageSurface(path);
     if (cropw != 0 && croph != 0) object.Crop(cropx, cropy, cropw, croph);

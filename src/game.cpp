@@ -72,11 +72,33 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
-    GameObject testTile = CreateObjectFromImage(renderer, "TileSheet1.png", 128, 128, 0, 0, 16, 16);
-    testTile.SetSpeed(10);
-    testTile.Rotate(37);
+    const int gridx = 16;
+    const int gridy = 9;
+    int tileSize = 120;
+    GameObject tiles[gridx*gridy];
 
-    WASDController testController = WASDController();
+    int posx = 0;
+    int posy = 0;
+
+    for (int i=0; i<gridx*gridy; i++) {
+        // gcf(width, height) = 120
+        tiles[i] = CreateObjectFromImage(renderer, "TileSheet1.png", tileSize, tileSize, 0, 0, 16, 16);
+        tiles[i].SetMomentBounds(0, 0, 0, 0);
+        tiles[i].Rotate(90);
+        tiles[i].Position(posx, posy);
+        posx += tileSize;
+
+        if (posx > tileSize * gridx) {
+            posx = 0;
+            posy += tileSize;
+        }
+    }
+
+    GameObject testTile = CreateObjectFromImage(renderer, "TileSheet1.png", tileSize, tileSize, 16, 0, 16, 16);
+    testTile.Rotate(90);
+    testTile.SetMomentBounds(-10, 10, -10, 10);
+
+    WASDController movement;
 
     while (gameState.IsRunning()) {
         SDL_Event event;
@@ -91,19 +113,19 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                     switch (event.key.keysym.scancode) {
                         case SDL_SCANCODE_W:
                         case SDL_SCANCODE_UP:
-                            testController.SetUpMovement(true);
+                            movement.SetUpMovement(true);
                             break;
                         case SDL_SCANCODE_A:
                         case SDL_SCANCODE_LEFT:
-                            testController.SetLeftMovement(true);
+                            movement.SetLeftMovement(true);
                             break;
                         case SDL_SCANCODE_S:
                         case SDL_SCANCODE_DOWN:
-                            testController.SetDownMovement(true);
+                            movement.SetDownMovement(true);
                             break;
                         case SDL_SCANCODE_D:
                         case SDL_SCANCODE_RIGHT:
-                            testController.SetRightMovement(true);
+                            movement.SetRightMovement(true);
                             break;
                         case SDL_SCANCODE_Q:
                             gameState.StopGame();
@@ -116,19 +138,19 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                     switch(event.key.keysym.scancode) {
                         case SDL_SCANCODE_W:
                         case SDL_SCANCODE_UP:
-                            testController.SetUpMovement(false);
+                            movement.SetUpMovement(false);
                             break;
                         case SDL_SCANCODE_A:
                         case SDL_SCANCODE_LEFT:
-                            testController.SetLeftMovement(false);
+                            movement.SetLeftMovement(false);
                             break;
                         case SDL_SCANCODE_S:
                         case SDL_SCANCODE_DOWN:
-                            testController.SetDownMovement(false);
+                            movement.SetDownMovement(false);
                             break;
                         case SDL_SCANCODE_D:
                         case SDL_SCANCODE_RIGHT:
-                            testController.SetRightMovement(false);
+                            movement.SetRightMovement(false);
                             break;
                         default:
                             break;
@@ -139,22 +161,29 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             }
         }
 
-        if (testController.MovingUp()) testTile.MomentY = -10;
-        else if (testController.MovingDown()) testTile.MomentY = 10;
-        else testTile.MomentY = 0;
-        if (testController.MovingLeft()) testTile.MomentX = -10;
-        else if (testController.MovingRight()) testTile.MomentX = 10;
-        else testTile.MomentX = 0;
+        // if (movement.MovingUp()) testTile.MomentY = -10;
+        // else if (movement.MovingDown()) testTile.MomentY = 10;
+        // else testTile.MomentY = 0;
+        // if (movement.MovingLeft()) testTile.MomentX = -10;
+        // else if (movement.MovingRight()) testTile.MomentX = 10;
+        // else testTile.MomentX = 0;
 
-        if (testController.MovingUp() && testController.MovingDown()) testTile.MomentY = 0;
-        if (testController.MovingLeft() && testController.MovingRight()) testTile.MomentX = 0;
+        // if (movement.MovingUp() && movement.MovingDown()) testTile.MomentY = 0;
+        // if (movement.MovingLeft() && movement.MovingRight()) testTile.MomentX = 0;
 
-        testTile.CheckMomentBounds(-10, 10, -10, 10);
-        testTile.Position(testTile.GetX() + testTile.MomentX, testTile.GetY() + testTile.MomentY);
-        testTile.CheckPositionBounds(Width, Height);
+        // testTile.CheckMomentBounds();
+        // testTile.UpdatePosition();
+        // testTile.CheckPositionBounds(Width, Height);
 
         SDL_RenderClear(renderer);
-        testTile.Render();
+        // testTile.Render();
+
+        for (int i=0; i<gridx*gridy; i++) {
+            tiles[i].CheckMomentBounds();
+            tiles[i].UpdatePosition();
+            tiles[i].CheckPositionBounds(Width, Height);
+            tiles[i].Render();
+        }
 
         // triggers the double buffers for multiple rendering
         SDL_RenderPresent(renderer);
@@ -164,7 +193,10 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     }
 
     // cleanup
-    testTile.~GameObject();
+    // testTile.Destroy();
+    for (int i=0; i<gridx*gridy; i++) {
+        tiles[i].Destroy();
+    }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
