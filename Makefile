@@ -8,7 +8,7 @@ OUTFILE:="bin/$(VERSION)/game.exe"
 CC=g++
 CCFLAGS=-Iinclude -Ilib/SDL -Wall -Wextra # general
 CCFLAGS+=-Dmain=SDL_main # sdl specific
-LDFLAGS=-L./lib/SDL/lib -lSDL2_image -Wl,-Bdynamic -Wall -Wextra # general
+LDFLAGS=-L./lib/SDL/lib -lSDL2_image -lSDL2_gfx -Wl,-Bdynamic -Wall -Wextra # general
 # LDFLAGS+=-mwindows
 LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 -ldxguid -ldxerr8 \

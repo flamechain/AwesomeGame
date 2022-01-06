@@ -8,6 +8,7 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL2_rotozoom.h>
 #include <stdio.h>
 #include <string>
 #include <errno.h>

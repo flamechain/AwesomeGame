@@ -168,8 +168,19 @@ public:
     }
 
     void Resize(int width, int height) {
-        this->hitbox_.w = width;
-        this->hitbox_.h = height;
+        // this->hitbox_.w = width;
+        // this->hitbox_.h = height;
+    }
+
+    void ResizeFlat(int width) {
+        double zoom = this->hitbox_.w / width;
+        SDL_Surface * surface = rotozoomSurface(&this->surface_original_, this->rotation_, zoom, 1);
+        printf("rotozoomed\n");
+        SDL_FreeSurface(&this->surface_);
+        printf("freed\n");
+        this->surface_ = *surface;
+        printf("copying\n");
+        // SDL_FreeSurface(surface);
     }
 
     void Position(int x, int y) {
@@ -203,9 +214,9 @@ inline GameObject CreateObjectFromImage(SDL_Renderer * renderer, const char * pa
     GameObject object (renderer);
     object.CreateImageSurface(path);
     if (cropw != 0 && croph != 0) object.Crop(cropx, cropy, cropw, croph);
+    if (width != 0 && height != 0) object.ResizeFlat(width); // currently just supports proportional scaling
     object.LoadTextureFromSurface();
     object.FreeSurface();
-    if (width != 0 && height != 0) object.Resize(width, height);
 
     return object;
 }
