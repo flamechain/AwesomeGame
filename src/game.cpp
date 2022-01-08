@@ -77,12 +77,11 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
-
     const int gridx = 16;
     const int gridy = 9;
     const int tilecount = gridx * gridy;
-    int tilewidth = Width / gridx;
-    int tileheight = Height / gridy;
+    const int tilewidth = Width / gridx;
+    const int tileheight = Height / gridy;
 
     int posx = 0;
     int posy = 0;
@@ -184,11 +183,9 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         for (int i=0; i<tilecount; i++) map[i].Render();
         player.Render();
 
-        // triggers the double buffers for multiple rendering
+        // triggers the double buffer
         SDL_RenderPresent(renderer);
- 
-        // 60 fps (milliseconds)
-        SDL_Delay(1000 / 60);
+        SDL_Delay(1000 / FRAMERATE);
     }
 
     player.Destroy();

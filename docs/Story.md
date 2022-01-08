@@ -1,5 +1,3 @@
 # Game
 
-Takes place on Mars.
-Idea one:
-    First a menu pops up with a character creator pops up where you put your gender and how you look. Then maybe a cutscene of the spaceship and what not and it cuts to your character. you are on earth getting onto the S.S Spes nova(Means "new hope" in latin). Walking through the security and such you go and submit your ticket to go to the newly founded mars colony and this is where someone reads your ticket and where you pick your name, age, gender, etc. Ex: "Ah so your trying to get to mars I see. well good luck...(ticket pops up on screen with a picture of your character in the top left corner with the details of your character and to continue you need to write your first/last name and other such details) then it's a mini cutscene of you walking into the building to get into the ship. Then the space ship lifts off into space and it cuts to the space ship with the earth getting smaller and smaller behind you and the title pops up with names of the creaters.
+Roguelike

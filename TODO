@@ -1,4 +1,0 @@
-TODO:
-
-    * installer that installs dlls to allow standalone exe (if doing this it will be more space efficent to switch to sdl2 and sdl_image dlls instead of static libraries)
-    * remove glitch affect when moving image
