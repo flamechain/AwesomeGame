@@ -133,7 +133,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                         case SDL_SCANCODE_RIGHT:
                             movement.SetRightMovement(true);
                             break;
-                        case SDL_SCANCODE_Q:
+                        case SDL_SCANCODE_ESCAPE:
                             gameState.StopGame();
                             break;
                         default:
