@@ -1,5 +1,8 @@
 #include "game.h"
 #include "tile.h"
+#include "player.h"
+#include "objects.h"
+#include "utils.h"
 
 extern GameState gameState;
 
@@ -15,7 +18,8 @@ int InitializeEngine() {
         return errno;
     }
 
-    SDL_setenv("SDL_VIDEODRIVER", "directx", 1);
+    SDL_setenv("SDL_VIDEODRIVER", "directx", 1); // override
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // linear
     return 0;
 }
 
@@ -54,6 +58,7 @@ SDL_Window * CreateWindow(int Width, int Height, const char * Title, int Flags) 
 int RunGame(int Width, int Height, const char * Title, int Flags) {
     gameState = GameState();
     InitializeEngine();
+    SDL_Rect * tiles = InitTiles();
 
     switch (errno) {
         case GAME_ERROR_SDL_FAIL:
@@ -72,31 +77,33 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
+
     const int gridx = 16;
     const int gridy = 9;
-    int tileSize = 120;
-    GameObject tiles[gridx*gridy];
+    const int tilecount = gridx * gridy;
+    int tilewidth = Width / gridx;
+    int tileheight = Height / gridy;
 
     int posx = 0;
     int posy = 0;
 
-    for (int i=0; i<gridx*gridy; i++) {
-        // gcf(width, height) = 120
-        tiles[i] = CreateObjectFromImage(renderer, "TileSheet1.png", tileSize, tileSize, 0, 0, 16, 16);
-        tiles[i].SetMomentBounds(0, 0, 0, 0);
-        tiles[i].Rotate(90);
-        tiles[i].Position(posx, posy);
-        posx += tileSize;
+    vector<Tile> map;
+    for (int i=0; i<tilecount; i++) {
+        map.push_back(Tile(renderer, TileType::GrassPathCenter, tiles));
+        map[i].Resize(tilewidth, tileheight);
+        map[i].Position(posx, posy);
+        posx += tilewidth;
 
-        if (posx > tileSize * gridx) {
+        if (posx > Width - tilewidth) {
             posx = 0;
-            posy += tileSize;
+            posy += tileheight;
         }
     }
 
-    GameObject testTile = CreateObjectFromImage(renderer, "TileSheet1.png", tileSize, tileSize, 16, 0, 16, 16);
-    testTile.Rotate(90);
-    testTile.SetMomentBounds(-10, 10, -10, 10);
+    Player player = Player(renderer, TileType::DirtBlood, tiles);
+    player.Resize(tilewidth, tileheight);
+    player.SetSpeedCap(10, 10);
+    player.SetPositionBounds(0, 0, Width, Height);
 
     WASDController movement;
 
@@ -161,29 +168,21 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             }
         }
 
-        // if (movement.MovingUp()) testTile.MomentY = -10;
-        // else if (movement.MovingDown()) testTile.MomentY = 10;
-        // else testTile.MomentY = 0;
-        // if (movement.MovingLeft()) testTile.MomentX = -10;
-        // else if (movement.MovingRight()) testTile.MomentX = 10;
-        // else testTile.MomentX = 0;
+        if (movement.MovingUp()) player.speed.y = -10;
+        else if (movement.MovingDown()) player.speed.y = 10;
+        else player.speed.y = 0;
+        if (movement.MovingLeft()) player.speed.x = -10;
+        else if (movement.MovingRight()) player.speed.x = 10;
+        else player.speed.x = 0;
 
-        // if (movement.MovingUp() && movement.MovingDown()) testTile.MomentY = 0;
-        // if (movement.MovingLeft() && movement.MovingRight()) testTile.MomentX = 0;
+        if (movement.MovingUp() && movement.MovingDown()) player.speed.y = 0;
+        if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
 
-        // testTile.CheckMomentBounds();
-        // testTile.UpdatePosition();
-        // testTile.CheckPositionBounds(Width, Height);
+        player.Update();
 
         SDL_RenderClear(renderer);
-        // testTile.Render();
-
-        for (int i=0; i<gridx*gridy; i++) {
-            tiles[i].CheckMomentBounds();
-            tiles[i].UpdatePosition();
-            tiles[i].CheckPositionBounds(Width, Height);
-            tiles[i].Render();
-        }
+        for (int i=0; i<tilecount; i++) map[i].Render();
+        player.Render();
 
         // triggers the double buffers for multiple rendering
         SDL_RenderPresent(renderer);
@@ -192,11 +191,8 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         SDL_Delay(1000 / 60);
     }
 
-    // cleanup
-    // testTile.Destroy();
-    for (int i=0; i<gridx*gridy; i++) {
-        tiles[i].Destroy();
-    }
+    player.Destroy();
+    for (int i=0; i<tilecount; i++) map[i].Destroy();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

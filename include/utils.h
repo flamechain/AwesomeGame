@@ -8,10 +8,13 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
-#include <SDL2/SDL2_rotozoom.h>
 #include <stdio.h>
 #include <string>
 #include <errno.h>
+#include <vector>
+
+using std::vector;
+using std::string;
 
 inline void ConsoleOutput(const char * Format, ...) {
     va_list argptr;
