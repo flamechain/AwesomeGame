@@ -108,7 +108,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     player.SetSpeedCap(10, 10);
     player.SetBounds(0, 0, Width, Height);
     // center player on screen
-    player.Position((Width / 2) - (player.GetPos().w / 2), (Height / 2) - (player.GetPos().h / 2));
+    player.Position((Width / 2) - (player.GetHitbox().w / 2), (Height / 2) - (player.GetHitbox().h / 2));
 
     WASDController movement;
 
@@ -184,8 +184,8 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
 
         // checks if players hitbox center is centered with camera
-        if ((player.GetPos().x + (player.GetPos().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
-        if ((player.GetPos().y + (player.GetPos().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
+        if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
+        if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
 
         player.Update();
 

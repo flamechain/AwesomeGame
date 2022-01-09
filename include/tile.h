@@ -89,7 +89,7 @@ public:
         this->rotation_ = angle;
     }
 
-    SDL_Rect GetPos() {
+    SDL_Rect GetHitbox() {
         return this->hitbox_;
     }
 
