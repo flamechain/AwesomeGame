@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "game.h"
+#include "camera.h"
 
 #define TILE_SHEET "TileSheet.png"
 #define IMG_PATH "resources/img/"
@@ -22,19 +23,21 @@ protected:
     SDL_Texture * texture_;
     SDL_Rect srcbox_;
     SDL_Rect hitbox_;
+    Camera * camera_;
     SDL_Renderer * renderer_;
     SDL_Point rotate_axis_ = {-1, -1};
     int rotation_ = 0;
 
 public:
 
-    Tile(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles) {
+    Tile(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles, Camera * camera) {
         this->renderer_ = renderer;
         this->LoadTile(type, tiles);
         this->hitbox_.x = 0;
         this->hitbox_.y = 0;
         this->hitbox_.w = this->srcbox_.w;
         this->hitbox_.h = this->srcbox_.h;
+        this->camera_ = camera;
     }
 
     void Destroy() {
@@ -65,7 +68,8 @@ public:
             this->rotate_axis_.y = this->hitbox_.h / 2;
         }
 
-        SDL_RenderCopyEx(this->renderer_, this->texture_, &this->srcbox_, &this->hitbox_, this->rotation_, &this->rotate_axis_, SDL_FLIP_NONE);
+        SDL_Rect dst = {this->hitbox_.x - this->camera_->x, this->hitbox_.y - this->camera_->y, this->hitbox_.w, this->hitbox_.h};
+        SDL_RenderCopyEx(this->renderer_, this->texture_, &this->srcbox_, &dst, this->rotation_, &this->rotate_axis_, SDL_FLIP_NONE);
 
         this->rotate_axis_ = {-1, -1};
     }
@@ -83,6 +87,10 @@ public:
     void Rotate(int angle, SDL_Point axis = {-1, -1}) {
         this->rotate_axis_ = axis;
         this->rotation_ = angle;
+    }
+
+    SDL_Rect GetPos() {
+        return this->hitbox_;
     }
 
 };

@@ -20,7 +20,7 @@ public:
 
     Momentum speed;
 
-    Player(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles) : Tile(renderer, type, tiles) {
+    Player(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles, Camera * camera) : Tile(renderer, type, tiles, camera) {
     }
 
     void SetSpeedCap(int x, int y) {
@@ -28,14 +28,20 @@ public:
         this->speed_cap_.y = y;
     }
 
-    void SetPositionBounds(int x, int y, int w, int h) {
+    void SetBounds(int x, int y, int w, int h) {
         this->bounds_.x = x;
         this->bounds_.y = y;
         this->bounds_.w = w;
         this->bounds_.h = h;
     }
 
-    void Update() {
+    void Update(bool checkBounds = true) {
+        if (!checkBounds) {
+            this->hitbox_.x += this->speed.x;
+            this->hitbox_.y += this->speed.y;
+            return;
+        }
+
         if (this->speed.x > this->speed_cap_.x) this->speed.x = this->speed_cap_.x;
         if (this->speed.x < -this->speed_cap_.x) this->speed.x = -this->speed_cap_.x;
         if (this->speed.y > this->speed_cap_.y) this->speed.y = this->speed_cap_.y;

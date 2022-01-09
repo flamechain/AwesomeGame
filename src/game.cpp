@@ -3,6 +3,7 @@
 #include "player.h"
 #include "objects.h"
 #include "utils.h"
+#include "camera.h"
 
 extern GameState gameState;
 
@@ -86,9 +87,12 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     int posx = 0;
     int posy = 0;
 
+    Camera camera = Camera(0, 0, Width, Height);
+    camera.SetBounds(-200, -200, Width + 200, Height + 200);
+
     vector<Tile> map;
     for (int i=0; i<tilecount; i++) {
-        map.push_back(Tile(renderer, TileType::GrassPathCenter, tiles));
+        map.push_back(Tile(renderer, TileType::GrassPathCenter, tiles, &camera));
         map[i].Resize(tilewidth, tileheight);
         map[i].Position(posx, posy);
         posx += tilewidth;
@@ -99,10 +103,12 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         }
     }
 
-    Player player = Player(renderer, TileType::DirtBlood, tiles);
+    Player player = Player(renderer, TileType::DirtBlood, tiles, &camera);
     player.Resize(tilewidth, tileheight);
     player.SetSpeedCap(10, 10);
-    player.SetPositionBounds(0, 0, Width, Height);
+    player.SetBounds(0, 0, Width, Height);
+    // center player on screen
+    player.Position((Width / 2) - (player.GetPos().w / 2), (Height / 2) - (player.GetPos().h / 2));
 
     WASDController movement;
 
@@ -176,6 +182,10 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
 
         if (movement.MovingUp() && movement.MovingDown()) player.speed.y = 0;
         if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
+
+        // checks if players hitbox center is centered with camera
+        if ((player.GetPos().x + (player.GetPos().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
+        if ((player.GetPos().y + (player.GetPos().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
 
         player.Update();
 
