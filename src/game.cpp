@@ -4,6 +4,7 @@
 #include "objects.h"
 #include "utils.h"
 #include "camera.h"
+#include "rect.h"
 
 extern GameState gameState;
 
@@ -112,6 +113,9 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
 
     WASDController movement;
 
+    Rect testmenu = Rect(renderer, Width / 4, Height / 4, Width / 2, Height / 2, 100, 100, 255);
+    Rect background = Rect(renderer, 0, 0, Width, Height, 255, 255, 255);
+
     while (gameState.IsRunning()) {
         SDL_Event event;
 
@@ -141,6 +145,12 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                             break;
                         case SDL_SCANCODE_ESCAPE:
                             gameState.StopGame();
+                            break;
+                        case SDL_SCANCODE_P:
+                            if (gameState.GetMenu() == Menu::None)
+                                gameState.SetMenu(Menu::Pause);
+                            else if (gameState.GetMenu() == Menu::Pause)
+                                gameState.SetMenu(Menu::None);
                             break;
                         default:
                             break;
@@ -173,28 +183,47 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             }
         }
 
-        if (movement.MovingUp()) player.speed.y = -10;
-        else if (movement.MovingDown()) player.speed.y = 10;
-        else player.speed.y = 0;
-        if (movement.MovingLeft()) player.speed.x = -10;
-        else if (movement.MovingRight()) player.speed.x = 10;
-        else player.speed.x = 0;
+        if (gameState.GetMenu() == Menu::None) {
+            if (movement.MovingUp()) player.speed.y = -10;
+            else if (movement.MovingDown()) player.speed.y = 10;
+            else player.speed.y = 0;
+            if (movement.MovingLeft()) player.speed.x = -10;
+            else if (movement.MovingRight()) player.speed.x = 10;
+            else player.speed.x = 0;
 
-        if (movement.MovingUp() && movement.MovingDown()) player.speed.y = 0;
-        if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
+            if (movement.MovingUp() && movement.MovingDown()) player.speed.y = 0;
+            if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
 
-        // checks if players hitbox center is centered with camera
-        if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
-        if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
+            // checks if players hitbox center is centered with camera
+            if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
+            if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
 
-        player.Update();
+            player.Update();
+        }
 
         SDL_RenderClear(renderer);
-        for (int i=0; i<tilecount; i++) map[i].Render();
-        player.Render();
+        background.Render();
+
+        if (gameState.GetMenu() > 0 && gameState.GetMenu() < 4) {
+            for (int i=0; i<tilecount; i++) {
+                map[i].SetColor(150, 150, 150);
+                map[i].Render();
+            }
+            player.SetColor(150, 150, 150);
+            player.Render();
+        }
+
+        if (gameState.GetMenu() <= 3) {
+            for (int i=0; i<tilecount; i++) map[i].Render();
+            player.Render();
+        }
+
+        if (gameState.GetMenu() == Menu::Pause) testmenu.Render();
 
         // triggers the double buffer
         SDL_RenderPresent(renderer);
+        player.SetColor(255, 255, 255);
+        for (int i=0; i<tilecount; i++) map[i].SetColor(255, 255, 255);
         SDL_Delay(1000 / FRAMERATE);
     }
 

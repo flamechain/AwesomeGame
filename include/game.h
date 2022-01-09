@@ -23,22 +23,42 @@ int CreateRenderer(SDL_Window * Window, SDL_Renderer * Renderer, int Flags);
 
 int RunGame(int Width, int Height, const char * Title, int Flags = GAME_WINDOW_WINDOWED);
 
+enum Menu {
+    None = 0,
+    Pause = 1,
+    Lose = 2,
+    Win = 3,
+    Title,
+    Options,
+    Credits
+};
+
 class GameState {
 private:
     bool running_;
+    Menu menu_type_;
 
 public:
 
     GameState() {
         this->running_ = true;
+        this->menu_type_ = Menu::None;
     }
 
-    bool IsRunning() {
+    bool IsRunning() const {
         return this->running_;
     }
 
     void StopGame() {
         this->running_ = false;
+    }
+
+    void SetMenu(Menu type) {
+        this->menu_type_ = type;
+    }
+
+    Menu GetMenu() const {
+        return this->menu_type_;
     }
 
 };

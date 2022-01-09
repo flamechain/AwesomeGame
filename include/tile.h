@@ -25,8 +25,9 @@ protected:
     SDL_Rect hitbox_;
     Camera * camera_;
     SDL_Renderer * renderer_;
-    SDL_Point rotate_axis_ = {-1, -1};
-    int rotation_ = 0;
+    SDL_Point rotate_axis_;
+    int rotation_;
+    int opacity_;
 
 public:
 
@@ -38,6 +39,9 @@ public:
         this->hitbox_.w = this->srcbox_.w;
         this->hitbox_.h = this->srcbox_.h;
         this->camera_ = camera;
+        this->opacity_ = 255;
+        this->rotation_ = 0;
+        this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
     }
 
     void Destroy() {
@@ -62,16 +66,9 @@ public:
         this->srcbox_ = tiles[type];
     }
 
-    void Render() {
-        if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
-            this->rotate_axis_.x = this->hitbox_.w / 2;
-            this->rotate_axis_.y = this->hitbox_.h / 2;
-        }
-
+    void Render() const {
         SDL_Rect dst = {this->hitbox_.x - this->camera_->x, this->hitbox_.y - this->camera_->y, this->hitbox_.w, this->hitbox_.h};
         SDL_RenderCopyEx(this->renderer_, this->texture_, &this->srcbox_, &dst, this->rotation_, &this->rotate_axis_, SDL_FLIP_NONE);
-
-        this->rotate_axis_ = {-1, -1};
     }
 
     void Resize(int w, int h) {
@@ -85,12 +82,25 @@ public:
     }
 
     void Rotate(int angle, SDL_Point axis = {-1, -1}) {
-        this->rotate_axis_ = axis;
+        if (axis.x > -1 && axis.y > -1) this->rotate_axis_ = axis;
         this->rotation_ = angle;
     }
 
-    SDL_Rect GetHitbox() {
+    SDL_Rect GetHitbox() const {
         return this->hitbox_;
+    }
+
+    int GetOpacity() const {
+        return this->opacity_;
+    }
+
+    void SetOpacity(char opacity) {
+        this->opacity_ = opacity;
+        SDL_SetTextureAlphaMod(this->texture_, opacity);
+    }
+
+    void SetColor(char r, char g, char b) {
+        SDL_SetTextureColorMod(this->texture_, r, g, b);
     }
 
 };
