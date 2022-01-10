@@ -20,6 +20,8 @@ using std::string;
 using namespace std::this_thread;
 using namespace std::chrono;
 
+/// Sends text output to stdout
+/// @param Format   format string (same syntax as printf)
 inline void ConsoleOutput(const char * Format, ...) {
     va_list argptr;
     va_start(argptr, Format);

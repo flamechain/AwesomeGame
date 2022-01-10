@@ -23,6 +23,11 @@ public:
         this->h = h;
     }
 
+    /// Sets where the camera can view
+    /// @param x    x-coord
+    /// @param y    y-coord
+    /// @param w    boundary width
+    /// @param h    boundary height
     void SetBounds(int x, int y, int w, int h) {
         this->bounds_.x = x;
         this->bounds_.y = y;
@@ -30,6 +35,9 @@ public:
         this->bounds_.h = h;
     }
 
+    /// Updates camaera position, checking bounds
+    /// @param x    x movement (px)
+    /// @param y    y movement (px)
     void Update(int x, int y) {
         this->x += x;
         this->y += y;

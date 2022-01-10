@@ -23,11 +23,19 @@ public:
     Player(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles, Camera * camera) : Tile(renderer, type, tiles, camera) {
     }
 
+    /// Set limit on speed
+    /// @param x    x-direction speed cap
+    /// @param y    y-direction speed cap
     void SetSpeedCap(int x, int y) {
         this->speed_cap_.x = x;
         this->speed_cap_.y = y;
     }
 
+    /// Sets area player can move
+    /// @param x    x-coord
+    /// @param y    y-coord
+    /// @param w    boundary width
+    /// @param h    boundary height
     void SetBounds(int x, int y, int w, int h) {
         this->bounds_.x = x;
         this->bounds_.y = y;
@@ -35,6 +43,8 @@ public:
         this->bounds_.h = h;
     }
 
+    /// Moves player based on speed
+    /// @param checkBounds  if to check bounds
     void Update(bool checkBounds = true) {
         if (!checkBounds) {
             this->hitbox_.x += this->speed.x;

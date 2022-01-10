@@ -16,12 +16,32 @@
 #define GAME_ERROR_GENERAL_FAIL 5
 #define GAME_ERROR_TTF_FAIL 6
 
+/// Initializes libraries
+/// @return error
 int InitializeEngine();
 
+/// Creates a window
+/// @param Width    window width
+/// @param Height   window height
+/// @param Title    display title
+/// @param Flags    display flags
+/// @param Window   window storage
+/// @return error
 int CreateWindow(int Width, int Height, const char * Title, int Flags, SDL_Window * Window);
 
+/// Creates display renderer
+/// @param Window   created window
+/// @param Renderer renderer storage
+/// @param Flags    render flags
+/// @return error
 int CreateRenderer(SDL_Window * Window, SDL_Renderer * Renderer, int Flags);
 
+/// Runs game
+/// @param Width    window width
+/// @param Height   window height
+/// @param Title    display title
+/// @param Flags    display flags
+/// @return error
 int RunGame(int Width, int Height, const char * Title, int Flags = GAME_WINDOW_WINDOWED);
 
 enum Menu {
@@ -46,18 +66,25 @@ public:
         this->menu_type_ = Menu::None;
     }
 
+    /// If game is running
+    /// @return game running
     bool IsRunning() const {
         return this->running_;
     }
 
+    /// Stops game running var
     void StopGame() {
         this->running_ = false;
     }
 
+    /// Sets current menu
+    /// @param type menu type based on enum Menu
     void SetMenu(Menu type) {
         this->menu_type_ = type;
     }
 
+    /// Gets curernt menu
+    /// @return current menu entry in Menu enum
     Menu GetMenu() const {
         return this->menu_type_;
     }

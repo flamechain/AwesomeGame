@@ -21,6 +21,7 @@ public:
     Button(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb) : Rect(renderer, x, y, w, h, rgb) {
     }
 
+    /// Renders text and rect
     void Render() {
         SDL_Rect newRect = {this->rect_.x + this->border_pt_, this->rect_.y + this->border_pt_, this->rect_.w - (this->border_pt_ * 2), this->rect_.h - (this->border_pt_ * 2)};
 
@@ -33,24 +34,42 @@ public:
         this->text_.Render();
     }
 
+    /// Sets text attributes
+    /// @param font     ttf font name
+    /// @param pt       size
+    /// @param color    font color
+    /// @param text     display text
+    /// @param centered if to center on rect
     void SetText(const char * font, int pt, Color color, const char * text, bool centered) {
         this->text_ = Text(this->renderer_, font, pt, color, text);
         this->centered_ = centered;
         if (centered) this->CenterText();
     }
 
+    /// Moves text
+    /// @param x    x-coord
+    /// @param y    y-coord
     void SetTextPos(int x, int y) {
         this->text_.SetPosition(x, y);
     }
 
+    /// Sets activity
+    /// @param active   if to display
     void SetActive(bool active) {
         this->active_ = active;
     }
 
+    /// Gets acitivity
+    /// @return if to display
     bool IsActive() const {
         return this->active_;
     }
 
+    /// Sets dimensions
+    /// @param x    x-coord
+    /// @param y    y-coord
+    /// @param w    width
+    /// @param h    height
     void SetDimensions(int x, int y, int w, int h) {
         this->rect_.x = x;
         this->rect_.y = y;
@@ -59,12 +78,18 @@ public:
         if (this->centered_) this->CenterText();
     }
 
+    /// Moves button
+    /// @param x    x-coord
+    /// @param y    y-coord
     void SetPosition(int x, int y) {
         this->rect_.x = x;
         this->rect_.y = y;
         if (this->centered_) this->CenterText();
     }
 
+    /// If coord pair is inside the button area (usally mouse position)
+    /// @param x    x-coord
+    /// @param y    y-coord
     bool IsInside(int x, int y) {
         if ( (x >= this->rect_.x && x <= this->rect_.x + this->rect_.w) && \
              (y >= this->rect_.y && y <= this->rect_.y + this->rect_.h))
