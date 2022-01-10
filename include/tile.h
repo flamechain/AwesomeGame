@@ -76,7 +76,7 @@ public:
         this->hitbox_.h = h;
     }
 
-    void Position(int x, int y) {
+    void SetPosition(int x, int y) {
         this->hitbox_.x = x;
         this->hitbox_.y = y;
     }
@@ -86,7 +86,7 @@ public:
         this->rotation_ = angle;
     }
 
-    SDL_Rect GetHitbox() const {
+    SDL_Rect GetRect() const {
         return this->hitbox_;
     }
 
@@ -99,7 +99,7 @@ public:
         SDL_SetTextureAlphaMod(this->texture_, opacity);
     }
 
-    void SetColor(char r, char g, char b) {
+    void SetExtraColor(char r, char g, char b) {
         SDL_SetTextureColorMod(this->texture_, r, g, b);
     }
 

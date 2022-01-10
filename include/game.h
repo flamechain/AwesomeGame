@@ -14,6 +14,7 @@
 #define GAME_ERROR_WINDOW_FAIL 3
 #define GAME_ERROR_RENDERER_FAIL 4
 #define GAME_ERROR_GENERAL_FAIL 5
+#define GAME_ERROR_TTF_FAIL 6
 
 int InitializeEngine();
 

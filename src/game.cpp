@@ -5,18 +5,28 @@
 #include "utils.h"
 #include "camera.h"
 #include "rect.h"
+#include "text.h"
+#include "button.h"
 
 extern GameState gameState;
 
 int InitializeEngine() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         errno = GAME_ERROR_SDL_FAIL;
+        ConsoleOutput("Failed loading SDL: %s\n", SDL_GetError());
         return errno;
     }
 
     int imgflags = IMG_INIT_PNG|IMG_INIT_JPG;
     if ((IMG_Init(imgflags)&imgflags) != imgflags) {
         errno = GAME_ERROR_IMAGE_FAIL;
+        ConsoleOutput("Failed loading SDL_image: %s\n", IMG_GetError());
+        return errno;
+    }
+
+    if (TTF_Init() < 0) {
+        errno = GAME_ERROR_TTF_FAIL;
+        ConsoleOutput("Failed loading SDL_ttf: %s\n", TTF_GetError());
         return errno;
     }
 
@@ -62,22 +72,23 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     InitializeEngine();
     SDL_Rect * tiles = InitTiles();
 
-    switch (errno) {
-        case GAME_ERROR_SDL_FAIL:
-            ConsoleOutput("Failed loading SDL: %s\n", SDL_GetError());
-            return errno;
-        case GAME_ERROR_IMAGE_FAIL:
-            ConsoleOutput("Failed loading SDL_image: %s\n", IMG_GetError());
-            return errno;
-        default:
-            break;
-    }
-
     SDL_Window * window = CreateWindow(Width, Height, Title, Flags);
     if (errno) ConsoleOutput("Failed creating window: %s\n", SDL_GetError());
 
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
+
+    Rect loadingScreen = Rect(renderer, 0, 0, Width, Height, {0, 0, 0});
+    Text loadingText = Text(renderer, "Lato-Regular.ttf", 60, {255, 255, 255}, "Loading...");
+
+    loadingText.SetPosition((Width / 2) - (loadingText.GetRect().w / 2), (Height / 2) - (loadingText.GetRect().h / 2));
+
+    SDL_RenderClear(renderer);
+    loadingScreen.Render();
+    loadingText.Render();
+    SDL_RenderPresent(renderer);
+
+    // do all game loading here
 
     const int gridx = 16;
     const int gridy = 9;
@@ -95,7 +106,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     for (int i=0; i<tilecount; i++) {
         map.push_back(Tile(renderer, TileType::GrassPathCenter, tiles, &camera));
         map[i].Resize(tilewidth, tileheight);
-        map[i].Position(posx, posy);
+        map[i].SetPosition(posx, posy);
         posx += tilewidth;
 
         if (posx > Width - tilewidth) {
@@ -109,15 +120,32 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     player.SetSpeedCap(10, 10);
     player.SetBounds(0, 0, Width, Height);
     // center player on screen
-    player.Position((Width / 2) - (player.GetHitbox().w / 2), (Height / 2) - (player.GetHitbox().h / 2));
+    player.SetPosition((Width / 2) - (player.GetRect().w / 2), (Height / 2) - (player.GetRect().h / 2));
 
     WASDController movement;
 
-    Rect testmenu = Rect(renderer, Width / 4, Height / 4, Width / 2, Height / 2, 100, 100, 255);
-    Rect background = Rect(renderer, 0, 0, Width, Height, 255, 255, 255);
+    gameState.SetMenu(Menu::None);
+    Rect pauseMenu = Rect(renderer, Width / 4, Height / 4, Width / 2, Height / 2, {100, 100, 255});
+    Text pauseText[2];
+
+    pauseText[0] = Text(renderer, "Lato-Bold.ttf", 80, {0, 0, 0}, "PAUSED");
+    pauseText[1] = Text(renderer, "Lato-Regular.ttf", 24, {0, 0, 0}, "Press ESC to resume.");
+    pauseText[0].SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseText[0].GetRect().w / 2), pauseMenu.GetRect().y + 20);
+    pauseText[1].SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseText[1].GetRect().w / 2), pauseMenu.GetRect().y + pauseText[0].GetRect().h + 20);
+
+    Rect background = Rect(renderer, 0, 0, Width, Height, {255, 255, 255});
+
+    Button quitButton = Button(renderer, 0, 0, 400, 100, {200, 200, 200});
+    quitButton.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
+    quitButton.SetBorder(5, {0, 0, 0});
+    quitButton.SetActive(false);
+    quitButton.SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (quitButton.GetRect().w / 2), pauseMenu.GetRect().y + pauseMenu.GetRect().h - quitButton.GetRect().h - 20);
+
+    SDL_Point mouse;
 
     while (gameState.IsRunning()) {
         SDL_Event event;
+        SDL_GetMouseState(&mouse.x, &mouse.y);
 
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -144,20 +172,20 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                             movement.SetRightMovement(true);
                             break;
                         case SDL_SCANCODE_ESCAPE:
-                            gameState.StopGame();
-                            break;
-                        case SDL_SCANCODE_P:
-                            if (gameState.GetMenu() == Menu::None)
+                            if (gameState.GetMenu() == Menu::None) {
                                 gameState.SetMenu(Menu::Pause);
-                            else if (gameState.GetMenu() == Menu::Pause)
+                                quitButton.SetActive(true);
+                            } else if (gameState.GetMenu() == Menu::Pause) {
                                 gameState.SetMenu(Menu::None);
+                                quitButton.SetActive(false);
+                            }
                             break;
                         default:
                             break;
                     }
                     break;
                 case SDL_KEYUP:
-                    switch(event.key.keysym.scancode) {
+                    switch (event.key.keysym.scancode) {
                         case SDL_SCANCODE_W:
                         case SDL_SCANCODE_UP:
                             movement.SetUpMovement(false);
@@ -178,10 +206,28 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
                             break;
                     }
                     break;
+                case SDL_MOUSEBUTTONDOWN:
+                    switch (event.button.button) {
+                        case SDL_BUTTON_LEFT:
+                            if (quitButton.IsActive() && quitButton.IsInside(mouse.x, mouse.y)) gameState.StopGame();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case SDL_MOUSEMOTION:
+                    if (quitButton.IsActive() && quitButton.IsInside(mouse.x, mouse.y)) {
+                        quitButton.Shadow(50, 50, 50);
+                    } else {
+                        quitButton.UnShadow();
+                    }
+                    break;
                 default:
                     break;
             }
         }
+
+        // game code goes here
 
         if (gameState.GetMenu() == Menu::None) {
             if (movement.MovingUp()) player.speed.y = -10;
@@ -195,8 +241,8 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
 
             // checks if players hitbox center is centered with camera
-            if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
-            if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
+            if ((player.GetRect().x + (player.GetRect().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
+            if ((player.GetRect().y + (player.GetRect().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
 
             player.Update();
         }
@@ -206,10 +252,10 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
 
         if (gameState.GetMenu() > 0 && gameState.GetMenu() < 4) {
             for (int i=0; i<tilecount; i++) {
-                map[i].SetColor(150, 150, 150);
+                map[i].SetExtraColor(150, 150, 150);
                 map[i].Render();
             }
-            player.SetColor(150, 150, 150);
+            player.SetExtraColor(150, 150, 150);
             player.Render();
         }
 
@@ -218,20 +264,31 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             player.Render();
         }
 
-        if (gameState.GetMenu() == Menu::Pause) testmenu.Render();
+        if (gameState.GetMenu() == Menu::Pause) {
+            pauseMenu.Render();
+            pauseText[0].Render();
+            pauseText[1].Render();
+            quitButton.Render();
+        }
 
         // triggers the double buffer
         SDL_RenderPresent(renderer);
-        player.SetColor(255, 255, 255);
-        for (int i=0; i<tilecount; i++) map[i].SetColor(255, 255, 255);
+        player.SetExtraColor(255, 255, 255);
+        for (int i=0; i<tilecount; i++) map[i].SetExtraColor(255, 255, 255);
         SDL_Delay(1000 / FRAMERATE);
     }
 
     player.Destroy();
+    loadingText.Destroy();
+    loadingScreen.Destroy();
     for (int i=0; i<tilecount; i++) map[i].Destroy();
+    pauseMenu.Destroy();
+    quitButton.Destroy();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
+    TTF_Quit();
+    IMG_Quit();
     SDL_Quit();
 
     return 0;
