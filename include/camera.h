@@ -3,6 +3,7 @@
 
 #include "utils.h"
 
+// consider making subclass of Rect
 class Camera {
 private:
 

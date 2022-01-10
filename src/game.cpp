@@ -70,7 +70,6 @@ SDL_Window * CreateWindow(int Width, int Height, const char * Title, int Flags) 
 int RunGame(int Width, int Height, const char * Title, int Flags) {
     gameState = GameState();
     InitializeEngine();
-    SDL_Rect * tiles = InitTiles();
 
     SDL_Window * window = CreateWindow(Width, Height, Title, Flags);
     if (errno) ConsoleOutput("Failed creating window: %s\n", SDL_GetError());
@@ -89,6 +88,8 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     SDL_RenderPresent(renderer);
 
     // do all game loading here
+
+    SDL_Rect * tiles = InitTiles();
 
     const int gridx = 16;
     const int gridy = 9;
@@ -125,9 +126,11 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     WASDController movement;
 
     gameState.SetMenu(Menu::None);
+    // centered on screen
     Rect pauseMenu = Rect(renderer, Width / 4, Height / 4, Width / 2, Height / 2, {100, 100, 255});
     Text pauseText[2];
 
+    // two lines of text for pause menu
     pauseText[0] = Text(renderer, "Lato-Bold.ttf", 80, {0, 0, 0}, "PAUSED");
     pauseText[1] = Text(renderer, "Lato-Regular.ttf", 24, {0, 0, 0}, "Press ESC to resume.");
     pauseText[0].SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseText[0].GetRect().w / 2), pauseMenu.GetRect().y + 20);
@@ -135,10 +138,13 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
 
     Rect background = Rect(renderer, 0, 0, Width, Height, {255, 255, 255});
 
+    // button, maybe add to button vector to make it easier to handle tons of buttons
+    // do the same with rectangles in the future maybe?
     Button quitButton = Button(renderer, 0, 0, 400, 100, {200, 200, 200});
     quitButton.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
     quitButton.SetBorder(5, {0, 0, 0});
     quitButton.SetActive(false);
+    // centered to pause menu, padded 20px from the bottom
     quitButton.SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (quitButton.GetRect().w / 2), pauseMenu.GetRect().y + pauseMenu.GetRect().h - quitButton.GetRect().h - 20);
 
     SDL_Point mouse;
@@ -147,6 +153,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         SDL_Event event;
         SDL_GetMouseState(&mouse.x, &mouse.y);
 
+        // all SDL keyboard/mouse interactions, excluded from game code
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
@@ -230,6 +237,8 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         // game code goes here
 
         if (gameState.GetMenu() == Menu::None) {
+            // check player movement
+            // change to use an {x, y} vector movement that calculates next point rather than speed
             if (movement.MovingUp()) player.speed.y = -10;
             else if (movement.MovingDown()) player.speed.y = 10;
             else player.speed.y = 0;
@@ -250,6 +259,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         SDL_RenderClear(renderer);
         background.Render();
 
+        // make tiles darker if menu open
         if (gameState.GetMenu() > 0 && gameState.GetMenu() < 4) {
             for (int i=0; i<tilecount; i++) {
                 map[i].SetExtraColor(150, 150, 150);
@@ -259,11 +269,13 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             player.Render();
         }
 
+        // render tiles if not in title, options, or credits
         if (gameState.GetMenu() <= 3) {
             for (int i=0; i<tilecount; i++) map[i].Render();
             player.Render();
         }
 
+        // render pause menu
         if (gameState.GetMenu() == Menu::Pause) {
             pauseMenu.Render();
             pauseText[0].Render();
@@ -278,6 +290,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         SDL_Delay(1000 / FRAMERATE);
     }
 
+    // cleanup, later add everything to vector for organization and easier destruction (tiles e.g.)
     player.Destroy();
     loadingText.Destroy();
     loadingScreen.Destroy();
