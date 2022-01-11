@@ -38,14 +38,16 @@ public:
     /// Updates camaera position, checking bounds
     /// @param x    x movement (px)
     /// @param y    y movement (px)
-    void Update(int x, int y) {
+    void Update(int x, int y, bool checkBounds = true) {
         this->x += x;
         this->y += y;
 
-        if (this->x < this->bounds_.x) this->x = this->bounds_.x;
-        if (this->x + this->w > this->bounds_.w) this->x = this->bounds_.w - this->w;
-        if (this->y < this->bounds_.y) this->y = this->bounds_.y;
-        if (this->y + this->h > this->bounds_.h) this->y = this->bounds_.h - this->h;
+        if (checkBounds) {
+            if (this->x < this->bounds_.x) this->x = this->bounds_.x;
+            if (this->x + this->w > this->bounds_.w) this->x = this->bounds_.w - this->w;
+            if (this->y < this->bounds_.y) this->y = this->bounds_.y;
+            if (this->y + this->h > this->bounds_.h) this->y = this->bounds_.h - this->h;
+        }
     }
 
 };

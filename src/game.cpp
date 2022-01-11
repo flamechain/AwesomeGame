@@ -199,6 +199,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
 
             player.Update();
+
         }
 
         SDL_RenderClear(renderer);
