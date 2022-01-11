@@ -8,11 +8,16 @@
 #define TILE_SHEET "TileSheet.png"
 #define IMG_PATH "resources/img/"
 
-enum TileType {
+enum class TileType {
+    None,
+    Grass,
+    Path,
     GrassPathStrait,
-    GrassPathCenter,
     GrassPathCorner,
-    DirtBlood
+    GrassPathT,
+    GrassPathCross,
+    GrassPathEnd,
+    TestPlayer
 };
 
 SDL_Rect * InitTiles();
@@ -21,26 +26,39 @@ class Tile {
 protected:
 
     SDL_Texture * texture_;
-    SDL_Rect srcbox_;
+    vector<SDL_Rect> src_;
     SDL_Rect hitbox_;
     Camera * camera_;
     SDL_Renderer * renderer_;
     SDL_Point rotate_axis_;
     int rotation_;
     unsigned char opacity_;
+    SDL_RendererFlip flip_;
+    TileType type_;
 
 public:
 
+    Tile() {}
+
     Tile(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles, Camera * camera) {
         this->renderer_ = renderer;
+        this->camera_ = camera;
+
         this->LoadTile(type, tiles);
         this->hitbox_.x = 0;
         this->hitbox_.y = 0;
-        this->hitbox_.w = this->srcbox_.w;
-        this->hitbox_.h = this->srcbox_.h;
-        this->camera_ = camera;
         this->opacity_ = 255;
         this->rotation_ = 0;
+        this->flip_ = SDL_FLIP_NONE;
+
+        if (type == TileType::None) {
+            this->hitbox_.w = 0;
+            this->hitbox_.h = 0;
+        } else {
+            this->hitbox_.w = this->src_[0].w;
+            this->hitbox_.h = this->src_[0].h;
+        }
+
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
     }
 
@@ -54,6 +72,8 @@ public:
     /// @param type     which tile to use
     /// @param tiles    list of available tiles
     void LoadTile(TileType type, SDL_Rect * tiles) {
+        this->type_ = type;
+        if (type == TileType::None) return;
         string spath = IMG_PATH;
         spath += TILE_SHEET;
         SDL_Surface * surface = IMG_Load(spath.c_str());
@@ -67,13 +87,22 @@ public:
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         SDL_FreeSurface(surface);
 
-        this->srcbox_ = tiles[type];
+        this->src_.clear();
+        // order here matters because it defines the order rendering happens
+        if (type == TileType::GrassPathCorner || \
+            type == TileType::GrassPathStrait || \
+            type == TileType::GrassPathCross || \
+            type == TileType::GrassPathT || \
+            type == TileType::GrassPathEnd)
+            this->src_.push_back(tiles[(int)TileType::Path]);
+        this->src_.push_back(tiles[(int)type]);
     }
 
     /// Renders texture to screen
     void Render() const {
         SDL_Rect dst = {this->hitbox_.x - this->camera_->x, this->hitbox_.y - this->camera_->y, this->hitbox_.w, this->hitbox_.h};
-        SDL_RenderCopyEx(this->renderer_, this->texture_, &this->srcbox_, &dst, this->rotation_, &this->rotate_axis_, SDL_FLIP_NONE);
+        for (int i=0; i<(int)this->src_.size(); i++)
+            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
     }
 
     /// Resizes tiles texture
@@ -82,6 +111,18 @@ public:
     void Resize(int w, int h) {
         this->hitbox_.w = w;
         this->hitbox_.h = h;
+    }
+
+    /// Gets current flip flags
+    /// @return flips flags
+    SDL_RendererFlip GetFlip() const {
+        return this->flip_;
+    }
+
+    /// Flips texture on along x and y axis
+    /// @param flip flip flags
+    void Flip(int flip) {
+        this->flip_ = (SDL_RendererFlip)flip;
     }
 
     /// Moves tiles texture

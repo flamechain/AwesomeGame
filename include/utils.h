@@ -14,6 +14,8 @@
 #include <chrono>
 #include <thread>
 
+#include <math.h>
+
 using std::printf;
 using std::vector;
 using std::string;

@@ -7,64 +7,23 @@
 #include "rect.h"
 #include "text.h"
 #include "button.h"
+#include "level.h"
 
 extern GameState gameState;
 
-int InitializeEngine() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        errno = GAME_ERROR_SDL_FAIL;
-        ConsoleOutput("Failed loading SDL: %s\n", SDL_GetError());
-        return errno;
-    }
+Level GenerateRandomLevel(int x, int y, SDL_Rect * tiles, SDL_Renderer * renderer, Camera * camera) {
+    printf("init\n");
+    Level level = Level(renderer, camera, tiles, x, y);
+    printf("level done\n");
 
-    int imgflags = IMG_INIT_PNG|IMG_INIT_JPG;
-    if ((IMG_Init(imgflags)&imgflags) != imgflags) {
-        errno = GAME_ERROR_IMAGE_FAIL;
-        ConsoleOutput("Failed loading SDL_image: %s\n", IMG_GetError());
-        return errno;
-    }
-
-    if (TTF_Init() < 0) {
-        errno = GAME_ERROR_TTF_FAIL;
-        ConsoleOutput("Failed loading SDL_ttf: %s\n", TTF_GetError());
-        return errno;
-    }
-
-    SDL_setenv("SDL_VIDEODRIVER", "directx", 1); // override
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // linear
-    return 0;
-}
-
-SDL_Renderer * CreateRenderer(SDL_Window * Window, int Flags) {
-    // triggers program that controls graphics hardware
-    int renderflags = Flags & GAME_RENDERER_ACCELERATED;
-    SDL_Renderer * renderer = SDL_CreateRenderer(Window, -1, renderflags);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-    errno = 0;
-    return renderer;
-}
-
-SDL_Window * CreateWindow(int Width, int Height, const char * Title, int Flags) {
-    SDL_Window * window = SDL_CreateWindow(Title,
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        Width, Height, SDL_WINDOW_OPENGL); // SDL_WINDOW_OPENGL replaced 0
-
-    if (window == NULL) {
-        errno = GAME_ERROR_WINDOW_FAIL;
-        return window;
-    }
-
-    if (Flags & GAME_WINDOW_FULLSCREEN) {
-        if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN)) {
-            errno = GAME_ERROR_WINDOW_FAIL;
-            return window;
+    for (int i=0; i<x; i++) {
+        for (int j=0; j<y; j++) {
+            level.SetTile(i, j, TileType::Path, tiles);
         }
     }
 
-    errno = 0;
-    return window;
+    printf("ret\n");
+    return level;
 }
 
 int RunGame(int Width, int Height, const char * Title, int Flags) {
@@ -93,30 +52,16 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
 
     const int gridx = 16;
     const int gridy = 9;
-    const int tilecount = gridx * gridy;
     const int tilewidth = Width / gridx;
     const int tileheight = Height / gridy;
-
-    int posx = 0;
-    int posy = 0;
 
     Camera camera = Camera(0, 0, Width, Height);
     camera.SetBounds(-200, -200, Width + 200, Height + 200);
 
-    vector<Tile> map;
-    for (int i=0; i<tilecount; i++) {
-        map.push_back(Tile(renderer, TileType::GrassPathCenter, tiles, &camera));
-        map[i].Resize(tilewidth, tileheight);
-        map[i].SetPosition(posx, posy);
-        posx += tilewidth;
+    Level level = GenerateRandomLevel(gridx, gridy, tiles, renderer, &camera);
+    printf("all done\n");
 
-        if (posx > Width - tilewidth) {
-            posx = 0;
-            posy += tileheight;
-        }
-    }
-
-    Player player = Player(renderer, TileType::DirtBlood, tiles, &camera);
+    Player player = Player(renderer, TileType::TestPlayer, tiles, &camera);
     player.Resize(tilewidth, tileheight);
     player.SetSpeedCap(10, 10);
     player.SetBounds(0, 0, Width, Height);
@@ -250,8 +195,8 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
 
             // checks if players hitbox center is centered with camera
-            if ((player.GetRect().x + (player.GetRect().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
-            if ((player.GetRect().y + (player.GetRect().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
+            if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
+            if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
 
             player.Update();
         }
@@ -260,18 +205,16 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         background.Render();
 
         // make tiles darker if menu open
-        if (gameState.GetMenu() > 0 && gameState.GetMenu() < 4) {
-            for (int i=0; i<tilecount; i++) {
-                map[i].SetExtraColor(150, 150, 150);
-                map[i].Render();
-            }
+        if ((int)gameState.GetMenu() > 0 && (int)gameState.GetMenu() < 4) {
+            level.SetExtraColor(150, 150, 150);
+            level.Render();
             player.SetExtraColor(150, 150, 150);
             player.Render();
         }
 
         // render tiles if not in title, options, or credits
-        if (gameState.GetMenu() <= 3) {
-            for (int i=0; i<tilecount; i++) map[i].Render();
+        if ((int)gameState.GetMenu() <= 3) {
+            level.Render();
             player.Render();
         }
 
@@ -286,7 +229,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
         // triggers the double buffer
         SDL_RenderPresent(renderer);
         player.SetExtraColor(255, 255, 255);
-        for (int i=0; i<tilecount; i++) map[i].SetExtraColor(255, 255, 255);
+        level.SetExtraColor(255, 255, 255);
         SDL_Delay(1000 / FRAMERATE);
     }
 
@@ -294,7 +237,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     player.Destroy();
     loadingText.Destroy();
     loadingScreen.Destroy();
-    for (int i=0; i<tilecount; i++) map[i].Destroy();
+    level.Destroy();
     pauseMenu.Destroy();
     quitButton.Destroy();
     SDL_DestroyRenderer(renderer);
