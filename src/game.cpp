@@ -197,9 +197,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
             // checks if players hitbox center is centered with camera
             if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
             if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
-
             player.Update();
-
         }
 
         SDL_RenderClear(renderer);
