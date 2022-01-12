@@ -1,3 +1,3 @@
 # Index
 
-- [Game Story Boarding](./Story.md)
+- [Game Ideas](./BrainStorm.md)
