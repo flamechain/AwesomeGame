@@ -22,7 +22,7 @@ public:
 
     Momentum speed;
 
-    Player(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles, Camera * camera) : Tile(renderer, type, tiles, camera) {
+    Player(SDL_Renderer * renderer, TileType type, vector<SDL_Rect> tiles, Camera * camera) : Tile(renderer, type, tiles, camera) {
         this->SetSize(0, 0, this->hitbox_.w, this->hitbox_.h);
     }
 

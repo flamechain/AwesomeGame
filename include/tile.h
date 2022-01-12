@@ -20,7 +20,7 @@ enum class TileType {
     TestPlayer
 };
 
-SDL_Rect * InitTiles();
+vector<SDL_Rect> InitTiles();
 
 class Tile {
 protected:
@@ -35,16 +35,19 @@ protected:
     unsigned char opacity_;
     SDL_RendererFlip flip_;
     TileType type_;
+    vector<SDL_Rect> tiles_;
 
 public:
 
     Tile() {}
 
-    Tile(SDL_Renderer * renderer, TileType type, SDL_Rect * tiles, Camera * camera) {
+    Tile(SDL_Renderer * renderer, TileType type, vector<SDL_Rect> tiles, Camera * camera) {
         this->renderer_ = renderer;
         this->camera_ = camera;
+        this->tiles_ = tiles;
+        this->texture_ = NULL;
 
-        this->LoadTile(type, tiles);
+        this->LoadTile(type);
         this->hitbox_.x = 0;
         this->hitbox_.y = 0;
         this->opacity_ = 255;
@@ -62,6 +65,55 @@ public:
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
     }
 
+    void operator=(const Tile& tile) {
+        this->camera_ = tile.GetCamera();
+        this->renderer_ = tile.GetRenderer();
+        this->tiles_ = tile.GetTiles();
+        this->src_ = {};
+        this->texture_ = NULL;
+        this->type_ = tile.GetType();
+        this->LoadTile(this->type_);
+        this->hitbox_.x = 0;
+        this->hitbox_.y = 0;
+        this->opacity_ = 255;
+        this->rotation_ = 0;
+        this->flip_ = SDL_FLIP_NONE;
+
+        if (this->type_ == TileType::None) {
+            this->hitbox_.w = 0;
+            this->hitbox_.h = 0;
+        } else {
+            this->hitbox_.w = this->src_[0].w;
+            this->hitbox_.h = this->src_[0].h;
+        }
+
+        this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
+    }
+
+    /// Gets camera
+    /// @return pointer to camera
+    Camera * GetCamera() const {
+        return this->camera_;
+    }
+
+    /// Gets renderer
+    /// @return pointer to renderer
+    SDL_Renderer * GetRenderer() const {
+        return this->renderer_;
+    }
+
+    /// Gets global tiles
+    /// @return copy of global tiles
+    vector<SDL_Rect> GetTiles() const {
+        return this->tiles_;
+    }
+
+    /// Gets tile type
+    /// @return current tile type
+    TileType GetType() const {
+        return this->type_;
+    }
+
     /// Destroys allocated memory e.g. textures
     void Destroy() {
         SDL_DestroyTexture(this->texture_);
@@ -70,8 +122,7 @@ public:
 
     /// Creates renderable texture from tile
     /// @param type     which tile to use
-    /// @param tiles    list of available tiles
-    void LoadTile(TileType type, SDL_Rect * tiles) {
+    void LoadTile(TileType type) {
         this->type_ = type;
         if (type == TileType::None) return;
         string spath = IMG_PATH;
@@ -84,6 +135,7 @@ public:
             return;
         }
 
+        if (this->texture_ != NULL) SDL_DestroyTexture(this->texture_);
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         SDL_FreeSurface(surface);
 
@@ -94,15 +146,18 @@ public:
             type == TileType::GrassPathCross || \
             type == TileType::GrassPathT || \
             type == TileType::GrassPathEnd)
-            this->src_.push_back(tiles[(int)TileType::Path]);
-        this->src_.push_back(tiles[(int)type]);
+            this->src_.push_back(this->tiles_[(int)TileType::Path]);
+        this->src_.push_back(this->tiles_[(int)type]);
+        this->hitbox_.w = 16;
+        this->hitbox_.h = 16;
     }
 
     /// Renders texture to screen
     void Render() const {
         SDL_Rect dst = {this->hitbox_.x - this->camera_->x, this->hitbox_.y - this->camera_->y, this->hitbox_.w, this->hitbox_.h};
-        for (int i=0; i<(int)this->src_.size(); i++)
+        for (int i=0; i<(int)this->src_.size(); i++) {
             SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+        }
     }
 
     /// Resizes tiles texture

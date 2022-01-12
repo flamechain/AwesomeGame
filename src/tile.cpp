@@ -1,8 +1,12 @@
 #include "tile.h"
 
-SDL_Rect * InitTiles() {
+vector<SDL_Rect> InitTiles() {
     const int tilecount = 10;
-    SDL_Rect * tiles = new SDL_Rect[tilecount];
+    vector<SDL_Rect> tiles;
+    for (int i=0; i<tilecount; i++) {
+        SDL_Rect temp = {0, 0, 16, 16};
+        tiles.push_back(temp);
+    }
 
     tiles[(int)TileType::None].x = 0;
     tiles[(int)TileType::None].y = 0;
@@ -30,11 +34,6 @@ SDL_Rect * InitTiles() {
 
     tiles[(int)TileType::TestPlayer].x = 0;
     tiles[(int)TileType::TestPlayer].y = 16;
-
-    for (int i=0; i<tilecount; i++) {
-        tiles[i].w = 16;
-        tiles[i].h = 16;
-    }
 
     return tiles;
 }

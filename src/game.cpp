@@ -11,18 +11,27 @@
 
 extern GameState gameState;
 
-Level GenerateRandomLevel(int x, int y, SDL_Rect * tiles, SDL_Renderer * renderer, Camera * camera) {
-    printf("init\n");
+Level GenerateRandomLevel(int x, int y, int width, int height, vector<SDL_Rect> tiles, SDL_Renderer * renderer, Camera * camera) {
     Level level = Level(renderer, camera, tiles, x, y);
-    printf("level done\n");
+    int posx = 0;
+    int posy = 0;
+    const int tilewidth = width / 16;
+    const int tileheight = height / 9;
 
     for (int i=0; i<x; i++) {
         for (int j=0; j<y; j++) {
-            level.SetTile(i, j, TileType::Path, tiles);
+            level.SetTile(i, j, TileType::Grass);
+            level.SetTilePosition(i, j, posx, posy);
+            level.ResizeTile(i, j, tilewidth, tileheight);
+            posx += tilewidth;
+
+            if (posx > tilewidth * (x - 1)) {
+                posx = 0;
+                posy += tileheight;
+            }
         }
     }
 
-    printf("ret\n");
     return level;
 }
 
@@ -48,7 +57,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
 
     // do all game loading here
 
-    SDL_Rect * tiles = InitTiles();
+    vector<SDL_Rect> tiles = InitTiles();
 
     const int gridx = 16;
     const int gridy = 9;
@@ -58,8 +67,7 @@ int RunGame(int Width, int Height, const char * Title, int Flags) {
     Camera camera = Camera(0, 0, Width, Height);
     camera.SetBounds(-200, -200, Width + 200, Height + 200);
 
-    Level level = GenerateRandomLevel(gridx, gridy, tiles, renderer, &camera);
-    printf("all done\n");
+    Level level = GenerateRandomLevel(gridx, gridy, Width, Height, tiles, renderer, &camera);
 
     Player player = Player(renderer, TileType::TestPlayer, tiles, &camera);
     player.Resize(tilewidth, tileheight);
