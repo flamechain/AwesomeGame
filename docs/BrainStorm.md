@@ -1,46 +1,142 @@
-# Game
-Name: The adventures of cliche
-Roguelike
+# Adventures of Cliche
 
-Setting/story:
-    Magical dungeon with moving bridges and rooms
-    somehow get into dungeon goal is to escape
+Roguelike game that takes place in a magical dungeon. The goal is to fight your way through enemies and bosses to escape.
 
-Generation: 
-    Random generation with rooms needed to be moved to continue to the next level
+## Characters
 
-Character design:
-    Classes:
-        Rouge - Knives, poison, -- lockpicking ability, dash ablitity
-        Wizard - Magic staff, tomb of spells -- summon creature
-        Knight - sword, sheild, armour, -- enraged(increased damage and damage reduction for X amount of time)
-        Ranger - bow, arrows, quiver(poison, normal, flame, ice, bomb), throwing knives -- arrow storm(decreased bow cooldown)
-    before each run you pick a class and that class has the most basic set of weapons and then continue your run
+There are 4 main classes with there own strengths and weaknesses, unique weapons, and powerful abilities.
 
-Eniemes:
-    Eniemes drop weapons, armour, etc. and gold(gold can be used at shops before every round to buy health potions and special tools/upgrades)
-        Enemy types:
-            Skeleton archer
-            Skeleton sword fighter
-            goblin
-            Orc
-            bomber
-            ice wizard (frezes player when hit)
-            fire wizard (take little damage for a little while)
-            necromancer (revives recently killed enemies to half of eniemes max health(besides other necromancers))
-            three phase creature (normal,zombie,skeleton)
+Each run you can change your class, and use Eternity Shards to improve specific classes.
 
-    Bosses:
-        bomber that blows up escape bridges 
-        Rouge(poisons player reduced damage and fire like damage while poisoned)
-        Skeleton King(summons skeletons to fight player)
+### Rogue
 
-MISC.:
-    upgrades to certain things(how many pots. player can carry unlock certain weapons to find in game)
+Weapons:
 
-    Shop:
-        before every[pending] level (besides level one) you can spend your gold on tool upgrades and 
+- Knives: Simple weapon to deal some fast damage
+- Poison Attack: A way to do lots of damage over time to an enemy
 
-    Currency: Gold which lasts only each run and Eternity shards which last after the player dies
-        Eternity Shards upgrades: Improved inventory, bigger potion capacity, death prevention item(expensive), class upgrades(new spells for tomb of spells)
+Abilities:
 
+- Lockpicking: Access to special rooms
+- Dash: Dash through enemies to get behind them and do extra damage
+
+Upgrades:
+
+- Throwing knives
+- More lethal poison
+- Longer dash
+- Increased backstab damage
+- Higher lockpicking skill
+
+### Wizard
+
+Weapons:
+
+- Magic Staff: Shoots beams of fire or ice energy
+- Tomb of Spells: Collections of unique spells that can be added to and upgraded
+
+Abilities:
+
+- Summon: Summon a mythical creature to fight for you
+
+Upgrades:
+
+- More spells for Tomb of Spells
+- More slots for spells in Tomb of Spells
+- Stronger summon
+- Stronger staff
+
+### Knight
+
+Weapons:
+
+- Sword: Basic melee attack with wide strikes
+- Sheild: Abilities to dash into an enemy to deal damage; increases block chance and damage reduction
+
+Abilities:
+
+- Enraged: Increased damage and damage reduction for a limited amount of time
+
+Upgrades:
+
+- Larger sword range
+- Faster attack speed
+- Upgraded sheild for more damage reduction
+
+### Ranger
+
+Weapons:
+
+- Bow: Ranged weapon with many arrow upgrades and damage upgrades
+
+Abilities:
+
+- Storm of Arrows: Multishot and increased attack speed
+
+Upgrades:
+
+- Quiver that holds different arrow types
+- Posion arrows
+- Bomb arrows
+- Flame arrows
+
+## Enemies
+
+Enemies can drop Gold, weapons, armor, and sometimes health.
+
+- Skeleton Archer: Shoots arrows at player
+- Skeleton Swordsman: Charges at player and swings sword
+- Goblin: Basic enemy with contact damage
+- Orc: Tanky enemy with slow movements and devastating blows
+- Bomber: Throws exploding bombs at the player
+- Ice Wizard: Shoots ice at player, freezing them when hit
+- Fire Wizard: Shoots fire at player, inflicting fire damage (medium damage over time, lasts short time)
+- Necromancer: Revives recently killed enemies
+- Necromancer Goblin: Attacks player with basic attacks, turning into a zombie at death. Zombie is slower but does more damage. Transforms into skeleton on death, doing less damage but much faster
+
+## Bosses
+
+### Lark the Goblin Bomber
+
+Throws large, powerful bombs with the ability to destroy bridges and escape routes, requiring them to be rebuilt.
+
+### Shade the Rogue
+
+Skillfull rogue that can quickly move and dash, giving the player poison when close enough (small damage over long time).
+
+### Skeleton King
+
+Summons hordes of skeletons to fight the player.
+
+## Shop
+
+Gold is used to buy items that affect the player during the run, but Eternity Shards are used to buy permanent upgrades.
+
+Gold is dropped from most enemies, while Eternity Shards are a rare item dropped from powerful enemies, bosses, and found in loot chests occasionally.
+
+Eternity Shards can buy weapons, armor, class upgrades, larger inventory, and death preventions items.
+
+Gold is used for temporary buffs, potions, 1-time use items.
+
+## Misc
+
+### Debuffs
+
+| Name | Affect | Duration | Inflicted |
+|-|-|-|-|
+| Poison | Does small damage to the player | ~long time | Some enemies |
+| Fire | Does big damage to the player | ~short | Some enemies |
+
+### Buffs
+
+| Name | Affect | Duration | Cooldown | Obtaining |
+|-|-|-|-|-|
+| Enraged | Increases damage and damage reduction | | | Knight class upgrade |
+
+## Potions
+
+There are limited potions slots in a players inventory, but that can be increased using upgrades bought with Eternity Shards.
+
+| Potion | Price | Affect |
+|-|-|-|
+| Health | | Heals the player |
