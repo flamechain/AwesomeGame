@@ -1,6 +1,10 @@
 # Adventures of Cliche
 
-Roguelike game that takes place in a magical dungeon. The goal is to fight your way through enemies and bosses to escape.
+Roguelike game that takes place in a magical dungeon.
+
+You are on board a small ship with a crew of about 20 people. A violent storm hits and you crash onto a small unmapped island. After searching he rubble you are the only one to survive, so you search the island. You come across a rusty iron door, which looks very old. You open the door out of curiosity and walk in into the darkness. You hear the door shut behind you, and the only way to get out is through. You see a dim light in the distance and run towards it.
+
+The goal is to fight your way through enemies and bosses to escape.
 
 ## Characters
 
