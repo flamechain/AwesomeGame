@@ -35,11 +35,17 @@ Level GenerateRandomLevel(int x, int y, int width, int height, vector<SDL_Rect> 
     return level;
 }
 
-int RunGame(int Width, int Height, const char * Title, int Flags) {
+int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameState = GameState();
     InitializeEngine();
 
-    SDL_Window * window = CreateWindow(Width, Height, Title, Flags);
+    string sTitle = Title;
+
+    if (Debug) {
+        sTitle = StringFormat("%s: Width: %i, Height: %i, FPS: %i", Title, Width, Height, FRAMERATE);
+    }
+
+    SDL_Window * window = CreateWindow(Width, Height, sTitle, Flags);
     if (errno) ConsoleOutput("Failed creating window: %s\n", SDL_GetError());
 
     SDL_Renderer * renderer = CreateRenderer(window, Flags);

@@ -6,7 +6,7 @@ OBJECT_FILES:=$(patsubst src/%.cpp, bin/temp/%.o, $(SOURCE_FILES))
 OUTFILE:="bin/$(VERSION)/game.exe"
 
 CC=g++
-CCFLAGS=-Iinclude -Ilib/SDL -Wall -Wextra -std=c++11 # general
+CCFLAGS=-Iinclude -Ilib/SDL -Wall -Wextra # general
 CCFLAGS+=-Llib/SDL/lib -Dmain=SDL_main # sdl specific
 LDFLAGS=-Llib/SDL/lib -Lbin/release -lSDL2_image -lSDL2_ttf -llibfreetype-6 -Wl,-Bdynamic -Wall -Wextra # general
 # LDFLAGS+=-mwindows

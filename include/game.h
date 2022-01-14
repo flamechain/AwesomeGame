@@ -8,9 +8,10 @@
 /// @param Width    window width
 /// @param Height   window height
 /// @param Title    display title
+/// @param Debug    run in debug mode
 /// @param Flags    display flags
 /// @return error
-int RunGame(int Width, int Height, const char * Title, int Flags = GAME_WINDOW_WINDOWED);
+int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags = GAME_WINDOW_WINDOWED);
 
 enum class Menu {
     None = 0,

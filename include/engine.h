@@ -26,7 +26,7 @@ int InitializeEngine();
 /// @param Title    display title
 /// @param Flags    display flags
 /// @return window object
-SDL_Window * CreateWindow(int Width, int Height, const char * Title, int Flags);
+SDL_Window * CreateWindow(int Width, int Height, string Title, int Flags);
 
 /// Creates display renderer
 /// @param Window   created window

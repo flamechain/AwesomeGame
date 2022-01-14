@@ -35,8 +35,8 @@ SDL_Renderer * CreateRenderer(SDL_Window * Window, int Flags) {
     return renderer;
 }
 
-SDL_Window * CreateWindow(int Width, int Height, const char * Title, int Flags) {
-    SDL_Window * window = SDL_CreateWindow(Title,
+SDL_Window * CreateWindow(int Width, int Height, string Title, int Flags) {
+    SDL_Window * window = SDL_CreateWindow(Title.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         Width, Height, SDL_WINDOW_OPENGL); // SDL_WINDOW_OPENGL replaced 0
