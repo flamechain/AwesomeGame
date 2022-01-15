@@ -14,13 +14,11 @@
 int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags = GAME_WINDOW_WINDOWED);
 
 enum class Menu {
-    None = 0,
-    Pause = 1,
-    Lose = 2,
-    Win = 3,
+    None,
     Title,
     Options,
-    Credits
+    Credits,
+    Pause
 };
 
 class GameState {

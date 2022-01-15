@@ -84,27 +84,47 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     WASDController movement;
 
-    gameState.SetMenu(Menu::None);
+    gameState.SetMenu(Menu::Title);
     // centered on screen
     Rect pauseMenu = Rect(renderer, Width / 4, Height / 4, Width / 2, Height / 2, {100, 100, 255});
-    Text pauseText[2];
+    Paragraph pauseText = Paragraph(renderer);
+    pauseText.AddLine("Lato-Bold.ttf", 80, {0, 0, 0}, "PAUSED");
+    pauseText.AddLine("Lato-Regular.ttf", 24, {0, 0, 0}, "Press ESC to resume.");
 
-    // two lines of text for pause menu
-    pauseText[0] = Text(renderer, "Lato-Bold.ttf", 80, {0, 0, 0}, "PAUSED");
-    pauseText[1] = Text(renderer, "Lato-Regular.ttf", 24, {0, 0, 0}, "Press ESC to resume.");
     pauseText[0].SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseText[0].GetRect().w / 2), pauseMenu.GetRect().y + 20);
     pauseText[1].SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseText[1].GetRect().w / 2), pauseMenu.GetRect().y + pauseText[0].GetRect().h + 20);
 
+    Rect titleMenu = Rect(renderer, 0, 0, Width, Height, {100, 100, 100});
+    // titleMenu.LoadImage("TitleScreen.png");
+    Paragraph titleText = Paragraph(renderer);
+    titleText.AddLine("Lato-Bold.ttf", 120, {255, 255, 255}, "Adventures of Cliche");
+    titleText[0].SetPosition((titleMenu.GetRect().w / 2) - (titleText[0].GetRect().w / 2), 100);
+
+    // add similar_buttons class? lots of duplicate numbers here
+    Button titleStart = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 400, 400, 100, {100, 255, 100});
+    Button titleCredits = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 550, 400, 100, {170, 170, 170});
+    Button titleOptions = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 700, 400, 100, {170, 170, 170});
+    Button titleQuit = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 850, 400, 100, {255, 100, 100});
+    titleStart.SetBorder(10, {0, 0, 0});
+    titleCredits.SetBorder(10, {0, 0, 0});
+    titleOptions.SetBorder(10, {0, 0, 0});
+    titleQuit.SetBorder(10, {0, 0, 0});
+    titleStart.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "START", true);
+    titleCredits.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "OPTIONS", true);
+    titleOptions.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "CREDITS", true);
+    titleQuit.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
+
     Rect background = Rect(renderer, 0, 0, Width, Height, {255, 255, 255});
 
-    // button, maybe add to button vector to make it easier to handle tons of buttons
-    // do the same with rectangles in the future maybe?
-    Button quitButton = Button(renderer, 0, 0, 400, 100, {200, 200, 200});
-    quitButton.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
-    quitButton.SetBorder(5, {0, 0, 0});
-    quitButton.SetActive(false);
+    Button pauseQuit = Button(renderer, 0, 0, 400, 100, {200, 200, 200});
+    pauseQuit.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
+    pauseQuit.SetBorder(7, {0, 0, 0});
     // centered to pause menu, padded 20px from the bottom
-    quitButton.SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (quitButton.GetRect().w / 2), pauseMenu.GetRect().y + pauseMenu.GetRect().h - quitButton.GetRect().h - 20);
+    pauseQuit.SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseQuit.GetRect().w / 2), pauseMenu.GetRect().y + pauseMenu.GetRect().h - pauseQuit.GetRect().h - 20);
+
+    Button titleBack = Button(renderer, 200, 200, 150, 50, {170, 170, 170});
+    titleBack.SetText("Lato-Regular.ttf", 24, {0, 0, 0}, "Back", true);
+    titleBack.SetBorder(5, {0, 0, 0});
 
     SDL_Point mouse;
 
@@ -140,10 +160,10 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                         case SDL_SCANCODE_ESCAPE:
                             if (gameState.GetMenu() == Menu::None) {
                                 gameState.SetMenu(Menu::Pause);
-                                quitButton.SetActive(true);
+                                pauseQuit.SetActive(true);
                             } else if (gameState.GetMenu() == Menu::Pause) {
                                 gameState.SetMenu(Menu::None);
-                                quitButton.SetActive(false);
+                                pauseQuit.SetActive(false);
                             }
                             break;
                         default:
@@ -175,68 +195,114 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 case SDL_MOUSEBUTTONDOWN:
                     switch (event.button.button) {
                         case SDL_BUTTON_LEFT:
-                            if (quitButton.IsActive() && quitButton.IsInside(mouse.x, mouse.y)) gameState.StopGame();
+                            // add vector of active buttons to save space on checking every possible button
+                            if (pauseQuit.IsActive() && pauseQuit.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Title);
+                            if (titleStart.IsActive() && titleStart.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::None);
+                            if (titleOptions.IsActive() && titleOptions.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Options);
+                            if (titleCredits.IsActive() && titleCredits.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Credits);
+                            if (titleBack.IsActive() && titleBack.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Title);
+                            if (titleQuit.IsActive() && titleQuit.IsInside(mouse.x, mouse.y)) gameState.StopGame();
                             break;
                         default:
                             break;
                     }
                     break;
                 case SDL_MOUSEMOTION:
-                    if (quitButton.IsActive() && quitButton.IsInside(mouse.x, mouse.y)) {
-                        quitButton.Shadow(50, 50, 50);
-                    } else {
-                        quitButton.UnShadow();
-                    }
+                    // shadow buttons method here; pass in vector of active buttons
+                    if (pauseQuit.IsActive() && pauseQuit.IsInside(mouse.x, mouse.y)) pauseQuit.Shadow(150, 150, 150);
+                    else pauseQuit.UnShadow();
+
+                    if (titleStart.IsActive() && titleStart.IsInside(mouse.x, mouse.y)) titleStart.Shadow(150, 150, 150);
+                    else titleStart.UnShadow();
+                    if (titleOptions.IsActive() && titleOptions.IsInside(mouse.x, mouse.y)) titleOptions.Shadow(150, 150, 150);
+                    else titleOptions.UnShadow();
+                    if (titleCredits.IsActive() && titleCredits.IsInside(mouse.x, mouse.y)) titleCredits.Shadow(150, 150, 150);
+                    else titleCredits.UnShadow();
+                    if (titleBack.IsActive() && titleBack.IsInside(mouse.x, mouse.y)) titleBack.Shadow(150, 150, 150);
+                    else titleBack.UnShadow();
+                    if (titleQuit.IsActive() && titleQuit.IsInside(mouse.x, mouse.y)) titleQuit.Shadow(150, 150, 150);
+                    else titleQuit.UnShadow();
+
                     break;
                 default:
                     break;
             }
         }
 
-        // game code goes here
-
-        if (gameState.GetMenu() == Menu::None) {
-            // check player movement
-            // change to use an {x, y} vector movement that calculates next point rather than speed
-            if (movement.MovingUp()) player.speed.y = -10;
-            else if (movement.MovingDown()) player.speed.y = 10;
-            else player.speed.y = 0;
-            if (movement.MovingLeft()) player.speed.x = -10;
-            else if (movement.MovingRight()) player.speed.x = 10;
-            else player.speed.x = 0;
-
-            if (movement.MovingUp() && movement.MovingDown()) player.speed.y = 0;
-            if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
-
-            // checks if players hitbox center is centered with camera
-            if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
-            if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
-            player.Update();
-        }
-
         SDL_RenderClear(renderer);
         background.Render();
 
-        // make tiles darker if menu open
-        if ((int)gameState.GetMenu() > 0 && (int)gameState.GetMenu() < 4) {
-            level.SetExtraColor(150, 150, 150);
-            level.Render();
-            player.SetExtraColor(150, 150, 150);
-            player.Render();
-        }
+        // game code goes here
+        switch(gameState.GetMenu()) {
+            case Menu::None: {
+                // way to do this once and not every game loop?
+                titleStart.SetActive(false);
+                titleOptions.SetActive(false);
+                titleCredits.SetActive(false);
+                titleQuit.SetActive(false);
 
-        // render tiles if not in title, options, or credits
-        if ((int)gameState.GetMenu() <= 3) {
-            level.Render();
-            player.Render();
-        }
+                // check player movement
+                // change to use an {x, y} vector movement that calculates next point rather than speed
+                if (movement.MovingUp()) player.speed.y = -10;
+                else if (movement.MovingDown()) player.speed.y = 10;
+                else player.speed.y = 0;
+                if (movement.MovingLeft()) player.speed.x = -10;
+                else if (movement.MovingRight()) player.speed.x = 10;
+                else player.speed.x = 0;
 
-        // render pause menu
-        if (gameState.GetMenu() == Menu::Pause) {
-            pauseMenu.Render();
-            pauseText[0].Render();
-            pauseText[1].Render();
-            quitButton.Render();
+                if (movement.MovingUp() && movement.MovingDown()) player.speed.y = 0;
+                if (movement.MovingLeft() && movement.MovingRight()) player.speed.x = 0;
+
+                // checks if players hitbox center is centered with camera
+                if ((player.GetHitbox().x + (player.GetHitbox().w / 2)) - camera.x == camera.w / 2) camera.Update(player.speed.x, 0);
+                if ((player.GetHitbox().y + (player.GetHitbox().h / 2)) - camera.y == camera.h / 2) camera.Update(0, player.speed.y);
+                player.Update();
+
+                level.Render();
+                player.Render();
+            } break;
+            case Menu::Title: {
+                titleBack.SetActive(false);
+                titleStart.SetActive(true);
+                titleOptions.SetActive(true);
+                titleCredits.SetActive(true);
+                titleQuit.SetActive(true);
+                titleMenu.Render();
+                titleText.Render();
+
+                titleStart.Render();
+                titleOptions.Render();
+                titleCredits.Render();
+                titleQuit.Render();
+            } break;
+            case Menu::Pause: {
+                level.SetExtraColor(150, 150, 150);
+                level.Render();
+                player.SetExtraColor(150, 150, 150);
+                player.Render();
+
+                pauseMenu.Render();
+                pauseText.Render();
+                pauseQuit.Render();
+            } break;
+            case Menu::Credits: {
+                titleBack.SetActive(true);
+                titleStart.SetActive(false);
+                titleOptions.SetActive(false);
+                titleCredits.SetActive(false);
+                titleQuit.SetActive(false);
+
+                titleBack.Render();
+            } break;
+            case Menu::Options: {
+                titleBack.SetActive(true);
+                titleStart.SetActive(false);
+                titleOptions.SetActive(false);
+                titleCredits.SetActive(false);
+                titleQuit.SetActive(false);
+
+                titleBack.Render();
+            } break;
         }
 
         // triggers the double buffer
@@ -252,7 +318,13 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     loadingScreen.Destroy();
     level.Destroy();
     pauseMenu.Destroy();
-    quitButton.Destroy();
+    pauseText.Destroy();
+    pauseQuit.Destroy();
+    titleStart.Destroy();
+    titleOptions.Destroy();
+    titleCredits.Destroy();
+    titleBack.Destroy();
+    titleQuit.Destroy();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

@@ -90,10 +90,11 @@ public:
     /// @param g    g-channel
     /// @param b    b-channel
     void Shadow(int r, int g, int b) {
+        // fix to check backup.r - r
         if (r < 0) r = 0;
         if (g < 0) g = 0;
         if (b < 0) b = 0;
-        this->color_ = {r, g, b};
+        this->color_ = {this->color_backup_.r - r, this->color_backup_.g - g, this->color_backup_.b - b};
     }
 
     /// Restores original color

@@ -64,4 +64,34 @@ public:
     }
 };
 
+class Paragraph {
+private:
+
+    SDL_Renderer * renderer_;
+    vector<Text> lines_;
+
+public:
+
+    Paragraph(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void Destroy() {
+        for (int i=0; i<(int)this->lines_.size(); i++) this->lines_[i].Destroy();
+        this->renderer_ = nullptr;
+    }
+
+    void AddLine(const char * font, int pt, Color color, const char * text) {
+        this->lines_.push_back(Text(this->renderer_, font, pt, color, text));
+    }
+
+    Text & operator[](unsigned long long index) {
+        return this->lines_[index];
+    }
+
+    void Render() {
+        for (int i=0; i<(int)this->lines_.size(); i++) this->lines_[i].Render();
+    }
+};
+
 #endif

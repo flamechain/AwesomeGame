@@ -19,6 +19,7 @@ private:
 public:
 
     Button(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb) : Rect(renderer, x, y, w, h, rgb) {
+        this->active_ = false;
     }
 
     /// Renders text and rect
