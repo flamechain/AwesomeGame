@@ -18,8 +18,11 @@ private:
 
 public:
 
-    Button(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb) : Rect(renderer, x, y, w, h, rgb) {
+    Button() {}
+
+    Button(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb, int bpt, Color brgb) : Rect(renderer, x, y, w, h, rgb) {
         this->active_ = false;
+        this->SetBorder(bpt, brgb);
     }
 
     /// Renders text and rect

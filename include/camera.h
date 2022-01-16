@@ -16,6 +16,8 @@ public:
     int w;
     int h;
 
+    Camera() {}
+
     Camera(int x, int y, int w, int h) {
         this->x = x;
         this->y = y;

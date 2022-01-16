@@ -20,6 +20,8 @@ enum class TileType {
     TestPlayer
 };
 
+/// Defines sizes of all tiles
+/// @return tile sizes
 vector<SDL_Rect> InitTiles();
 
 class Tile {

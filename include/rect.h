@@ -15,6 +15,8 @@ protected:
 
 public:
 
+    Rect() {}
+
     Rect(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb) {
         this->renderer_ = renderer;
         this->color_ = rgb;
@@ -85,21 +87,13 @@ public:
         this->border_color_ = color;
     }
 
-    /// Darkens color
-    /// @param r    r-channel
-    /// @param g    g-channel
-    /// @param b    b-channel
-    void Shadow(int r, int g, int b) {
-        // fix to check backup.r - r
-        if (r < 0) r = 0;
-        if (g < 0) g = 0;
-        if (b < 0) b = 0;
-        this->color_ = {this->color_backup_.r - r, this->color_backup_.g - g, this->color_backup_.b - b};
-    }
-
-    /// Restores original color
-    void UnShadow() {
-        this->color_ = this->color_backup_;
+    /// Darkens colors
+    /// @param percent  percent to decrease, 0 -> 1
+    void SetDarkness(float percent) {
+        int r = (float)this->color_backup_.r * ((float)1 - percent);
+        int g = (float)this->color_backup_.g * ((float)1 - percent);
+        int b = (float)this->color_backup_.b * ((float)1 - percent);
+        this->color_ = {r, g, b};
     }
 
     /// Moves rect

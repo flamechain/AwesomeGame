@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "tile.h"
+#include "camera.h"
 
 class Level {
 private:
@@ -13,6 +14,8 @@ private:
     int y_;
 
 public:
+
+    Level() {}
 
     Level(SDL_Renderer * renderer, Camera * camera, vector<SDL_Rect> tiles, const int x, const int y) {
         this->level_ = new Tile[x*y]();

@@ -14,6 +14,7 @@
 #include <chrono>
 #include <thread>
 #include <memory>
+#include <map>
 #include <stdexcept>
 
 #include <math.h>
@@ -21,6 +22,7 @@
 using std::printf;
 using std::vector;
 using std::string;
+using std::map;
 using namespace std::this_thread;
 using namespace std::chrono;
 

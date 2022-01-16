@@ -1,4 +1,6 @@
 #include "game.h"
+#include "gamedef.h"
+
 #include "tile.h"
 #include "player.h"
 #include "objects.h"
@@ -33,6 +35,58 @@ Level GenerateRandomLevel(int x, int y, int width, int height, vector<SDL_Rect> 
     }
 
     return level;
+}
+
+void ShadowButtons(map<string, Button*> active, SDL_Point mouse) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) {
+        if (it->second->IsActive() && it->second->IsInside(mouse.x, mouse.y)) active[it->first]->SetDarkness(0.50);
+        else active[it->first]->SetDarkness(0);
+    }
+}
+
+void TitleScreen(map<string, Button*> active) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) active[it->first]->SetActive(false);
+
+    active["Title_Start"]->SetActive(true);
+    active["Title_Options"]->SetActive(true);
+    active["Title_Credits"]->SetActive(true);
+    active["Title_Quit"]->SetActive(true);
+
+    gameState.SetMenu(Menu::Title);
+}
+
+void OptionsScreen(map<string, Button*> active) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) active[it->first]->SetActive(false);
+
+    active["Options_Back"]->SetActive(true);
+
+    gameState.SetMenu(Menu::Options);
+}
+
+void CreditsScreen(map<string, Button*> active) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) active[it->first]->SetActive(false);
+
+    active["Options_Back"]->SetActive(true);
+
+    gameState.SetMenu(Menu::Credits);
+}
+
+void GameScreen(map<string, Button*> active) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) active[it->first]->SetActive(false);
+
+    gameState.SetMenu(Menu::None);
+}
+
+void PauseScreen(map<string, Button*> active) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) active[it->first]->SetActive(false);
+
+    active["Pause_Quit"]->SetActive(true);
+
+    gameState.SetMenu(Menu::Pause);
+}
+
+void DestroyButtons(map<string, Button*> active) {
+    for (map<string, Button*>::iterator it = active.begin(); it != active.end(); ++it) active[it->first]->Destroy();
 }
 
 int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
@@ -100,33 +154,35 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     titleText.AddLine("Lato-Bold.ttf", 120, {255, 255, 255}, "Adventures of Cliche");
     titleText[0].SetPosition((titleMenu.GetRect().w / 2) - (titleText[0].GetRect().w / 2), 100);
 
-    // add similar_buttons class? lots of duplicate numbers here
-    Button titleStart = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 400, 400, 100, {100, 255, 100});
-    Button titleCredits = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 550, 400, 100, {170, 170, 170});
-    Button titleOptions = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 700, 400, 100, {170, 170, 170});
-    Button titleQuit = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 850, 400, 100, {255, 100, 100});
-    titleStart.SetBorder(10, {0, 0, 0});
-    titleCredits.SetBorder(10, {0, 0, 0});
-    titleOptions.SetBorder(10, {0, 0, 0});
-    titleQuit.SetBorder(10, {0, 0, 0});
-    titleStart.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "START", true);
-    titleCredits.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "OPTIONS", true);
-    titleOptions.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "CREDITS", true);
-    titleQuit.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
-
     Rect background = Rect(renderer, 0, 0, Width, Height, {255, 255, 255});
 
-    Button pauseQuit = Button(renderer, 0, 0, 400, 100, {200, 200, 200});
-    pauseQuit.SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
-    pauseQuit.SetBorder(7, {0, 0, 0});
-    // centered to pause menu, padded 20px from the bottom
-    pauseQuit.SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (pauseQuit.GetRect().w / 2), pauseMenu.GetRect().y + pauseMenu.GetRect().h - pauseQuit.GetRect().h - 20);
+    map<string, Button*> buttons;
+    Button titlestart = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 400, 400, 100, {100, 255, 100}, 10, {0, 0, 0});
+    Button titlecredits = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 550, 400, 100, {170, 170, 170}, 10, {0, 0, 0});
+    Button titleoptions = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 700, 400, 100, {170, 170, 170}, 10, {0, 0, 0});
+    Button titlequit = Button(renderer, (titleMenu.GetRect().w / 2) - 200, 850, 400, 100, {255, 100, 100}, 10, {0, 0, 0});
+    Button pausequit = Button(renderer, 0, 0, 400, 100, {200, 200, 200}, 7, {0, 0, 0});
+    Button optionsback = Button(renderer, 200, 200, 150, 50, {170, 170, 170}, 5, {0, 0, 0});
 
-    Button titleBack = Button(renderer, 200, 200, 150, 50, {170, 170, 170});
-    titleBack.SetText("Lato-Regular.ttf", 24, {0, 0, 0}, "Back", true);
-    titleBack.SetBorder(5, {0, 0, 0});
+    buttons["Title_Start"] = &titlestart;
+    buttons["Title_Credits"] = &titlecredits;
+    buttons["Title_Options"] = &titleoptions;
+    buttons["Title_Quit"] = &titlequit;
+    buttons["Pause_Quit"] = &pausequit;
+    buttons["Options_Back"] = &optionsback;
+
+    buttons["Title_Start"]->SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "START", true);
+    buttons["Title_Credits"]->SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "CREDITS", true);
+    buttons["Title_Options"]->SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "OPTIONS", true);
+    buttons["Title_Quit"]->SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
+    buttons["Pause_Quit"]->SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "QUIT", true);
+    buttons["Options_Back"]->SetText("Lato-Bold.ttf", 60, {0, 0, 0}, "BACK", true);
+
+    buttons["Pause_Quit"]->SetPosition(pauseMenu.GetRect().x + (pauseMenu.GetRect().w / 2) - (buttons["Pause_Quit"]->GetRect().w / 2), pauseMenu.GetRect().y + pauseMenu.GetRect().h - buttons["Pause_Quit"]->GetRect().h - 20);
 
     SDL_Point mouse;
+
+    TitleScreen(buttons);
 
     while (gameState.IsRunning()) {
         SDL_Event event;
@@ -159,11 +215,9 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                             break;
                         case SDL_SCANCODE_ESCAPE:
                             if (gameState.GetMenu() == Menu::None) {
-                                gameState.SetMenu(Menu::Pause);
-                                pauseQuit.SetActive(true);
+                                PauseScreen(buttons);
                             } else if (gameState.GetMenu() == Menu::Pause) {
-                                gameState.SetMenu(Menu::None);
-                                pauseQuit.SetActive(false);
+                                GameScreen(buttons);
                             }
                             break;
                         default:
@@ -195,34 +249,20 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 case SDL_MOUSEBUTTONDOWN:
                     switch (event.button.button) {
                         case SDL_BUTTON_LEFT:
-                            // add vector of active buttons to save space on checking every possible button
-                            if (pauseQuit.IsActive() && pauseQuit.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Title);
-                            if (titleStart.IsActive() && titleStart.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::None);
-                            if (titleOptions.IsActive() && titleOptions.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Options);
-                            if (titleCredits.IsActive() && titleCredits.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Credits);
-                            if (titleBack.IsActive() && titleBack.IsInside(mouse.x, mouse.y)) gameState.SetMenu(Menu::Title);
-                            if (titleQuit.IsActive() && titleQuit.IsInside(mouse.x, mouse.y)) gameState.StopGame();
+                            // somehow add OnClick to button?
+                            if (buttons["Pause_Quit"]->IsActive() && buttons["Pause_Quit"]->IsInside(mouse.x, mouse.y)) TitleScreen(buttons);
+                            else if (buttons["Title_Start"]->IsActive() && buttons["Title_Start"]->IsInside(mouse.x, mouse.y)) GameScreen(buttons);
+                            else if (buttons["Title_Options"]->IsActive() && buttons["Title_Options"]->IsInside(mouse.x, mouse.y)) OptionsScreen(buttons);
+                            else if (buttons["Title_Credits"]->IsActive() && buttons["Title_Credits"]->IsInside(mouse.x, mouse.y)) CreditsScreen(buttons);
+                            else if (buttons["Options_Back"]->IsActive() && buttons["Options_Back"]->IsInside(mouse.x, mouse.y)) TitleScreen(buttons);
+                            else if (buttons["Title_Quit"]->IsActive() && buttons["Title_Quit"]->IsInside(mouse.x, mouse.y)) gameState.StopGame();
                             break;
                         default:
                             break;
                     }
                     break;
                 case SDL_MOUSEMOTION:
-                    // shadow buttons method here; pass in vector of active buttons
-                    if (pauseQuit.IsActive() && pauseQuit.IsInside(mouse.x, mouse.y)) pauseQuit.Shadow(150, 150, 150);
-                    else pauseQuit.UnShadow();
-
-                    if (titleStart.IsActive() && titleStart.IsInside(mouse.x, mouse.y)) titleStart.Shadow(150, 150, 150);
-                    else titleStart.UnShadow();
-                    if (titleOptions.IsActive() && titleOptions.IsInside(mouse.x, mouse.y)) titleOptions.Shadow(150, 150, 150);
-                    else titleOptions.UnShadow();
-                    if (titleCredits.IsActive() && titleCredits.IsInside(mouse.x, mouse.y)) titleCredits.Shadow(150, 150, 150);
-                    else titleCredits.UnShadow();
-                    if (titleBack.IsActive() && titleBack.IsInside(mouse.x, mouse.y)) titleBack.Shadow(150, 150, 150);
-                    else titleBack.UnShadow();
-                    if (titleQuit.IsActive() && titleQuit.IsInside(mouse.x, mouse.y)) titleQuit.Shadow(150, 150, 150);
-                    else titleQuit.UnShadow();
-
+                    ShadowButtons(buttons, mouse);
                     break;
                 default:
                     break;
@@ -235,12 +275,6 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
         // game code goes here
         switch(gameState.GetMenu()) {
             case Menu::None: {
-                // way to do this once and not every game loop?
-                titleStart.SetActive(false);
-                titleOptions.SetActive(false);
-                titleCredits.SetActive(false);
-                titleQuit.SetActive(false);
-
                 // check player movement
                 // change to use an {x, y} vector movement that calculates next point rather than speed
                 if (movement.MovingUp()) player.speed.y = -10;
@@ -262,18 +296,13 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 player.Render();
             } break;
             case Menu::Title: {
-                titleBack.SetActive(false);
-                titleStart.SetActive(true);
-                titleOptions.SetActive(true);
-                titleCredits.SetActive(true);
-                titleQuit.SetActive(true);
                 titleMenu.Render();
                 titleText.Render();
 
-                titleStart.Render();
-                titleOptions.Render();
-                titleCredits.Render();
-                titleQuit.Render();
+                buttons["Title_Start"]->Render();
+                buttons["Title_Options"]->Render();
+                buttons["Title_Credits"]->Render();
+                buttons["Title_Quit"]->Render();
             } break;
             case Menu::Pause: {
                 level.SetExtraColor(150, 150, 150);
@@ -283,25 +312,13 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
                 pauseMenu.Render();
                 pauseText.Render();
-                pauseQuit.Render();
+                buttons["Pause_Quit"]->Render();
             } break;
             case Menu::Credits: {
-                titleBack.SetActive(true);
-                titleStart.SetActive(false);
-                titleOptions.SetActive(false);
-                titleCredits.SetActive(false);
-                titleQuit.SetActive(false);
-
-                titleBack.Render();
+                buttons["Options_Back"]->Render();
             } break;
             case Menu::Options: {
-                titleBack.SetActive(true);
-                titleStart.SetActive(false);
-                titleOptions.SetActive(false);
-                titleCredits.SetActive(false);
-                titleQuit.SetActive(false);
-
-                titleBack.Render();
+                buttons["Options_Back"]->Render();
             } break;
         }
 
@@ -312,19 +329,13 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
         SDL_Delay(1000 / FRAMERATE);
     }
 
-    // cleanup, later add everything to vector for organization and easier destruction (tiles e.g.)
     player.Destroy();
     loadingText.Destroy();
     loadingScreen.Destroy();
     level.Destroy();
     pauseMenu.Destroy();
     pauseText.Destroy();
-    pauseQuit.Destroy();
-    titleStart.Destroy();
-    titleOptions.Destroy();
-    titleCredits.Destroy();
-    titleBack.Destroy();
-    titleQuit.Destroy();
+    DestroyButtons(buttons);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
