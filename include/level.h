@@ -5,6 +5,8 @@
 #include "tile.h"
 #include "camera.h"
 
+extern vector<SDL_Rect> tileSheet;
+
 class Level {
 private:
 
@@ -17,17 +19,25 @@ public:
 
     Level() {}
 
-    Level(SDL_Renderer * renderer, Camera * camera, vector<SDL_Rect> tiles, const int x, const int y) {
+    Level(const int x, const int y) {
         this->level_ = new Tile[x*y]();
 
         for (int i=0; i<x; i++) {
             for (int j=0; j<y; j++) {
-                this->level_[i+x*j] = Tile(renderer, TileType::None, tiles, camera);
+                this->level_[i+x*j] = Tile(TileType::None);
             }
         }
 
         this->x_ = x;
         this->y_ = y;
+    }
+
+    void SetRenderer(SDL_Renderer * renderer) {
+        for (int i=0; i<this->x_; i++) {
+            for (int j=0; j<this->y_; j++) {
+                this->level_[i+this->x_*j].SetRenderer(renderer);
+            }
+        }
     }
 
     /// Sets tiles at coord pair
@@ -87,6 +97,44 @@ public:
                 this->level_[i+this->x_*j].SetExtraColor(r, g, b);
             }
         }
+    }
+
+};
+
+class LevelGroup {
+private:
+
+    SDL_Renderer * renderer_;
+
+public:
+
+    LevelGroup() {}
+
+    LevelGroup(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(const LevelGroup& copy) {
+    }
+
+    void Render() {
+    }
+
+    void Destroy() {
+        this->renderer_ = nullptr;
+    }
+
+    void AddLevel(string uid, Level level) {
+    }
+
+    Level &operator[](int iterindex) {
+    }
+
+    Level &operator[](string uid) {
     }
 
 };

@@ -24,6 +24,8 @@ enum class TileType {
 /// @return tile sizes
 vector<SDL_Rect> InitTiles();
 
+extern vector<SDL_Rect> tileSheet;
+
 class Tile {
 protected:
 
@@ -37,16 +39,12 @@ protected:
     unsigned char opacity_;
     SDL_RendererFlip flip_;
     TileType type_;
-    vector<SDL_Rect> tiles_;
 
 public:
 
     Tile() {}
 
-    Tile(SDL_Renderer * renderer, TileType type, vector<SDL_Rect> tiles, Camera * camera) {
-        this->renderer_ = renderer;
-        this->camera_ = camera;
-        this->tiles_ = tiles;
+    Tile(TileType type) {
         this->texture_ = NULL;
 
         this->LoadTile(type);
@@ -67,10 +65,17 @@ public:
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
     }
 
+    void SetRenderer(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void SetCamera(Camera * camera) {
+        this->camera_ = camera;
+    }
+
     void operator=(const Tile& tile) {
         this->camera_ = tile.GetCamera();
         this->renderer_ = tile.GetRenderer();
-        this->tiles_ = tile.GetTiles();
         this->src_ = {};
         this->texture_ = NULL;
         this->type_ = tile.GetType();
@@ -102,12 +107,6 @@ public:
     /// @return pointer to renderer
     SDL_Renderer * GetRenderer() const {
         return this->renderer_;
-    }
-
-    /// Gets global tiles
-    /// @return copy of global tiles
-    vector<SDL_Rect> GetTiles() const {
-        return this->tiles_;
     }
 
     /// Gets tile type
@@ -148,8 +147,8 @@ public:
             type == TileType::GrassPathCross || \
             type == TileType::GrassPathT || \
             type == TileType::GrassPathEnd)
-            this->src_.push_back(this->tiles_[(int)TileType::Path]);
-        this->src_.push_back(this->tiles_[(int)type]);
+            this->src_.push_back(tileSheet[(int)TileType::Path]);
+        this->src_.push_back(tileSheet[(int)type]);
         this->hitbox_.w = 16;
         this->hitbox_.h = 16;
     }

@@ -13,24 +13,15 @@
 /// @return error
 int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags = GAME_WINDOW_WINDOWED);
 
-enum class Menu {
-    None,
-    Title,
-    Options,
-    Credits,
-    Pause
-};
-
 class GameState {
 private:
     bool running_;
-    Menu menu_type_;
+    unsigned int screen_;
 
 public:
 
     GameState() {
         this->running_ = true;
-        this->menu_type_ = Menu::None;
     }
 
     /// If game is running
@@ -44,16 +35,16 @@ public:
         this->running_ = false;
     }
 
-    /// Sets current menu
-    /// @param type menu type based on enum Menu
-    void SetMenu(Menu type) {
-        this->menu_type_ = type;
+    /// Sets current screen
+    /// @param type screen uid
+    void SetScreen(unsigned int uid) {
+        this->screen_ = uid;
     }
 
-    /// Gets curernt menu
-    /// @return current menu entry in Menu enum
-    Menu GetMenu() const {
-        return this->menu_type_;
+    /// Gets curernt screen
+    /// @return current screen uid
+    unsigned int CurrentScreen() const {
+        return this->screen_;
     }
 
 };

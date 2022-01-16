@@ -87,12 +87,12 @@ public:
         this->border_color_ = color;
     }
 
-    /// Darkens colors
+    /// Changes brightness
     /// @param percent  percent to decrease, 0 -> 1
-    void SetDarkness(float percent) {
-        int r = (float)this->color_backup_.r * ((float)1 - percent);
-        int g = (float)this->color_backup_.g * ((float)1 - percent);
-        int b = (float)this->color_backup_.b * ((float)1 - percent);
+    void TempShade(float percent) {
+        int r = (float)this->color_backup_.r * percent;
+        int g = (float)this->color_backup_.g * percent;
+        int b = (float)this->color_backup_.b * percent;
         this->color_ = {r, g, b};
     }
 
@@ -102,6 +102,47 @@ public:
     void SetPosition(int x, int y) {
         this->rect_.x = x;
         this->rect_.y = y;
+    }
+
+};
+
+class RectGroup {
+private:
+
+    SDL_Renderer * renderer_;
+
+public:
+
+    RectGroup() {}
+
+    RectGroup(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(const RectGroup& copy) {
+    }
+
+    void Render() {
+    }
+
+    void Destroy() {
+        this->renderer_ = nullptr;
+    }
+
+    void SetOpacity(int r, int g, int b) {
+    }
+
+    void AddRect(string uid, int x, int y, int w, int h, Color color) {
+    }
+
+    Rect &operator[](int iterindex) {
+    }
+
+    Rect &operator[](string uid) {
     }
 
 };

@@ -26,6 +26,10 @@ using std::map;
 using namespace std::this_thread;
 using namespace std::chrono;
 
+class Screen;
+typedef void (*callback)(void);
+typedef void (*screen_callback)(Screen*);
+
 /// Sends text output to stdout
 /// @param Format   format string (same syntax as printf)
 inline void ConsoleOutput(const char * Format, ...) {

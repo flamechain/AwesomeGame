@@ -16,8 +16,8 @@ public:
 
     Text() {}
 
-    Text(SDL_Renderer * renderer, const char * font, int pt, Color color, const char * text = "") {
-        this->font_ = TTF_OpenFont((string("resources/font/") + font).c_str(), pt);
+    Text(SDL_Renderer * renderer, string font, int pt, Color color, string text = "") {
+        this->font_ = TTF_OpenFont((string("resources/font/") + font + ".ttf").c_str(), pt);
         if (this->font_ == NULL) ConsoleOutput("%s\n", TTF_GetError());
         this->font_color_ = color;
         this->rect_.x = 0;
@@ -29,12 +29,12 @@ public:
 
     /// Changes text to render
     /// @param text new text
-    void SetText(const char * text) {
+    void SetText(string text) {
         if (this->font_ == NULL) return;
         SDL_Color fontColor = {(unsigned char)this->font_color_.r, (unsigned char)this->font_color_.g, (unsigned char)this->font_color_.b, 255};
-        SDL_Surface * surface = TTF_RenderText_Solid(this->font_, text, fontColor);
+        SDL_Surface * surface = TTF_RenderText_Solid(this->font_, text.c_str(), fontColor);
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
-        TTF_SizeText(this->font_, text, &this->rect_.w, &this->rect_.h);
+        TTF_SizeText(this->font_, text.c_str(), &this->rect_.w, &this->rect_.h);
         SDL_FreeSurface(surface);
     }
 
@@ -68,12 +68,21 @@ class Paragraph {
 private:
 
     SDL_Renderer * renderer_;
-    vector<Text> lines_;
+    map<string, Text> lines_;
 
 public:
 
+    Paragraph() {}
+
     Paragraph(SDL_Renderer * renderer) {
         this->renderer_ = renderer;
+    }
+
+    void operator=(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(const Paragraph& copy) {
     }
 
     void Destroy() {
@@ -81,12 +90,22 @@ public:
         this->renderer_ = nullptr;
     }
 
-    void AddLine(const char * font, int pt, Color color, const char * text) {
-        this->lines_.push_back(Text(this->renderer_, font, pt, color, text));
+    void AddLine(string uid, string font, int pt, Color color, string text) {
+        this->lines_[uid] = Text(this->renderer_, font, pt, color, text);
     }
 
-    Text & operator[](unsigned long long index) {
-        return this->lines_[index];
+    Text &operator[](unsigned int iterindex) {
+        vector<string> keys;
+
+        for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); ++it) {
+            keys.push_back(it->first);
+        }
+
+        return this->lines_[keys[iterindex]];
+    }
+
+    Text &operator[](string uid) {
+        return this->lines_[uid];
     }
 
     void Render() {

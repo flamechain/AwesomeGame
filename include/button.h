@@ -102,6 +102,73 @@ public:
         return false;
     }
 
+    /// If button is clicked
+    /// @param x    mouse x-coord
+    /// @param y    mouse y-coord
+    bool Clicked(int x, int y) {
+        if (this->IsActive() && this->IsInside(x, y)) return true;
+        return false;
+    }
+
+};
+
+class ButtonGroup {
+private:
+
+    SDL_Renderer * renderer_;
+
+public:
+
+    ButtonGroup() {}
+
+    ButtonGroup(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(const ButtonGroup& copy) {
+    }
+
+    void Render() {
+    }
+
+    void Destroy() {
+        this->renderer_ = nullptr;
+    }
+
+    void SetDefaultBorder(int pt, Color color) {
+    }
+
+    void SetDefaultTextAttrib(int pt, Color color, string font) {
+    }
+
+    void SetDefaultHoverRoutine(screen_callback onHover, screen_callback offHover) {
+    }
+
+    void AddButton(string uid, int x, int y, int w, int h, Color color, string text, screen_callback onClick) {
+    }
+
+    void SetOpacity(int r, int g, int b) {
+    }
+
+    int Count() const {
+    }
+
+    void Hover(SDL_Point mouse) {
+    }
+
+    void Click(SDL_Point mouse) {
+    }
+
+    Button &operator[](int iterindex) {
+    }
+
+    Button &operator[](string uid) {
+    }
+
 };
 
 #endif

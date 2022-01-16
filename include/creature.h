@@ -1,28 +1,22 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef CREATURE_H
+#define CREATURE_H
 
 #include "utils.h"
 #include "game.h"
 #include "tile.h"
 
-struct Momentum {
-    int x;
-    int y;
-};
-
-class Player : public Tile {
+class Creature : public Tile {
 private:
 
     SDL_Rect real_hitbox_;
     SDL_Rect bounds_;
-    Momentum speed_cap_;
     SDL_Point real_offset_;
 
 public:
 
-    Momentum speed;
+    SDL_Point Speed;
 
-    Player(SDL_Renderer * renderer, TileType type, vector<SDL_Rect> tiles, Camera * camera) : Tile(renderer, type, tiles, camera) {
+    Creature(TileType type) : Tile(type) {
         this->SetSize(0, 0, this->hitbox_.w, this->hitbox_.h);
     }
 
@@ -66,15 +60,7 @@ public:
         this->real_hitbox_.y = this->hitbox_.y + this->real_offset_.y;
     }
 
-    /// Set limit on speed
-    /// @param x    x-direction speed cap
-    /// @param y    y-direction speed cap
-    void SetSpeedCap(int x, int y) {
-        this->speed_cap_.x = x;
-        this->speed_cap_.y = y;
-    }
-
-    /// Sets area player can move
+    /// Sets area creature can move
     /// @param x    x-coord
     /// @param y    y-coord
     /// @param w    boundary width
@@ -86,29 +72,36 @@ public:
         this->bounds_.h = h;
     }
 
-    /// Moves player based on speed
+    /// Checks if creature is centered in X
+    /// @param screen   camera to check
+    /// @return result
+    bool IsCenteredX(Screen * screen) {
+    }
+
+    /// Checks if creature is centered in Y
+    /// @param screen   camera to check
+    /// @return result
+    bool IsCenteredY(Screen * screen) {
+    }
+
+    /// Moves creature based on speed
     /// @param checkBounds  if to check bounds
-    void Update(bool checkBounds = true) {
+    void Update(SDL_Point offset, bool checkBounds = true) {
         if (!checkBounds) {
-            this->hitbox_.x += this->speed.x;
-            this->hitbox_.y += this->speed.y;
-            this->real_hitbox_.x += this->speed.x;
-            this->real_hitbox_.y += this->speed.y;
+            this->hitbox_.x += offset.x;
+            this->hitbox_.y += offset.y;
+            this->real_hitbox_.x += offset.x;
+            this->real_hitbox_.y += offset.y;
             return;
         }
 
-        if (this->speed.x > this->speed_cap_.x) this->speed.x = this->speed_cap_.x;
-        if (this->speed.x < -this->speed_cap_.x) this->speed.x = -this->speed_cap_.x;
-        if (this->speed.y > this->speed_cap_.y) this->speed.y = this->speed_cap_.y;
-        if (this->speed.y < -this->speed_cap_.y) this->speed.y = -this->speed_cap_.y;
-
-        this->hitbox_.x += this->speed.x;
+        this->hitbox_.x += offset.x;
         int flipFlags = this->GetFlip();
-        if (this->speed.x < 0) flipFlags |= SDL_FLIP_HORIZONTAL;
-        else if (this->speed.x > 0) flipFlags = SDL_FLIP_NONE;
-        this->hitbox_.y += this->speed.y;
-        this->real_hitbox_.x += this->speed.x;
-        this->real_hitbox_.y += this->speed.y;
+        if (offset.x < 0) flipFlags |= SDL_FLIP_HORIZONTAL;
+        else if (offset.x > 0) flipFlags = SDL_FLIP_NONE;
+        this->hitbox_.y += offset.y;
+        this->real_hitbox_.x += offset.x;
+        this->real_hitbox_.y += offset.y;
         this->Flip(flipFlags);
 
         if (this->real_hitbox_.x + this->real_hitbox_.w > this->bounds_.w) {
@@ -127,6 +120,47 @@ public:
             this->real_hitbox_.y = this->bounds_.y;
             this->hitbox_.y = this->bounds_.y - this->real_offset_.y;
         }
+    }
+
+};
+
+class CreatureGroup {
+private:
+
+    SDL_Renderer * renderer_;
+
+public:
+
+    CreatureGroup() {}
+
+    CreatureGroup(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
+    }
+
+    void operator=(const CreatureGroup& copy) {
+    }
+
+    void SetOpacity(int r, int g, int b) {
+    }
+
+    void AddCreature(string uid, TileType type, int w, int h) {
+    }
+
+    void Render() {
+    }
+
+    void Destroy() {
+        this->renderer_ = nullptr;
+    }
+
+    Creature &operator[](int iterindex) {
+    }
+
+    Creature &operator[](string uid) {
     }
 
 };
