@@ -117,17 +117,14 @@ public:
 
     RectGroup() {}
 
-    RectGroup(Screen * screen) {
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
         this->screen_ = screen;
     }
 
-    void operator=(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-    }
-
-    void operator=(RectGroup& copy) {
-        for (map<string, Rect>::iterator it = copy.rects_.begin(); it != copy.rects_.end(); ++it) {
-            this->rects_[it->first] = copy.rects_[it->first];
+    void operator=(const RectGroup& copy) {
+        for (map<string, Rect>::iterator it = ((map<string, Rect>)copy.rects_).begin(); it != copy.rects_.end(); ++it) {
+            this->rects_[it->first] = copy.rects_.at(it->first);
         }
         this->renderer_ = copy.renderer_;
     }
@@ -165,6 +162,10 @@ public:
         }
 
         return this->rects_[keys[iterindex]];
+    }
+
+    Rect at(string uid) const {
+        return this->rects_.at(uid);
     }
 
     Rect &operator[](string uid) {

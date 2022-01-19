@@ -136,17 +136,14 @@ public:
 
     CreatureGroup() {}
 
-    CreatureGroup(Screen * screen) {
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
         this->screen_ = screen;
     }
 
-    void operator=(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-    }
-
-    void operator=(CreatureGroup& copy) {
-        for (map<string, Creature>::iterator it = copy.creatures_.begin(); it != copy.creatures_.end(); ++it) {
-            this->creatures_[it->first] = copy.creatures_[it->first];
+    void operator=(const CreatureGroup& copy) {
+        for (map<string, Creature>::iterator it = ((map<string, Creature>)copy.creatures_).begin(); it != copy.creatures_.end(); ++it) {
+            this->creatures_[it->first] = copy.creatures_.at(it->first);
         }
         this->renderer_ = copy.renderer_;
     }
@@ -187,6 +184,10 @@ public:
 
     Creature &operator[](string uid) {
         return this->creatures_[uid];
+    }
+
+    Creature at(string uid) const {
+        return this->creatures_.at(uid);
     }
 
 };

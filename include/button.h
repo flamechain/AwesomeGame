@@ -137,18 +137,14 @@ public:
 
     ButtonGroup() {}
 
-    ButtonGroup(SDL_Renderer * renderer, Screen * parent) {
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
         this->renderer_ = renderer;
-        this->screen_ = parent;
-    }
-
-    void operator=(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
+        this->screen_ = screen;
     }
 
     void operator=(const ButtonGroup& copy) {
-        for (const map<string, Button>::iterator it = copy.buttons_.begin(); it != copy.buttons_.end(); ++it) {
-            this->buttons_[it->first] = copy.buttons_[it->first];
+        for (map<string, Button>::iterator it = ((map<string, Button>)copy.buttons_).begin(); it != copy.buttons_.end(); ++it) {
+            this->buttons_[it->first] = copy.buttons_.at(it->first);
         }
         this->def_border_pt_ = copy.def_border_pt_;
         this->def_border_color_ = copy.def_border_color_;
@@ -229,6 +225,10 @@ public:
 
     Button &operator[](string uid) {
         return this->buttons_[uid];
+    }
+
+    Button at(string uid) const {
+        return this->buttons_.at(uid);
     }
 
 };

@@ -105,17 +105,15 @@ class LevelGroup {
 private:
 
     SDL_Renderer * renderer_;
+    Screen * screen_;
 
 public:
 
     LevelGroup() {}
 
-    LevelGroup(SDL_Renderer * renderer) {
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
         this->renderer_ = renderer;
-    }
-
-    void operator=(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
+        this->screen_ = screen;
     }
 
     void operator=(const LevelGroup& copy) {
@@ -135,6 +133,9 @@ public:
     }
 
     Level &operator[](string uid) {
+    }
+
+    Level at(string uid) const {
     }
 
 };

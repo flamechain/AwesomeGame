@@ -22,22 +22,22 @@ public:
 
     static const int CENTERED = -1;
 
-    Paragraph Text = this;
-    ButtonGroup Button = this;
-    RectGroup Rect = this;
-    LevelGroup Level = this;
-    CreatureGroup Creature = this;
+    Paragraph Text;
+    ButtonGroup Button;
+    RectGroup Rect;
+    LevelGroup Level;
+    CreatureGroup Creature;
 
     Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor) {
         this->renderer_ = renderer;
         this->uid_ = uid;
         this->rect_ = {x, y, w, h};
         this->bgcolor_ = bgcolor_;
-        this->Text = renderer;
-        this->Button = renderer;
-        this->Rect = renderer;
-        this->Level = renderer;
-        this->Creature = renderer;
+        this->Text.SetAttrib(this, this->renderer_);
+        this->Button.SetAttrib(this, this->renderer_);
+        this->Rect.SetAttrib(this, this->renderer_);
+        this->Level.SetAttrib(this, this->renderer_);
+        this->Creature.SetAttrib(this, this->renderer_);
     }
 
     Screen(const Screen& copy) {

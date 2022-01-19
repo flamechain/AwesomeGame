@@ -85,18 +85,15 @@ public:
 
     Paragraph() {}
 
-    Paragraph(Screen * screen) {
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
         this->screen_ = screen;
     }
 
-    void operator=(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-    }
-
-    void operator=(Paragraph& copy) {
+    void operator=(const Paragraph& copy) {
         this->renderer_ = copy.renderer_;
-        for (map<string, Text>::iterator it = copy.lines_.begin(); it != copy.lines_.end(); ++it) {
-            this->lines_[it->first] = copy.lines_[it->first];
+        for (map<string, Text>::iterator it = ((map<string, Text>)copy.lines_).begin(); it != copy.lines_.end(); ++it) {
+            this->lines_[it->first] = copy.lines_.at(it->first);
         }
     }
 
@@ -132,6 +129,10 @@ public:
 
     Text &operator[](string uid) {
         return this->lines_[uid];
+    }
+
+    Text at(string uid) const {
+        return this->lines_.at(uid);
     }
 
     void Render() {
