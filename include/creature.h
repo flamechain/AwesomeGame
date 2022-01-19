@@ -16,8 +16,9 @@ public:
 
     SDL_Point Speed;
 
-    Creature(TileType type) : Tile(type) {
+    Creature(TileType type, int x, int y) : Tile(type) {
         this->SetSize(0, 0, this->hitbox_.w, this->hitbox_.h);
+        this->SetPosition(x, y);
     }
 
     /// Gets colllision hitbox
@@ -128,39 +129,64 @@ class CreatureGroup {
 private:
 
     SDL_Renderer * renderer_;
+    Screen * screen_;
+    map<string, Creature> creatures_;
 
 public:
 
     CreatureGroup() {}
 
-    CreatureGroup(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
+    CreatureGroup(Screen * screen) {
+        this->screen_ = screen;
     }
 
     void operator=(SDL_Renderer * renderer) {
         this->renderer_ = renderer;
     }
 
-    void operator=(const CreatureGroup& copy) {
+    void operator=(CreatureGroup& copy) {
+        for (map<string, Creature>::iterator it = copy.creatures_.begin(); it != copy.creatures_.end(); ++it) {
+            this->creatures_[it->first] = copy.creatures_[it->first];
+        }
+        this->renderer_ = copy.renderer_;
     }
 
-    void SetOpacity(int r, int g, int b) {
+    void TempShade(float percent) {
+        for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); ++it) {
+            this->creatures_[it->first].SetOpacity(255*percent);
+        }
     }
 
-    void AddCreature(string uid, TileType type, int w, int h) {
+    void AddCreature(string uid, TileType type, int w, int h, int x, int y) {
+        this->creatures_[uid] = Creature(type, x, y);
+        this->creatures_[uid].Resize(w, h);
     }
 
     void Render() {
+        for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); ++it) {
+            this->creatures_[it->first].Render();
+        }
     }
 
     void Destroy() {
         this->renderer_ = nullptr;
+        for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); ++it) {
+            this->creatures_[it->first].Destroy();
+        }
     }
 
     Creature &operator[](int iterindex) {
+        vector<string> keys;
+
+        for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); ++it) {
+            keys.push_back(it->first);
+        }
+
+        return this->creatures_[keys[iterindex]];
     }
 
     Creature &operator[](string uid) {
+        return this->creatures_[uid];
     }
 
 };

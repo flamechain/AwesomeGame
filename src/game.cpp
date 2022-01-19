@@ -87,8 +87,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
     Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, {0, 0, 0});
-    loadingScreen.Text.AddLine("load", "Lato-Regular", 60, {255, 255, 255}, "Loading...");
-    loadingScreen.Text["load"].SetPosition(loadingScreen.CENTERED, loadingScreen.CENTERED);
+    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, {255, 255, 255}, "Loading...");
 
     SDL_RenderClear(renderer);
     loadingScreen.Render();
@@ -101,10 +100,8 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameState.SetScreen(TITLE_SCREEN);
 
     Screen pauseScreen = Screen(renderer, PAUSE_SCREEN, Width / 4, Height / 4, Width / 2, Height / 2, {100, 100, 255});
-    pauseScreen.Text.AddLine("title", "Lato-Bold", 80, {0, 0, 0}, "PAUSED");
-    pauseScreen.Text.AddLine("desc", "Lato-Regular", 24, {0, 0, 0}, "Press ESC to resume.");
-    pauseScreen.Text["title"].SetPosition(pauseScreen.CENTERED, 20);
-    pauseScreen.Text["desc"].SetPosition(pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20);
+    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "Lato-Bold", 80, {0, 0, 0}, "PAUSED");
+    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "Lato-Regular", 24, {0, 0, 0}, "Press ESC to resume.");
 
     pauseScreen.Button.SetDefaultBorder(10, {0, 0, 0});
     pauseScreen.Button.SetDefaultTextAttrib(60, {0, 0, 0}, "Lato-Bold");
@@ -112,8 +109,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, {170, 170, 170}, "QUIT", GotoTitle);
 
     Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, {100, 100, 100});
-    titleScreen.Text.AddLine("title", "Lato-Bold", 120, {255, 255, 255}, "Adventures of Cliche");
-    titleScreen.Text["title"].SetPosition(titleScreen.CENTERED, 100);
+    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "Lato-Bold", 120, {255, 255, 255}, "Adventures of Cliche");
 
     titleScreen.Button.SetDefaultBorder(10, {0, 0, 0});
     titleScreen.Button.SetDefaultTextAttrib(60, {0, 0, 0}, "Lato-Bold");
@@ -137,7 +133,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(Width / 16, Height / 9, 16, 9)); // AddLevel() will bind renderer later
 
-    gameScreen.Creature.AddCreature("player", TileType::TestPlayer, Width / 16, Height / 9);
+    gameScreen.Creature.AddCreature("player", TileType::TestPlayer, Width / 16, Height / 9, gameScreen.CENTERED, gameScreen.CENTERED);
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
     gameScreen.Creature["player"].SetPosition(gameScreen.CENTERED, gameScreen.CENTERED);
 
@@ -242,7 +238,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
         // game code goes here
         switch (gameState.CurrentScreen()) {
             case GAME_SCREEN: {
-                gameScreen.SetOpacity(255, 255, 255);
+                gameScreen.TempShade(1);
 
                 // check player movement
                 SDL_Point offset;
@@ -265,7 +261,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
-                gameScreen.SetOpacity(150, 150, 150);
+                gameScreen.TempShade(0.7);
                 // player.SetOpacity(150, 150, 150);
                 gameScreen.Render();
                 // player.Render();

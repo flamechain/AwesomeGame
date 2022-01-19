@@ -20,13 +20,13 @@ private:
 
 public:
 
-    const int CENTERED = -1;
+    static const int CENTERED = -1;
 
-    Paragraph Text;
-    ButtonGroup Button;
-    RectGroup Rect;
-    LevelGroup Level;
-    CreatureGroup Creature;
+    Paragraph Text = this;
+    ButtonGroup Button = this;
+    RectGroup Rect = this;
+    LevelGroup Level = this;
+    CreatureGroup Creature = this;
 
     Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor) {
         this->renderer_ = renderer;
@@ -44,11 +44,11 @@ public:
         this->renderer_ = copy.GetRenderer();
         this->rect_ = copy.GetRect();
         this->bgcolor_ = copy.GetColor();
-        this->Text = copy.Text;
-        this->Button = copy.Button;
-        this->Rect = copy.Rect;
-        this->Level = copy.Level;
-        this->Creature = copy.Creature;
+        this->Text = (Paragraph)copy.Text;
+        this->Button = (ButtonGroup)copy.Button;
+        this->Rect = (RectGroup)copy.Rect;
+        this->Level = (LevelGroup)copy.Level;
+        this->Creature = (CreatureGroup)copy.Creature;
     }
 
     void CreateBounds(int x, int y, int w, int h) {
@@ -92,10 +92,10 @@ public:
         this->Creature.Destroy();
     }
 
-    void SetOpacity(int r, int g, int b) {
-        this->Rect.SetOpacity(r, g, b);
-        this->Button.SetOpacity(r, g, b);
-        this->Creature.SetOpacity(r, g, b);
+    void TempShade(float percent) {
+        this->Rect.TempShade(percent);
+        this->Button.TempShade(percent);
+        this->Creature.TempShade(percent);
     }
 
     void Move(int x, int y) {

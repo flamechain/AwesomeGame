@@ -110,39 +110,65 @@ class RectGroup {
 private:
 
     SDL_Renderer * renderer_;
+    Screen * screen_;
+    map<string, Rect> rects_;
 
 public:
 
     RectGroup() {}
 
-    RectGroup(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
+    RectGroup(Screen * screen) {
+        this->screen_ = screen;
     }
 
     void operator=(SDL_Renderer * renderer) {
         this->renderer_ = renderer;
     }
 
-    void operator=(const RectGroup& copy) {
+    void operator=(RectGroup& copy) {
+        for (map<string, Rect>::iterator it = copy.rects_.begin(); it != copy.rects_.end(); ++it) {
+            this->rects_[it->first] = copy.rects_[it->first];
+        }
+        this->renderer_ = copy.renderer_;
     }
 
     void Render() {
+        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
+            this->rects_[it->first].Render();
+        }
     }
 
     void Destroy() {
         this->renderer_ = nullptr;
+        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
+            this->rects_[it->first].Destroy();
+        }
     }
 
-    void SetOpacity(int r, int g, int b) {
+    void TempShade(float percent) {
+        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
+            this->rects_[it->first].TempShade(percent);
+        }
     }
 
     void AddRect(string uid, int x, int y, int w, int h, Color color) {
+        if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
+        if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
+        this->rects_[uid] = Rect(this->renderer_, x, y, w, h, color);
     }
 
     Rect &operator[](int iterindex) {
+        vector<string> keys;
+
+        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
+            keys.push_back(it->first);
+        }
+
+        return this->rects_[keys[iterindex]];
     }
 
     Rect &operator[](string uid) {
+        return this->rects_[uid];
     }
 
 };

@@ -44,7 +44,7 @@ public:
     /// @param color    font color
     /// @param text     display text
     /// @param centered if to center on rect
-    void SetText(const char * font, int pt, Color color, const char * text, bool centered) {
+    void SetText(string font, int pt, Color color, string text, bool centered) {
         this->text_ = Text(this->renderer_, font, pt, color, text);
         this->centered_ = centered;
         if (centered) this->CenterText();
@@ -102,10 +102,11 @@ public:
         return false;
     }
 
-    /// If button is clicked
+    /// Checks if button is clicked
     /// @param x    mouse x-coord
     /// @param y    mouse y-coord
-    bool Clicked(int x, int y) {
+    /// @return if clicked
+    bool Click(int x, int y) {
         if (this->IsActive() && this->IsInside(x, y)) return true;
         return false;
     }
@@ -116,13 +117,29 @@ class ButtonGroup {
 private:
 
     SDL_Renderer * renderer_;
+    Screen * screen_;
+    map<string, Button> buttons_;
+    map<string, screen_callback> callbacks_;
+    map<string, screen_callback> onhovers_;
+    map<string, screen_callback> offhovers_;
+
+    // probably better to make structs?
+    // defaults defaults
+    int def_border_pt_ = 10;
+    Color def_border_color_ = {0, 0, 0};
+    int def_text_pt_ = 24;
+    Color def_text_color_ = {0, 0, 0};
+    string def_text_font_ = "Lato-Regular";
+    screen_callback def_onhover_;
+    screen_callback def_offhover_;
 
 public:
 
     ButtonGroup() {}
 
-    ButtonGroup(SDL_Renderer * renderer) {
+    ButtonGroup(SDL_Renderer * renderer, Screen * parent) {
         this->renderer_ = renderer;
+        this->screen_ = parent;
     }
 
     void operator=(SDL_Renderer * renderer) {
@@ -130,43 +147,88 @@ public:
     }
 
     void operator=(const ButtonGroup& copy) {
+        for (const map<string, Button>::iterator it = copy.buttons_.begin(); it != copy.buttons_.end(); ++it) {
+            this->buttons_[it->first] = copy.buttons_[it->first];
+        }
+        this->def_border_pt_ = copy.def_border_pt_;
+        this->def_border_color_ = copy.def_border_color_;
+        this->def_text_pt_ = copy.def_text_pt_;
+        this->def_text_color_ = copy.def_text_color_;
+        this->def_text_font_ = copy.def_text_font_;
+        this->def_onhover_ = copy.def_onhover_;
+        this->def_offhover_ = copy.def_offhover_;
     }
 
     void Render() {
+        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
+            this->buttons_[it->first].Render();
+        }
     }
 
     void Destroy() {
+        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
+            this->buttons_[it->first].Destroy();
+        }
         this->renderer_ = nullptr;
+        this->screen_ = nullptr;
     }
 
     void SetDefaultBorder(int pt, Color color) {
+        this->def_border_pt_ = pt;
+        this->def_border_color_ = color;
     }
 
     void SetDefaultTextAttrib(int pt, Color color, string font) {
+        this->def_text_pt_ = pt;
+        this->def_text_color_ = color;
+        this->def_text_font_ = font;
     }
 
     void SetDefaultHoverRoutine(screen_callback onHover, screen_callback offHover) {
+        this->def_onhover_ = onHover;
+        this->def_offhover_ = offHover;
     }
 
     void AddButton(string uid, int x, int y, int w, int h, Color color, string text, screen_callback onClick) {
+        this->buttons_[uid] = Button(this->renderer_, x, y, w, h, color, this->def_border_pt_, this->def_border_color_);
+        this->buttons_[uid].SetText(this->def_text_font_, this->def_text_pt_, this->def_text_color_, text, true);
+        this->callbacks_[uid] = onClick;
+        this->onhovers_[uid] = this->def_onhover_;
+        this->offhovers_[uid] = this->def_offhover_;
     }
 
-    void SetOpacity(int r, int g, int b) {
+    void TempShade(float percent) {
+        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
+            this->buttons_[it->first].TempShade(percent);
+        }
     }
 
     int Count() const {
+        return this->buttons_.size();
     }
 
     void Hover(SDL_Point mouse) {
+        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
+            if (this->buttons_[it->first].IsInside(mouse.x, mouse.y)) this->onhovers_[it->first](this->screen_);
+            else this->offhovers_[it->first](this->screen_);
+        }
     }
 
     void Click(SDL_Point mouse) {
     }
 
     Button &operator[](int iterindex) {
+        vector<string> keys;
+
+        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
+            keys.push_back(it->first);
+        }
+
+        return this->buttons_[keys[iterindex]];
     }
 
     Button &operator[](string uid) {
+        return this->buttons_[uid];
     }
 
 };
