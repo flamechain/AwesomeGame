@@ -137,99 +137,39 @@ public:
 
     ButtonGroup() {}
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-        this->screen_ = screen;
+    ButtonGroup(const ButtonGroup& copy) {
+        this->operator=(copy);
     }
 
-    void operator=(const ButtonGroup& copy) {
-        for (map<string, Button>::iterator it = ((map<string, Button>)copy.buttons_).begin(); it != copy.buttons_.end(); ++it) {
-            this->buttons_[it->first] = copy.buttons_.at(it->first);
-        }
-        this->def_border_pt_ = copy.def_border_pt_;
-        this->def_border_color_ = copy.def_border_color_;
-        this->def_text_pt_ = copy.def_text_pt_;
-        this->def_text_color_ = copy.def_text_color_;
-        this->def_text_font_ = copy.def_text_font_;
-        this->def_onhover_ = copy.def_onhover_;
-        this->def_offhover_ = copy.def_offhover_;
-    }
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
 
-    void Render() {
-        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
-            this->buttons_[it->first].Render();
-        }
-    }
+    void operator=(const ButtonGroup& copy);
 
-    void Destroy() {
-        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
-            this->buttons_[it->first].Destroy();
-        }
-        this->renderer_ = nullptr;
-        this->screen_ = nullptr;
-    }
+    void Render();
 
-    void SetDefaultBorder(int pt, Color color) {
-        this->def_border_pt_ = pt;
-        this->def_border_color_ = color;
-    }
+    void Destroy();
 
-    void SetDefaultTextAttrib(int pt, Color color, string font) {
-        this->def_text_pt_ = pt;
-        this->def_text_color_ = color;
-        this->def_text_font_ = font;
-    }
+    void SetDefaultBorder(int pt, Color color);
 
-    void SetDefaultHoverRoutine(screen_callback onHover, screen_callback offHover) {
-        this->def_onhover_ = onHover;
-        this->def_offhover_ = offHover;
-    }
+    void SetDefaultTextAttrib(int pt, Color color, string font);
 
-    void AddButton(string uid, int x, int y, int w, int h, Color color, string text, screen_callback onClick) {
-        this->buttons_[uid] = Button(this->renderer_, x, y, w, h, color, this->def_border_pt_, this->def_border_color_);
-        this->buttons_[uid].SetText(this->def_text_font_, this->def_text_pt_, this->def_text_color_, text, true);
-        this->callbacks_[uid] = onClick;
-        this->onhovers_[uid] = this->def_onhover_;
-        this->offhovers_[uid] = this->def_offhover_;
-    }
+    void SetDefaultHoverRoutine(screen_callback onHover, screen_callback offHover);
 
-    void TempShade(float percent) {
-        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
-            this->buttons_[it->first].TempShade(percent);
-        }
-    }
+    void AddButton(string uid, int x, int y, int w, int h, Color color, string text, screen_callback onClick);
 
-    int Count() const {
-        return this->buttons_.size();
-    }
+    void TempShade(float percent);
 
-    void Hover(SDL_Point mouse) {
-        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
-            if (this->buttons_[it->first].IsInside(mouse.x, mouse.y)) this->onhovers_[it->first](this->screen_);
-            else this->offhovers_[it->first](this->screen_);
-        }
-    }
+    int Count() const;
 
-    void Click(SDL_Point mouse) {
-    }
+    void Hover(SDL_Point mouse);
 
-    Button &operator[](int iterindex) {
-        vector<string> keys;
+    void Click(SDL_Point mouse);
 
-        for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); ++it) {
-            keys.push_back(it->first);
-        }
+    Button &operator[](int iterindex);
 
-        return this->buttons_[keys[iterindex]];
-    }
+    Button &operator[](string uid);
 
-    Button &operator[](string uid) {
-        return this->buttons_[uid];
-    }
-
-    Button at(string uid) const {
-        return this->buttons_.at(uid);
-    }
+    Button at(string uid) const;
 
 };
 

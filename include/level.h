@@ -106,37 +106,31 @@ private:
 
     SDL_Renderer * renderer_;
     Screen * screen_;
+    map<string, Level> levels_;
 
 public:
 
     LevelGroup() {}
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-        this->screen_ = screen;
+    LevelGroup(const LevelGroup& copy) {
+        this->operator=(copy);
     }
 
-    void operator=(const LevelGroup& copy) {
-    }
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
 
-    void Render() {
-    }
+    void operator=(const LevelGroup& copy);
 
-    void Destroy() {
-        this->renderer_ = nullptr;
-    }
+    void Render();
 
-    void AddLevel(string uid, Level level) {
-    }
+    void Destroy();
 
-    Level &operator[](int iterindex) {
-    }
+    void AddLevel(string uid, Level level);
 
-    Level &operator[](string uid) {
-    }
+    Level &operator[](int iterindex);
 
-    Level at(string uid) const {
-    }
+    Level &operator[](string uid);
+
+    Level at(string uid) const;
 
 };
 

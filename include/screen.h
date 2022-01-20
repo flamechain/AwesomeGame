@@ -41,72 +41,46 @@ public:
     }
 
     Screen(const Screen& copy) {
+    printf("copying\n");
         this->renderer_ = copy.GetRenderer();
         this->rect_ = copy.GetRect();
         this->bgcolor_ = copy.GetColor();
-        this->Text = (Paragraph)copy.Text;
-        this->Button = (ButtonGroup)copy.Button;
-        this->Rect = (RectGroup)copy.Rect;
-        this->Level = (LevelGroup)copy.Level;
-        this->Creature = (CreatureGroup)copy.Creature;
+    printf("copying 1\n");
+        this->Text = copy.Text;
+        this->Text.SetAttrib(this, this->renderer_);
+    printf("copying 2\n");
+        this->Button = copy.Button;
+        this->Button.SetAttrib(this, this->renderer_);
+    printf("copying 3\n");
+        this->Rect = copy.Rect;
+        this->Rect.SetAttrib(this, this->renderer_);
+    printf("copying 4\n");
+        this->Level = copy.Level;
+        this->Level.SetAttrib(this, this->renderer_);
+    printf("copying 5\n");
+        this->Creature = copy.Creature;
+        this->Creature.SetAttrib(this, this->renderer_);
     }
 
-    void CreateBounds(int x, int y, int w, int h) {
-        this->bounds_ = {x, y, w, h};
-    }
+    void CreateBounds(int x, int y, int w, int h);
 
-    SDL_Renderer * GetRenderer() const {
-        return this->renderer_;
-    }
+    SDL_Renderer * GetRenderer() const;
 
-    SDL_Rect GetRect() const {
-        return this->rect_;
-    }
+    SDL_Rect GetRect() const;
 
-    Color GetColor() const {
-        return this->bgcolor_;
-    }
+    Color GetColor() const;
 
-    unsigned int GetId() const {
-        return this->uid_;
-    }
+    unsigned int GetId() const;
 
-    void SetId(unsigned int uid) {
-        this->uid_ = uid;
-    }
+    void SetId(unsigned int uid);
 
-    void Render() {
-        // add way to set render order, this is good default
-        this->Level.Render();
-        this->Rect.Render();
-        this->Button.Render();
-        this->Text.Render();
-        this->Creature.Render();
-    }
+    void Render();
 
-    void Destroy() {
-        this->Level.Destroy();
-        this->Rect.Destroy();
-        this->Button.Destroy();
-        this->Text.Destroy();
-        this->Creature.Destroy();
-    }
+    void Destroy();
 
-    void TempShade(float percent) {
-        this->Rect.TempShade(percent);
-        this->Button.TempShade(percent);
-        this->Creature.TempShade(percent);
-    }
+    void TempShade(float percent);
 
-    void Move(int x, int y) {
-        if (this->rect_.x + x > this->bounds_.x) this->rect_.x = this->bounds_.x - x;
-        if (this->rect_.y + y > this->bounds_.y) this->rect_.y = this->bounds_.y - y;
-        if (this->rect_.x + x < 0) this->rect_.x = -x;
-        if (this->rect_.y + y < 0) this->rect_.y = -y;
-
-        this->rect_.x += x;
-        this->rect_.y += y;
-    }
+    void Move(int x, int y);
 
 };
 

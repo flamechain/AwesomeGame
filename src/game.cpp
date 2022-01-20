@@ -126,15 +126,24 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     optionsScreen.Button.AddButton("back", 200, 200, 150, 50, {100, 100, 100}, "BACK", GotoTitle);
 
-    Screen creditsScreen = optionsScreen; // copy data, now seperate
-    creditsScreen.SetId(CREDITS_SCREEN);
+    Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, {255, 255, 255});
+    creditsScreen.Button.SetDefaultBorder(4, {0, 0, 0});
+    creditsScreen.Button.SetDefaultTextAttrib(24, {0, 0, 0}, "Lato-Regular");
+    creditsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
+    creditsScreen.Button.AddButton("back", 200, 200, 150, 50, {100, 100, 100}, "BACK", GotoTitle);
 
+    printf("creating game screen\n");
     Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, {255, 255, 255});
+    printf("creating game screen\n");
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
+    printf("creating game screen\n");
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(Width / 16, Height / 9, 16, 9)); // AddLevel() will bind renderer later
 
+    printf("creating game screen\n");
     gameScreen.Creature.AddCreature("player", TileType::TestPlayer, Width / 16, Height / 9, gameScreen.CENTERED, gameScreen.CENTERED);
+    printf("creating game screen\n");
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
+    printf("creating game screen\n");
     gameScreen.Creature["player"].SetPosition(gameScreen.CENTERED, gameScreen.CENTERED);
 
     SDL_Point mouse;
@@ -262,9 +271,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
             } break;
             case PAUSE_SCREEN: {
                 gameScreen.TempShade(0.7);
-                // player.SetOpacity(150, 150, 150);
                 gameScreen.Render();
-                // player.Render();
 
                 pauseScreen.Render();
             } break;

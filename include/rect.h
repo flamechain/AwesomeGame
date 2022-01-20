@@ -117,60 +117,27 @@ public:
 
     RectGroup() {}
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-        this->screen_ = screen;
+    RectGroup(const RectGroup& copy) {
+        this->operator=(copy);
     }
 
-    void operator=(const RectGroup& copy) {
-        for (map<string, Rect>::iterator it = ((map<string, Rect>)copy.rects_).begin(); it != copy.rects_.end(); ++it) {
-            this->rects_[it->first] = copy.rects_.at(it->first);
-        }
-        this->renderer_ = copy.renderer_;
-    }
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
 
-    void Render() {
-        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
-            this->rects_[it->first].Render();
-        }
-    }
+    void operator=(const RectGroup& copy);
 
-    void Destroy() {
-        this->renderer_ = nullptr;
-        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
-            this->rects_[it->first].Destroy();
-        }
-    }
+    void Render();
 
-    void TempShade(float percent) {
-        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
-            this->rects_[it->first].TempShade(percent);
-        }
-    }
+    void Destroy();
 
-    void AddRect(string uid, int x, int y, int w, int h, Color color) {
-        if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
-        if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
-        this->rects_[uid] = Rect(this->renderer_, x, y, w, h, color);
-    }
+    void TempShade(float percent);
 
-    Rect &operator[](int iterindex) {
-        vector<string> keys;
+    void AddRect(string uid, int x, int y, int w, int h, Color color);
 
-        for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); ++it) {
-            keys.push_back(it->first);
-        }
+    Rect &operator[](int iterindex);
 
-        return this->rects_[keys[iterindex]];
-    }
+    Rect at(string uid) const;
 
-    Rect at(string uid) const {
-        return this->rects_.at(uid);
-    }
-
-    Rect &operator[](string uid) {
-        return this->rects_[uid];
-    }
+    Rect &operator[](string uid);
 
 };
 

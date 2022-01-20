@@ -85,61 +85,28 @@ public:
 
     Paragraph() {}
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-        this->screen_ = screen;
+    Paragraph(const Paragraph& copy) {
+        this->operator=(copy);
     }
 
-    void operator=(const Paragraph& copy) {
-        this->renderer_ = copy.renderer_;
-        for (map<string, Text>::iterator it = ((map<string, Text>)copy.lines_).begin(); it != copy.lines_.end(); ++it) {
-            this->lines_[it->first] = copy.lines_.at(it->first);
-        }
-    }
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
 
-    void Destroy() {
-        for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); ++it) {
-            this->lines_[it->first].Destroy();
-        }
-        this->renderer_ = nullptr;
-    }
+    void operator=(const Paragraph& copy);
 
-    void TempShade(float percent) {
-        for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); ++it) {
-            this->lines_[it->first].TempShade(percent);
-        }
-    }
+    void Destroy();
 
-    void AddLine(string uid, int x, int y, string font, int pt, Color color, string text) {
-        this->lines_[uid] = Text(this->renderer_, font, pt, color, text);
-        if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (this->lines_[uid].GetRect().w / 2);
-        if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (this->lines_[uid].GetRect().h / 2);
-        this->lines_[uid].SetPosition(x, y);
-    }
+    void TempShade(float percent);
 
-    Text &operator[](unsigned int iterindex) {
-        vector<string> keys;
+    void AddLine(string uid, int x, int y, string font, int pt, Color color, string text);
 
-        for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); ++it) {
-            keys.push_back(it->first);
-        }
+    Text &operator[](unsigned int iterindex);
 
-        return this->lines_[keys[iterindex]];
-    }
+    Text &operator[](string uid);
 
-    Text &operator[](string uid) {
-        return this->lines_[uid];
-    }
+    Text at(string uid) const;
 
-    Text at(string uid) const {
-        return this->lines_.at(uid);
-    }
+    void Render();
 
-    void Render() {
-        for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); ++it) {
-            this->lines_[it->first].Render();
-        }
-    }
 };
 
 #endif
