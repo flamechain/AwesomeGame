@@ -26,16 +26,17 @@ public:
     }
 
     /// Renders text and rect
-    void Render() {
-        SDL_Rect newRect = {this->rect_.x + this->border_pt_, this->rect_.y + this->border_pt_, this->rect_.w - (this->border_pt_ * 2), this->rect_.h - (this->border_pt_ * 2)};
+    void Render(int x = 0, int y = 0) {
+        SDL_Rect dstRect = {x + this->rect_.x, y + this->rect_.y, this->rect_.w, this->rect_.h};
+        SDL_Rect newRect = {x + this->rect_.x + this->border_pt_, y + this->rect_.y + this->border_pt_, this->rect_.w - (this->border_pt_ * 2), this->rect_.h - (this->border_pt_ * 2)};
 
         SDL_SetRenderDrawColor(this->renderer_, this->border_color_.r, this->border_color_.g, this->border_color_.b, 255);
-        SDL_RenderFillRect(this->renderer_, &this->rect_);
+        SDL_RenderFillRect(this->renderer_, &dstRect);
 
         SDL_SetRenderDrawColor(this->renderer_, this->color_.r, this->color_.g, this->color_.b, 255);
         SDL_RenderFillRect(this->renderer_, &newRect);
 
-        this->text_.Render();
+        this->text_.Render(x, y);
     }
 
     /// Sets text attributes
@@ -145,7 +146,7 @@ public:
 
     void operator=(const ButtonGroup& copy);
 
-    void Render();
+    void Render(int x = 0, int y = 0, bool f = false);
 
     void Destroy();
 

@@ -19,13 +19,14 @@ void ButtonGroup::operator=(const ButtonGroup& copy) {
     int i=0;
     for (map<string, Button>::iterator it = ((map<string, Button>)copy.buttons_).begin(); it != copy.buttons_.end(); it++, i++) {
         if (i >= copy.buttons_.size()) break;
-        this->buttons_[it->first] = copy.buttons_.at(it->first);
+        this->buttons_.insert(std::make_pair(it->first, copy.buttons_.at(it->first)));
     }
 }
 
-void ButtonGroup::Render() {
+void ButtonGroup::Render(int x, int y, bool f) {
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
-        this->buttons_[it->first].Render();
+        if (f) this->buttons_[it->first].Render();
+        else this->buttons_[it->first].Render(x, y);
     }
 }
 
@@ -56,11 +57,11 @@ void ButtonGroup::SetDefaultHoverRoutine(screen_callback onHover, screen_callbac
 void ButtonGroup::AddButton(string uid, int x, int y, int w, int h, Color color, string text, screen_callback onClick) {
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
-    this->buttons_[uid] = Button(this->renderer_, x, y, w, h, color, this->def_border_pt_, this->def_border_color_);
+    this->buttons_.insert(std::make_pair(uid, Button(this->renderer_, x, y, w, h, color, this->def_border_pt_, this->def_border_color_)));
     this->buttons_[uid].SetText(this->def_text_font_, this->def_text_pt_, this->def_text_color_, text, true);
-    this->callbacks_[uid] = onClick;
-    this->onhovers_[uid] = this->def_onhover_;
-    this->offhovers_[uid] = this->def_offhover_;
+    this->callbacks_.insert(std::make_pair(uid, onClick));
+    this->onhovers_.insert(std::make_pair(uid, this->def_onhover_));
+    this->offhovers_.insert(std::make_pair(uid, this->def_offhover_));
 }
 
 void ButtonGroup::TempShade(float percent) {
@@ -74,15 +75,31 @@ int ButtonGroup::Count() const {
 }
 
 void ButtonGroup::Hover(SDL_Point mouse) {
+    int x, y;
+    if (this->screen_->GetFollow()) {
+        x = mouse.x;
+        y = mouse.y;
+    } else {
+        x = mouse.x - this->screen_->GetRect().x;
+        y = mouse.y - this->screen_->GetRect().y;
+    }
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
-        if (this->buttons_[it->first].IsInside(mouse.x, mouse.y)) this->onhovers_[it->first](this->screen_);
-        else this->offhovers_[it->first](this->screen_);
+        if (this->buttons_[it->first].IsInside(x, y)) this->onhovers_[it->first](this->screen_, it->first);
+        else this->offhovers_[it->first](this->screen_, it->first);
     }
 }
 
 void ButtonGroup::Click(SDL_Point mouse) {
+    int x, y;
+    if (this->screen_->GetFollow()) {
+        x = mouse.x;
+        y = mouse.y;
+    } else {
+        x = mouse.x - this->screen_->GetRect().x;
+        y = mouse.y - this->screen_->GetRect().y;
+    }
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
-        if (this->buttons_[it->first].IsInside(mouse.x, mouse.y)) this->callbacks_[it->first](this->screen_);
+        if (this->buttons_[it->first].IsInside(x, y)) this->callbacks_[it->first](this->screen_, it->first);
     }
 }
 
@@ -98,8 +115,10 @@ Button & ButtonGroup::operator[](int iterindex) {
 
 Button & ButtonGroup::operator[](string uid) {
     if (this->buttons_.find(uid) != this->buttons_.end()) return this->buttons_[uid];
+    return this->buttons_[0];
 }
 
 Button ButtonGroup::at(string uid) const {
     if (this->buttons_.find(uid) != this->buttons_.end()) return this->buttons_.at(uid);
+    return this->buttons_.at(0);
 }

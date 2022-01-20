@@ -19,11 +19,8 @@ public:
     Creature() : Tile() {}
 
     Creature(TileType type, int x, int y) : Tile(type) {
-        printf("setting size\n");
         this->SetSize(0, 0, this->hitbox_.w, this->hitbox_.h);
-        printf("setting pos\n");
         this->SetPosition(x, y);
-        printf("setting pos\n");
     }
 
     void operator=(const Creature& copy);
@@ -94,9 +91,11 @@ public:
 
     void AddCreature(string uid, TileType type, int w, int h, int x, int y);
 
-    void Render();
+    void Render(int x = 0, int y = 0, bool f = false);
 
     void Destroy();
+
+    void Unlock(string uid);
 
     Creature &operator[](int iterindex);
 

@@ -124,7 +124,7 @@ void CreatureGroup::operator=(const CreatureGroup& copy) {
     int i=0;
     for (map<string, Creature>::iterator it = ((map<string, Creature>)copy.creatures_).begin(); it != copy.creatures_.end(); it++, i++) {
         if (i >= copy.creatures_.size()) break;
-        this->creatures_[it->first] = copy.creatures_.at(it->first);
+        this->creatures_.insert(std::make_pair(it->first, copy.creatures_.at(it->first)));
     }
 }
 
@@ -141,9 +141,10 @@ void CreatureGroup::AddCreature(string uid, TileType type, int w, int h, int x, 
     this->creatures_[uid].Resize(w, h);
 }
 
-void CreatureGroup::Render() {
+void CreatureGroup::Render(int x, int y, bool f) {
     for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); it++) {
-        this->creatures_[it->first].Render();
+        if (f) this->creatures_[it->first].Render(-x, -y);
+        else this->creatures_[it->first].Render();
     }
 }
 
@@ -167,8 +168,10 @@ Creature & CreatureGroup::operator[](int iterindex) {
 
 Creature & CreatureGroup::operator[](string uid) {
     if (this->creatures_.find(uid) != this->creatures_.end()) return this->creatures_[uid];
+    return this->creatures_[0];
 }
 
 Creature CreatureGroup::at(string uid) const {
     if (this->creatures_.find(uid) != this->creatures_.end()) return this->creatures_.at(uid);
+    return this->creatures_.at(0);
 }

@@ -12,13 +12,14 @@ void LevelGroup::operator=(const LevelGroup& copy) {
     int i=0;
     for (map<string, Level>::iterator it = ((map<string, Level>)copy.levels_).begin(); it != copy.levels_.end(); it++, i++) {
         if (i >= copy.levels_.size()) break;
-        this->levels_[it->first] = copy.levels_.at(it->first);
+        this->levels_.insert(std::make_pair(it->first, copy.levels_.at(it->first)));
     }
 }
 
-void LevelGroup::Render() {
+void LevelGroup::Render(int x, int y, bool f) {
     for (map<string, Level>::iterator it = this->levels_.begin(); it != this->levels_.end(); it++) {
-        this->levels_[it->first].Render();
+        if (f) this->levels_[it->first].Render(-x, -y);
+        else this->levels_[it->first].Render();
     }
 }
 
@@ -31,7 +32,8 @@ void LevelGroup::Destroy() {
 }
 
 void LevelGroup::AddLevel(string uid, Level level) {
-    this->levels_[uid] = level;
+    this->levels_.insert(std::make_pair(uid, level));
+    this->levels_[uid].SetRenderer(this->renderer_);
 }
 
 Level & LevelGroup::operator[](int iterindex) {
@@ -46,8 +48,10 @@ Level & LevelGroup::operator[](int iterindex) {
 
 Level & LevelGroup::operator[](string uid) {
     if (this->levels_.find(uid) != this->levels_.end()) return this->levels_[uid];
+    return this->levels_[0];
 }
 
 Level LevelGroup::at(string uid) const {
     if (this->levels_.find(uid) != this->levels_.end()) return this->levels_.at(uid);
+    return this->levels_.at(0);
 }

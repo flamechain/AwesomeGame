@@ -12,13 +12,14 @@ void RectGroup::operator=(const RectGroup& copy) {
     int i=0;
     for (map<string, Rect>::iterator it = ((map<string, Rect>)copy.rects_).begin(); it != copy.rects_.end(); it++, i++) {
         if (i >= copy.rects_.size()) break;
-        this->rects_[it->first] = copy.rects_.at(it->first);
+        this->rects_.insert(std::make_pair(it->first, copy.rects_.at(it->first)));
     }
 }
 
-void RectGroup::Render() {
+void RectGroup::Render(int x, int y, bool f) {
     for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); it++) {
-        this->rects_[it->first].Render();
+        if (f) this->rects_[it->first].Render();
+        else this->rects_[it->first].Render(x, y);
     }
 }
 
@@ -39,7 +40,7 @@ void RectGroup::TempShade(float percent) {
 void RectGroup::AddRect(string uid, int x, int y, int w, int h, Color color) {
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
-    this->rects_[uid] = Rect(this->renderer_, x, y, w, h, color);
+    this->rects_.insert(std::make_pair(uid, Rect(this->renderer_, x, y, w, h, color)));
 }
 
 Rect & RectGroup::operator[](int iterindex) {
@@ -54,8 +55,10 @@ Rect & RectGroup::operator[](int iterindex) {
 
 Rect RectGroup::at(string uid) const {
     if (this->rects_.find(uid) != this->rects_.end()) return this->rects_.at(uid);
+    return this->rects_.at(0);
 }
 
 Rect & RectGroup::operator[](string uid) {
     if (this->rects_.find(uid) != this->rects_.end()) return this->rects_[uid];
+    return this->rects_[0];
 }

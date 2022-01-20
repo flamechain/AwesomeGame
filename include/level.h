@@ -3,7 +3,6 @@
 
 #include "utils.h"
 #include "tile.h"
-#include "camera.h"
 
 extern vector<SDL_Rect> tileSheet;
 
@@ -11,7 +10,6 @@ class Level {
 private:
 
     Tile * level_;
-    Camera * camera_;
     int x_;
     int y_;
 
@@ -79,10 +77,10 @@ public:
     }
 
     /// Renders all tiles
-    void Render() {
+    void Render(int x = 0, int y = 0) {
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
-                this->level_[i+this->x_*j].Render();
+                this->level_[i+this->x_*j].Render(x, y);
             }
         }
     }
@@ -107,6 +105,7 @@ private:
     SDL_Renderer * renderer_;
     Screen * screen_;
     map<string, Level> levels_;
+    string level_;
 
 public:
 
@@ -120,7 +119,7 @@ public:
 
     void operator=(const LevelGroup& copy);
 
-    void Render();
+    void Render(int x = 0, int y = 0, bool f = false);
 
     void Destroy();
 

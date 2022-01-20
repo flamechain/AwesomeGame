@@ -8,6 +8,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <cerrno>
+#include <cstdint>
 #include <cstdio>
 #include <string>
 #include <vector>
@@ -28,7 +29,7 @@ using namespace std::chrono;
 
 class Screen;
 typedef void (*callback)(void);
-typedef void (*screen_callback)(Screen*);
+typedef void (*screen_callback)(Screen*, string uid);
 
 /// Sends text output to stdout
 /// @param Format   format string (same syntax as printf)
@@ -54,9 +55,17 @@ inline string StringFormat(const std::string& Format, ...) {
 
 // SDL_Color without alpha channel
 struct Color {
-    int r;
-    int g;
-    int b;
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
 };
+
+inline Color RGB(Uint8 r, Uint8 g, Uint8 b) {
+    Color rgb;
+    rgb.r = r;
+    rgb.g = g;
+    rgb.b = b;
+    return rgb;
+}
 
 #endif

@@ -45,12 +45,13 @@ public:
         int r = (float)this->color_backup_.r * percent;
         int g = (float)this->color_backup_.g * percent;
         int b = (float)this->color_backup_.b * percent;
-        this->font_color_ = {r, g, b};
+        this->font_color_ = RGB(r, g, b);
     }
 
     /// Renders texture to screen
-    void Render() const {
-        SDL_RenderCopy(this->renderer_, this->texture_, NULL, &this->rect_);
+    void Render(int x = 0, int y = 0) const {
+        SDL_Rect dstRect = {x + this->rect_.x, y + this->rect_.y, this->rect_.w, this->rect_.h};
+        SDL_RenderCopy(this->renderer_, this->texture_, NULL, &dstRect);
     }
 
     /// Moves location of text
@@ -105,7 +106,7 @@ public:
 
     Text at(string uid) const;
 
-    void Render();
+    void Render(int x = 0, int y = 0, bool f = false);
 
 };
 

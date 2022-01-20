@@ -16,7 +16,7 @@ private:
     unsigned int uid_;
     SDL_Rect rect_;
     SDL_Rect bounds_;
-    Camera camera_;
+    bool follow_;
 
 public:
 
@@ -28,11 +28,12 @@ public:
     LevelGroup Level;
     CreatureGroup Creature;
 
-    Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor) {
+    Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
         this->renderer_ = renderer;
         this->uid_ = uid;
         this->rect_ = {x, y, w, h};
-        this->bgcolor_ = bgcolor_;
+        this->bgcolor_ = bgcolor;
+        this->follow_ = follow;
         this->Text.SetAttrib(this, this->renderer_);
         this->Button.SetAttrib(this, this->renderer_);
         this->Rect.SetAttrib(this, this->renderer_);
@@ -41,23 +42,18 @@ public:
     }
 
     Screen(const Screen& copy) {
-    printf("copying\n");
         this->renderer_ = copy.GetRenderer();
         this->rect_ = copy.GetRect();
         this->bgcolor_ = copy.GetColor();
-    printf("copying 1\n");
+
         this->Text = copy.Text;
         this->Text.SetAttrib(this, this->renderer_);
-    printf("copying 2\n");
         this->Button = copy.Button;
         this->Button.SetAttrib(this, this->renderer_);
-    printf("copying 3\n");
         this->Rect = copy.Rect;
         this->Rect.SetAttrib(this, this->renderer_);
-    printf("copying 4\n");
         this->Level = copy.Level;
         this->Level.SetAttrib(this, this->renderer_);
-    printf("copying 5\n");
         this->Creature = copy.Creature;
         this->Creature.SetAttrib(this, this->renderer_);
     }
@@ -71,6 +67,8 @@ public:
     Color GetColor() const;
 
     unsigned int GetId() const;
+
+    bool GetFollow() const;
 
     void SetId(unsigned int uid);
 

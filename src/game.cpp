@@ -38,35 +38,35 @@ Level GenerateRandomLevel(int w, int h, int x, int y) {
     return level;
 }
 
-void DarkenButton(Screen * screen) {
-    for (int i=0; i<screen->Button.Count(); i++) screen->Button[i].TempShade(0.7);
+void DarkenButton(Screen * screen, string uid) {
+    screen->Button[uid].TempShade(0.7);
 }
 
-void LightenButton(Screen * screen) {
-    for (int i=0; i<screen->Button.Count(); i++) screen->Button[i].TempShade(1);
+void LightenButton(Screen * screen, string uid) {
+    screen->Button[uid].TempShade(1);
 }
 
-void GotoTitle(Screen * screen) {
+void GotoTitle(Screen * screen, string uid) {
     gameState.SetScreen(TITLE_SCREEN);
 }
 
-void GotoGame(Screen * screen) {
+void GotoGame(Screen * screen, string uid) {
     gameState.SetScreen(GAME_SCREEN);
 }
 
-void GotoOptions(Screen * screen) {
+void GotoOptions(Screen * screen, string uid) {
     gameState.SetScreen(OPTIONS_SCREEN);
 }
 
-void GotoCredits(Screen * screen) {
+void GotoCredits(Screen * screen, string uid) {
     gameState.SetScreen(CREDITS_SCREEN);
 }
 
-void GotoPause(Screen * screen) {
+void GotoPause(Screen * screen, string uid) {
     gameState.SetScreen(PAUSE_SCREEN);
 }
 
-void StopGame(Screen * screen) {
+void StopGame(Screen * screen, string uid) {
     gameState.StopGame();
 }
 
@@ -86,8 +86,8 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
-    Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, {0, 0, 0});
-    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, {255, 255, 255}, "Loading...");
+    Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, RGB(0, 0, 0));
+    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, RGB(255, 255, 255), "Loading...");
 
     SDL_RenderClear(renderer);
     loadingScreen.Render();
@@ -99,52 +99,45 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     gameState.SetScreen(TITLE_SCREEN);
 
-    Screen pauseScreen = Screen(renderer, PAUSE_SCREEN, Width / 4, Height / 4, Width / 2, Height / 2, {100, 100, 255});
-    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "Lato-Bold", 80, {0, 0, 0}, "PAUSED");
-    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "Lato-Regular", 24, {0, 0, 0}, "Press ESC to resume.");
+    Screen pauseScreen = Screen(renderer, PAUSE_SCREEN, Width / 4, Height / 4, Width / 2, Height / 2, RGB(100, 100, 255));
+    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "Lato-Bold", 80, RGB(0, 0, 0), "PAUSED");
+    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "Lato-Regular", 24, RGB(0, 0, 0), "Press ESC to resume.");
 
-    pauseScreen.Button.SetDefaultBorder(10, {0, 0, 0});
-    pauseScreen.Button.SetDefaultTextAttrib(60, {0, 0, 0}, "Lato-Bold");
+    pauseScreen.Button.SetDefaultBorder(10, RGB(0, 0, 0));
+    pauseScreen.Button.SetDefaultTextAttrib(60, RGB(0, 0, 0), "Lato-Bold");
     pauseScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
-    pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, {170, 170, 170}, "QUIT", GotoTitle);
+    pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, RGB(170, 170, 170), "QUIT", GotoTitle);
 
-    Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, {100, 100, 100});
-    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "Lato-Bold", 120, {255, 255, 255}, "Adventures of Cliche");
+    Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, RGB(100, 100, 100));
+    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "Lato-Bold", 120, RGB(255, 255, 255), "Adventures of Cliche");
 
-    titleScreen.Button.SetDefaultBorder(10, {0, 0, 0});
-    titleScreen.Button.SetDefaultTextAttrib(60, {0, 0, 0}, "Lato-Bold");
+    titleScreen.Button.SetDefaultBorder(10, RGB(0, 0, 0));
+    titleScreen.Button.SetDefaultTextAttrib(60, RGB(0, 0, 0), "Lato-Bold");
     titleScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
 
-    titleScreen.Button.AddButton("start", titleScreen.CENTERED, 400, 400, 100, {100, 255, 100}, "START", GotoGame);
-    titleScreen.Button.AddButton("options", titleScreen.CENTERED, 550, 400, 100, {170, 170, 170}, "OPTIONS", GotoOptions);
-    titleScreen.Button.AddButton("credits", titleScreen.CENTERED, 700, 400, 100, {170, 170, 170}, "CREDITS", GotoCredits);
-    titleScreen.Button.AddButton("quit", titleScreen.CENTERED, 850, 400, 100, {255, 100, 100}, "QUIT", StopGame);
+    titleScreen.Button.AddButton("start", titleScreen.CENTERED, 400, 400, 100, RGB(100, 255, 100), "START", GotoGame);
+    titleScreen.Button.AddButton("options", titleScreen.CENTERED, 550, 400, 100, RGB(170, 170, 170), "OPTIONS", GotoOptions);
+    titleScreen.Button.AddButton("credits", titleScreen.CENTERED, 700, 400, 100, RGB(170, 170, 170), "CREDITS", GotoCredits);
+    titleScreen.Button.AddButton("quit", titleScreen.CENTERED, 850, 400, 100, RGB(255, 100, 100), "QUIT", StopGame);
 
-    Screen optionsScreen = Screen(renderer, OPTIONS_SCREEN, 0, 0, Width, Height, {255, 255, 255});
-    optionsScreen.Button.SetDefaultBorder(4, {0, 0, 0});
-    optionsScreen.Button.SetDefaultTextAttrib(24, {0, 0, 0}, "Lato-Regular");
+    Screen optionsScreen = Screen(renderer, OPTIONS_SCREEN, 0, 0, Width, Height, RGB(255, 255, 255));
+    optionsScreen.Button.SetDefaultBorder(4, RGB(0, 0, 0));
+    optionsScreen.Button.SetDefaultTextAttrib(24, RGB(0, 0, 0), "Lato-Regular");
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
-    optionsScreen.Button.AddButton("back", 200, 200, 150, 50, {100, 100, 100}, "BACK", GotoTitle);
+    optionsScreen.Button.AddButton("back", 200, 200, 150, 50, RGB(100, 100, 100), "BACK", GotoTitle);
 
-    Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, {255, 255, 255});
-    creditsScreen.Button.SetDefaultBorder(4, {0, 0, 0});
-    creditsScreen.Button.SetDefaultTextAttrib(24, {0, 0, 0}, "Lato-Regular");
+    Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, RGB(255, 255, 255));
+    creditsScreen.Button.SetDefaultBorder(4, RGB(0, 0, 0));
+    creditsScreen.Button.SetDefaultTextAttrib(24, RGB(0, 0, 0), "Lato-Regular");
     creditsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
-    creditsScreen.Button.AddButton("back", 200, 200, 150, 50, {100, 100, 100}, "BACK", GotoTitle);
+    creditsScreen.Button.AddButton("back", 200, 200, 150, 50, RGB(100, 100, 100), "BACK", GotoTitle);
 
-    printf("creating game screen\n");
-    Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, {255, 255, 255});
-    printf("creating game screen\n");
+    Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, RGB(255, 255, 255), true);
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
-    printf("creating game screen\n");
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(Width / 16, Height / 9, 16, 9)); // AddLevel() will bind renderer later
 
-    printf("creating game screen\n");
     gameScreen.Creature.AddCreature("player", TileType::TestPlayer, Width / 16, Height / 9, gameScreen.CENTERED, gameScreen.CENTERED);
-    printf("creating game screen\n");
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
-    printf("creating game screen\n");
-    gameScreen.Creature["player"].SetPosition(gameScreen.CENTERED, gameScreen.CENTERED);
 
     SDL_Point mouse;
     map<char, bool> keyboard;
@@ -250,7 +243,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 gameScreen.TempShade(1);
 
                 // check player movement
-                SDL_Point offset;
+                SDL_Point offset = {0, 0};
 
                 if (keyboard['w']) offset.y = -gameScreen.Creature["player"].Speed.y;
                 if (keyboard['s']) offset.y = gameScreen.Creature["player"].Speed.y;
@@ -260,8 +253,8 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 if (keyboard['w'] && keyboard['s']) offset.y = 0;
                 if (keyboard['a'] && keyboard['d']) offset.x = 0;
 
-                if (gameScreen.Creature["player"].IsCenteredX(&gameScreen)) gameScreen.Move(gameScreen.Creature["player"].Speed.x, 0);
-                if (gameScreen.Creature["player"].IsCenteredY(&gameScreen)) gameScreen.Move(0, gameScreen.Creature["player"].Speed.y);
+                if (gameScreen.Creature["player"].IsCenteredX(&gameScreen)) gameScreen.Move(offset.x, 0);
+                if (gameScreen.Creature["player"].IsCenteredY(&gameScreen)) gameScreen.Move(0, offset.y);
                 gameScreen.Creature["player"].Update(offset);
 
                 gameScreen.Render();
