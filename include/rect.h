@@ -115,6 +115,7 @@ private:
     SDL_Renderer * renderer_;
     Screen * screen_;
     map<string, Rect> rects_;
+    vector<string> order_;
 
 public:
 

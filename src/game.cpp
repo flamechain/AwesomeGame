@@ -91,10 +91,15 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, RGB(0, 0, 0));
     loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, RGB(255, 255, 255), "Loading...");
+    loadingScreen.Rect.AddRect("border", loadingScreen.CENTERED, 800, 400, 75, RGB(0, 0, 0));
+    loadingScreen.Rect["border"].SetBorder(15, RGB(255, 255, 255));
+    loadingScreen.Rect.AddRect("bar", loadingScreen.Rect["border"].GetRect().x + 20, 800+20, 20, 75-40, RGB(255, 255, 255));
 
     SDL_RenderClear(renderer);
     loadingScreen.Render();
     SDL_RenderPresent(renderer);
+    //temp pause for loading screen
+    SDL_Delay(1000);
 
     // do all game loading here
 

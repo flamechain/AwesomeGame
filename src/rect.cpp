@@ -17,9 +17,9 @@ void RectGroup::operator=(const RectGroup& copy) {
 }
 
 void RectGroup::Render(int x, int y, bool f) {
-    for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); it++) {
-        if (f) this->rects_[it->first].Render();
-        else this->rects_[it->first].Render(x, y);
+    for(string uid : this->order_) {
+        if (f) this->rects_[uid].Render();
+        else this->rects_[uid].Render(x, y);
     }
 }
 
@@ -41,16 +41,11 @@ void RectGroup::AddRect(string uid, int x, int y, int w, int h, Color color) {
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
     this->rects_.insert(std::make_pair(uid, Rect(this->renderer_, x, y, w, h, color)));
+    this->order_.push_back(uid);
 }
 
 Rect & RectGroup::operator[](int iterindex) {
-    vector<string> keys;
-
-    for (map<string, Rect>::iterator it = this->rects_.begin(); it != this->rects_.end(); it++) {
-        keys.push_back(it->first);
-    }
-
-    return this->rects_[keys[iterindex]];
+    return this->rects_[this->order_[iterindex]];
 }
 
 Rect RectGroup::at(string uid) const {
