@@ -15,22 +15,19 @@ extern GameState gameState;
 extern vector<SDL_Rect> tileSheet;
 
 Level GenerateRandomLevel(int w, int h, int x, int y) {
-    Level level = Level(x, y);
+    Level level = Level(x, y, w, h);
     int posx = 0;
     int posy = 0;
-    const int tilewidth = w;
-    const int tileheight = h;
 
     for (int i=0; i<x; i++) {
         for (int j=0; j<y; j++) {
             level.SetTile(i, j, TileType::Grass);
             level.SetTilePosition(i, j, posx, posy);
-            level.ResizeTile(i, j, tilewidth, tileheight);
-            posx += tilewidth;
+            posx += w;
 
-            if (posx > tilewidth * (x - 1)) {
+            if (posx > w * (x - 1)) {
                 posx = 0;
-                posy += tileheight;
+                posy += h;
             }
         }
     }
@@ -138,6 +135,12 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     gameScreen.Creature.AddCreature("player", TileType::TestPlayer, Width / 16, Height / 9, gameScreen.CENTERED, gameScreen.CENTERED);
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
+    gameScreen.Creature["player"].Speed.x = 10;
+    gameScreen.Creature["player"].Speed.y = 10;
+
+    // purely as background if screens move
+    // in the future levels will be designed so the screen always covers the entire window
+    Screen background = Screen(renderer, 0, 0, 0, Width, Height, RGB(255, 255, 255));
 
     SDL_Point mouse;
     map<char, bool> keyboard;
@@ -236,6 +239,8 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
         }
 
         SDL_RenderClear(renderer);
+        background.TempShade(1);
+        background.Render();
 
         // game code goes here
         switch (gameState.CurrentScreen()) {
@@ -263,7 +268,9 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
-                gameScreen.TempShade(0.7);
+                background.TempShade(0.6);
+                gameScreen.TempShade(0.6);
+                background.Render();
                 gameScreen.Render();
 
                 pauseScreen.Render();

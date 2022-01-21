@@ -48,17 +48,25 @@ bool Screen::GetFollow() const {
 }
 
 void Screen::TempShade(float percent) {
+    this->bgcolor_.r = 255*percent;
+    this->bgcolor_.g = 255*percent;
+    this->bgcolor_.b = 255*percent;
     this->Rect.TempShade(percent);
     this->Button.TempShade(percent);
     this->Creature.TempShade(percent);
+    this->Level.TempShade(percent);
 }
 
 void Screen::Move(int x, int y) {
     if (this->rect_.x + x > this->bounds_.w) this->rect_.x = this->bounds_.w - x;
     if (this->rect_.y + y > this->bounds_.h) this->rect_.y = this->bounds_.h - y;
-    if (this->rect_.x + x < this->bounds_.x) this->rect_.x = 0 - this->bounds_.x -x;
-    if (this->rect_.y + y < this->bounds_.y) this->rect_.y = 0 - this->bounds_.y -y;
+    if (this->rect_.x + x < this->bounds_.x) this->rect_.x = this->bounds_.x - x;
+    if (this->rect_.y + y < this->bounds_.y) this->rect_.y = this->bounds_.y - y;
 
     this->rect_.x += x;
     this->rect_.y += y;
+}
+
+void Screen::SetColor(Color color) {
+    this->bgcolor_ = color;
 }

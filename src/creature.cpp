@@ -63,7 +63,7 @@ void Creature::SetBounds(int x, int y, int w, int h) {
 /// @param screen   camera to check
 /// @return result
 bool Creature::IsCenteredX(Screen * screen) {
-    if (this->hitbox_.x + (this->hitbox_.w / 2) == (screen->GetRect().w / 2)) return true;
+    if (this->hitbox_.x + this->hitbox_.w / 2 == screen->GetRect().x + screen->GetRect().w / 2) return true;
     return false;
 }
 
@@ -71,7 +71,7 @@ bool Creature::IsCenteredX(Screen * screen) {
 /// @param screen   camera to check
 /// @return result
 bool Creature::IsCenteredY(Screen * screen) {
-    if (this->hitbox_.y + (this->hitbox_.h / 2) == (screen->GetRect().h / 2)) return true;
+    if (this->hitbox_.y + this->hitbox_.h / 2 == screen->GetRect().y + screen->GetRect().h / 2) return true;
     return false;
 }
 
@@ -130,7 +130,7 @@ void CreatureGroup::operator=(const CreatureGroup& copy) {
 
 void CreatureGroup::TempShade(float percent) {
     for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); it++) {
-        this->creatures_[it->first].SetOpacity(255*percent);
+        this->creatures_[it->first].SetExtraColor(255*percent, 255*percent, 255*percent);
     }
 }
 
@@ -138,6 +138,8 @@ void CreatureGroup::AddCreature(string uid, TileType type, int w, int h, int x, 
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
     this->creatures_.insert(std::make_pair(uid, Creature(type, x, y)));
+    this->creatures_[uid].SetRenderer(this->renderer_);
+    this->creatures_[uid].LoadTile(type); // reload with valid renderer
     this->creatures_[uid].Resize(w, h);
 }
 

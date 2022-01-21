@@ -12,13 +12,17 @@ private:
     Tile * level_;
     int x_;
     int y_;
+    int w_;
+    int h_;
 
 public:
 
     Level() {}
 
-    Level(const int x, const int y) {
+    Level(const int x, const int y, int w, int h) {
         this->level_ = new Tile[x*y]();
+        this->w_ = w;
+        this->h_ = h;
 
         for (int i=0; i<x; i++) {
             for (int j=0; j<y; j++) {
@@ -34,6 +38,8 @@ public:
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
                 this->level_[i+this->x_*j].SetRenderer(renderer);
+                this->level_[i+this->x_*j].LoadTile(this->level_[i+this->x_*j].GetType()); // reload with valid renderer
+                this->level_[i+this->x_*j].Resize(this->w_, this->h_);
             }
         }
     }
@@ -74,6 +80,14 @@ public:
         }
 
         delete[] this->level_;
+    }
+
+    void TempShade(float percent) {
+        for (int i=0; i<this->x_; i++) {
+            for (int j=0; j<this->y_; j++) {
+                this->level_[i+this->x_*j].SetExtraColor(255*percent, 255*percent, 255*percent);
+            }
+        }
     }
 
     /// Renders all tiles
@@ -130,6 +144,8 @@ public:
     Level &operator[](string uid);
 
     Level at(string uid) const;
+
+    void TempShade(float percent);
 
 };
 

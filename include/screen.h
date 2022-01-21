@@ -80,6 +80,8 @@ public:
 
     void Move(int x, int y);
 
+    void SetColor(Color color);
+
 };
 
 #endif

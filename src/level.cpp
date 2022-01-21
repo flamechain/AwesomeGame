@@ -55,3 +55,9 @@ Level LevelGroup::at(string uid) const {
     if (this->levels_.find(uid) != this->levels_.end()) return this->levels_.at(uid);
     return this->levels_.at(0);
 }
+
+void LevelGroup::TempShade(float percent) {
+    for (map<string, Level>::iterator it = this->levels_.begin(); it != this->levels_.end(); it++) {
+        this->levels_[it->first].TempShade(percent);
+    }
+}

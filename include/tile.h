@@ -143,7 +143,6 @@ public:
     /// Renders texture to screen
     void Render(int x = 0, int y = 0) const {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
-        // printf("%i,%i,%i,%i, %i,%i,%i,%i\n", this->src_[0].x, this->src_[0].y, this->src_[0].w, this->src_[0].h, dst.x, dst.y, dst.w, dst.h);
         for (int i=0; i<(int)this->src_.size(); i++) {
             SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
         }
