@@ -28,6 +28,7 @@ public:
     /// Gets colllision hitbox
     /// @return hitbox as rect
     SDL_Rect GetHitbox() const;
+
     /// Sets collision hitbox size
     /// @param x    x offset from render x
     /// @param y    y offset from render y
@@ -83,25 +84,40 @@ public:
         this->operator=(copy);
     }
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
-
     void operator=(const CreatureGroup& copy);
-
-    void TempShade(float percent);
-
-    void AddCreature(string uid, TileType type, int w, int h, int x, int y);
-
-    void Render(int x = 0, int y = 0, bool f = false);
-
-    void Destroy();
-
-    void Unlock(string uid);
 
     Creature &operator[](int iterindex);
 
     Creature &operator[](string uid);
 
     Creature at(string uid) const;
+
+    /// Sets needed attributes not gotten from constructor
+    /// @param screen   parent
+    /// @param renderer global renderer
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+
+    /// Sets opacity
+    /// @param percent  0 -> 1
+    void TempShade(float percent);
+
+    /// Creates new creature
+    /// @param uid      map key
+    /// @param type     texture from tile sheet
+    /// @param x        absolute x
+    /// @param y        absolute y
+    /// @param w        width
+    /// @param h        height
+    void AddCreature(string uid, TileType type, int x, int y, int w, int h);
+
+    /// Renders all creatures
+    /// @param x    relative x
+    /// @param y    relative y
+    /// @param f    if screen is relative or absolute
+    void Render(int x = 0, int y = 0, bool f = false);
+
+    /// Destroys all creatures
+    void Destroy();
 
 };
 

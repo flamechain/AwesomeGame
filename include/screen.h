@@ -42,9 +42,9 @@ public:
     }
 
     Screen(const Screen& copy) {
-        this->renderer_ = copy.GetRenderer();
-        this->rect_ = copy.GetRect();
-        this->bgcolor_ = copy.GetColor();
+        this->renderer_ = copy.renderer_;
+        this->rect_ = copy.rect_;
+        this->bgcolor_ = copy.bgcolor_;
 
         this->Text = copy.Text;
         this->Text.SetAttrib(this, this->renderer_);
@@ -58,28 +58,48 @@ public:
         this->Creature.SetAttrib(this, this->renderer_);
     }
 
+    /// Creates artifical bounds when moving
+    /// @param x    x extension
+    /// @param y    y extension
+    /// @param w    x+w extension
+    /// @param h    y+h extension
     void CreateBounds(int x, int y, int w, int h);
 
-    SDL_Renderer * GetRenderer() const;
-
-    SDL_Rect GetRect() const;
-
-    Color GetColor() const;
-
+    /// Gets uid
+    /// @return uid
     unsigned int GetId() const;
 
+    /// Gets size
+    /// @return dimensions
+    SDL_Rect GetRect() const {
+        return this->rect_;
+    }
+
+    /// Gets if relative or absolute
+    /// @return bool if relative
     bool GetFollow() const;
 
+    /// New uid
+    /// @param uid  uid
     void SetId(unsigned int uid);
 
+    /// Renders all children
     void Render();
 
+    /// Destroys all children
     void Destroy();
 
+    /// Sets all childrens opacity
+    /// @param percent  0 -> 1
     void TempShade(float percent);
 
+    /// Moves screen (relative)
+    /// @param x    x relative
+    /// @param y    y relative
     void Move(int x, int y);
 
+    /// Sets background color
+    /// @param color    color
     void SetColor(Color color);
 
 };

@@ -41,6 +41,8 @@ public:
         SDL_FreeSurface(surface);
     }
 
+    /// Sets opacity
+    /// @param percent  0 -> 1
     void TempShade(float percent) {
         int r = (float)this->color_backup_.r * percent;
         int g = (float)this->color_backup_.g * percent;
@@ -49,6 +51,8 @@ public:
     }
 
     /// Renders texture to screen
+    /// @param x    x relative
+    /// @param y    y relative
     void Render(int x = 0, int y = 0) const {
         SDL_Rect dstRect = {x + this->rect_.x, y + this->rect_.y, this->rect_.w, this->rect_.h};
         SDL_RenderCopy(this->renderer_, this->texture_, NULL, &dstRect);
@@ -68,7 +72,7 @@ public:
         return this->rect_;
     }
 
-    /// Destroys memory
+    /// Destroys text
     void Destroy() {
         SDL_DestroyTexture(this->texture_);
         this->renderer_ = nullptr;
@@ -90,15 +94,7 @@ public:
         this->operator=(copy);
     }
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
-
     void operator=(const Paragraph& copy);
-
-    void Destroy();
-
-    void TempShade(float percent);
-
-    void AddLine(string uid, int x, int y, string font, int pt, Color color, string text);
 
     Text &operator[](unsigned int iterindex);
 
@@ -106,6 +102,32 @@ public:
 
     Text at(string uid) const;
 
+    /// Sets attributes not given by constructor
+    /// @param screen   parent
+    /// @param renderer global renderer
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+
+    /// Destroys all lines
+    void Destroy();
+
+    /// Sets opacity
+    /// @param percent  0 -> 1
+    void TempShade(float percent);
+
+    /// Creatures new line
+    /// @param uid      map key
+    /// @param x        relative x
+    /// @param y        relative y
+    /// @param font     ttf font
+    /// @param pt       size
+    /// @param color    color
+    /// @param text     line
+    void AddLine(string uid, int x, int y, string font, int pt, Color color, string text);
+
+    /// Renders all lines
+    /// @param x    x relative
+    /// @param y    y relative
+    /// @param f    if screen is relative or absolute
     void Render(int x = 0, int y = 0, bool f = false);
 
 };

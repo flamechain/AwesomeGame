@@ -7,17 +7,10 @@ void Creature::operator=(const Creature& copy) {
     this->SetPosition(copy.hitbox_.x, copy.hitbox_.y);
 }
 
-/// Gets colllision hitbox
-/// @return hitbox as rect
 SDL_Rect Creature::GetHitbox() const {
     return this->real_hitbox_;
 }
 
-/// Sets collision hitbox size
-/// @param x    x offset from render x
-/// @param y    y offset from render y
-/// @param w    width
-/// @param h    height
 void Creature::SetSize(int x, int y, int w, int h) {
     this->real_offset_.x = x;
     this->real_offset_.y = y;
@@ -27,9 +20,6 @@ void Creature::SetSize(int x, int y, int w, int h) {
     this->real_hitbox_.h = h;
 }
 
-/// Resizes tiles texture
-/// @param w    width
-/// @param h    height
 void Creature::Resize(int w, int h) {
     this->hitbox_.w = w;
     this->hitbox_.h = h;
@@ -37,9 +27,6 @@ void Creature::Resize(int w, int h) {
     this->real_hitbox_.h = h;
 }
 
-/// Moves tiles texture
-/// @param x    x coord
-/// @param y    y coord
 void Creature::SetPosition(int x, int y) {
     this->hitbox_.x = x;
     this->hitbox_.y = y;
@@ -47,11 +34,6 @@ void Creature::SetPosition(int x, int y) {
     this->real_hitbox_.y = this->hitbox_.y + this->real_offset_.y;
 }
 
-/// Sets area creature can move
-/// @param x    x-coord
-/// @param y    y-coord
-/// @param w    boundary width
-/// @param h    boundary height
 void Creature::SetBounds(int x, int y, int w, int h) {
     this->bounds_.x = x;
     this->bounds_.y = y;
@@ -59,24 +41,16 @@ void Creature::SetBounds(int x, int y, int w, int h) {
     this->bounds_.h = h;
 }
 
-/// Checks if creature is centered in X
-/// @param screen   camera to check
-/// @return result
 bool Creature::IsCenteredX(Screen * screen) {
     if (this->hitbox_.x + this->hitbox_.w / 2 == screen->GetRect().x + screen->GetRect().w / 2) return true;
     return false;
 }
 
-/// Checks if creature is centered in Y
-/// @param screen   camera to check
-/// @return result
 bool Creature::IsCenteredY(Screen * screen) {
     if (this->hitbox_.y + this->hitbox_.h / 2 == screen->GetRect().y + screen->GetRect().h / 2) return true;
     return false;
 }
 
-/// Moves creature based on speed
-/// @param checkBounds  if to check bounds
 void Creature::Update(SDL_Point offset, bool checkBounds) {
     if (!checkBounds) {
         this->hitbox_.x += offset.x;
@@ -134,7 +108,7 @@ void CreatureGroup::TempShade(float percent) {
     }
 }
 
-void CreatureGroup::AddCreature(string uid, TileType type, int w, int h, int x, int y) {
+void CreatureGroup::AddCreature(string uid, TileType type, int x, int y, int w, int h) {
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
     this->creatures_.insert(std::make_pair(uid, Creature(type, x, y)));

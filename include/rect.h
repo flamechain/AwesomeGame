@@ -30,6 +30,8 @@ public:
     }
 
     /// Renders border and rectangle
+    /// @param x    relative x
+    /// @param y    relative y
     void Render(int x = 0, int y = 0) {
         SDL_Rect dstRect = {x + this->rect_.x, y + this->rect_.y, this->rect_.w, this->rect_.h};
         SDL_Rect newRect = {this->rect_.x + this->border_pt_, this->rect_.y + this->border_pt_, this->rect_.w - (this->border_pt_ * 2), this->rect_.h - (this->border_pt_ * 2)};
@@ -122,23 +124,40 @@ public:
         this->operator=(copy);
     }
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
-
     void operator=(const RectGroup& copy);
-
-    void Render(int x = 0, int y = 0, bool f = false);
-
-    void Destroy();
-
-    void TempShade(float percent);
-
-    void AddRect(string uid, int x, int y, int w, int h, Color color);
 
     Rect &operator[](int iterindex);
 
+    Rect &operator[](string uid);
+
     Rect at(string uid) const;
 
-    Rect &operator[](string uid);
+    /// Sets attributes needed not given by constructor
+    /// @param screen   parent
+    /// @param renderer global renderer
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+
+    /// Renders all rects
+    /// @param x    relative x
+    /// @param y    relative y
+    /// @param f    if screen is relative or absolute
+    void Render(int x = 0, int y = 0, bool f = false);
+
+    /// Destroys all rects
+    void Destroy();
+
+    /// Sets opacity
+    /// @param percent  0 -> 1
+    void TempShade(float percent);
+
+    /// Creatures rect
+    /// @param uid      map key
+    /// @param x        relative x
+    /// @param y        relative y
+    /// @param w        width
+    /// @param h        height
+    /// @param color    fill color
+    void AddRect(string uid, int x, int y, int w, int h, Color color);
 
 };
 

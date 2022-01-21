@@ -34,6 +34,8 @@ public:
         this->y_ = y;
     }
 
+    /// Sets global renderer
+    /// @param renderer global renderer
     void SetRenderer(SDL_Renderer * renderer) {
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
@@ -82,14 +84,6 @@ public:
         delete[] this->level_;
     }
 
-    void TempShade(float percent) {
-        for (int i=0; i<this->x_; i++) {
-            for (int j=0; j<this->y_; j++) {
-                this->level_[i+this->x_*j].SetExtraColor(255*percent, 255*percent, 255*percent);
-            }
-        }
-    }
-
     /// Renders all tiles
     void Render(int x = 0, int y = 0) {
         for (int i=0; i<this->x_; i++) {
@@ -129,15 +123,7 @@ public:
         this->operator=(copy);
     }
 
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
-
     void operator=(const LevelGroup& copy);
-
-    void Render(int x = 0, int y = 0, bool f = false);
-
-    void Destroy();
-
-    void AddLevel(string uid, Level level);
 
     Level &operator[](int iterindex);
 
@@ -145,6 +131,27 @@ public:
 
     Level at(string uid) const;
 
+    /// Sets attributes needed not given from constructor
+    /// @param screen   parent
+    /// @param renderer global renderer
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+
+    /// Renders all levels
+    /// @param x    relative x
+    /// @param y    relative y
+    /// @param f    if screen is relative or absolute
+    void Render(int x = 0, int y = 0, bool f = false);
+
+    /// Destroys all levels
+    void Destroy();
+
+    /// Adds a level
+    /// @param uid      map key
+    /// @param level    level (predefined)
+    void AddLevel(string uid, Level level);
+
+    /// Sets opacity
+    /// @param percent  0 -> 1
     void TempShade(float percent);
 
 };

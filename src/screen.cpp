@@ -4,18 +4,6 @@ void Screen::CreateBounds(int x, int y, int w, int h) {
     this->bounds_ = {this->rect_.x - x, this->rect_.y - y, this->rect_.x + w, this->rect_.y + h};
 }
 
-SDL_Renderer * Screen::GetRenderer() const {
-    return this->renderer_;
-}
-
-SDL_Rect Screen::GetRect() const {
-    return this->rect_;
-}
-
-Color Screen::GetColor() const {
-    return this->bgcolor_;
-}
-
 unsigned int Screen::GetId() const {
     return this->uid_;
 }

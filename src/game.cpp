@@ -133,7 +133,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(Width / 16, Height / 9, 16, 9)); // AddLevel() will bind renderer later
 
-    gameScreen.Creature.AddCreature("player", TileType::TestPlayer, Width / 16, Height / 9, gameScreen.CENTERED, gameScreen.CENTERED);
+    gameScreen.Creature.AddCreature("player", TileType::TestPlayer, gameScreen.CENTERED, gameScreen.CENTERED, Width / 16, Height / 9);
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
     gameScreen.Creature["player"].Speed.x = 10;
     gameScreen.Creature["player"].Speed.y = 10;

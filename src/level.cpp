@@ -58,6 +58,6 @@ Level LevelGroup::at(string uid) const {
 
 void LevelGroup::TempShade(float percent) {
     for (map<string, Level>::iterator it = this->levels_.begin(); it != this->levels_.end(); it++) {
-        this->levels_[it->first].TempShade(percent);
+        this->levels_[it->first].SetExtraColor(255*percent, 255*percent, 255*percent);
     }
 }

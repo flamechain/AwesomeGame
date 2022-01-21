@@ -63,10 +63,6 @@ public:
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
     }
 
-    void SetRenderer(SDL_Renderer * renderer) {
-        this->renderer_ = renderer;
-    }
-
     void operator=(const Tile& tile) {
         this->renderer_ = tile.GetRenderer();
         this->src_ = {};
@@ -88,6 +84,12 @@ public:
         }
 
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
+    }
+
+    /// Sets renderer
+    /// @param renderer global renderer
+    void SetRenderer(SDL_Renderer * renderer) {
+        this->renderer_ = renderer;
     }
 
     /// Gets renderer
@@ -141,6 +143,8 @@ public:
     }
 
     /// Renders texture to screen
+    /// @param x    x relative
+    /// @param y    y relative
     void Render(int x = 0, int y = 0) const {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
         for (int i=0; i<(int)this->src_.size(); i++) {
