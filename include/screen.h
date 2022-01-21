@@ -13,6 +13,7 @@ private:
 
     SDL_Renderer * renderer_;
     Color bgcolor_;
+    Color color_;
     unsigned int uid_;
     SDL_Rect rect_;
     SDL_Rect bounds_;
@@ -33,6 +34,7 @@ public:
         this->uid_ = uid;
         this->rect_ = {x, y, w, h};
         this->bgcolor_ = bgcolor;
+        this->color_ = bgcolor;
         this->follow_ = follow;
         this->Text.SetAttrib(this, this->renderer_);
         this->Button.SetAttrib(this, this->renderer_);

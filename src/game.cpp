@@ -67,6 +67,12 @@ void StopGame(Screen * screen, string uid) {
     gameState.StopGame();
 }
 
+//Function to fade in pause screen
+float FadeIn(Screen * screen, float current, float increase) {
+    screen->TempShade(increase + current);
+    return current + increase;
+}
+
 int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameState = GameState();
     InitializeEngine();
@@ -144,7 +150,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     SDL_Point mouse;
     map<char, bool> keyboard;
-
+    float current = 0;
     while (gameState.IsRunning()) {
         SDL_Event event;
         SDL_GetMouseState(&mouse.x, &mouse.y);
@@ -268,11 +274,16 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
+                float increase = 0.02;
+
+                if (current < 1 - increase) {
+                    current = FadeIn(&pauseScreen, current, increase);
+                }
+
                 background.TempShade(0.6);
                 gameScreen.TempShade(0.6);
                 background.Render();
                 gameScreen.Render();
-
                 pauseScreen.Render();
             } break;
             case CREDITS_SCREEN: {

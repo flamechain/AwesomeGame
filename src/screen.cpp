@@ -36,9 +36,9 @@ bool Screen::GetFollow() const {
 }
 
 void Screen::TempShade(float percent) {
-    this->bgcolor_.r = 255*percent;
-    this->bgcolor_.g = 255*percent;
-    this->bgcolor_.b = 255*percent;
+    this->bgcolor_.r = this->color_.r*percent;
+    this->bgcolor_.g = this->color_.g*percent;
+    this->bgcolor_.b = this->color_.b*percent;
     this->Rect.TempShade(percent);
     this->Button.TempShade(percent);
     this->Creature.TempShade(percent);
@@ -57,4 +57,5 @@ void Screen::Move(int x, int y) {
 
 void Screen::SetColor(Color color) {
     this->bgcolor_ = color;
+    this->color_ = color;
 }
