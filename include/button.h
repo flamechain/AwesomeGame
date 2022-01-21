@@ -82,11 +82,11 @@ public:
         if (this->centered_) this->CenterText();
     }
 
-    /// Checks if button is clicked
-    /// @param x    mouse x-coord
-    /// @param y    mouse y-coord
-    /// @return if clicked
-    bool Click(int x, int y) {
+    /// Checks if x y inside button
+    /// @param x    x
+    /// @param y    y
+    /// @return true if inside
+    bool IsInside(int x, int y) const {
         if ( (x >= this->rect_.x && x <= this->rect_.x + this->rect_.w) && \
              (y >= this->rect_.y && y <= this->rect_.y + this->rect_.h))
             return true;
