@@ -73,6 +73,13 @@ float FadeIn(Screen * screen, float current, float increase) {
     return current + increase;
 }
 
+void UpdateLoadingBar(Screen * screen, SDL_Renderer * renderer, int change) {
+    screen->Rect["bar"].SetDimensions(screen->Rect["bar"].GetRect().x, screen->Rect["bar"].GetRect().y, screen->Rect["bar"].GetRect().w+change, screen->Rect["bar"].GetRect().h);
+    SDL_RenderClear(renderer);
+    screen->Render();
+    SDL_RenderPresent(renderer);
+}
+
 int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameState = GameState();
     InitializeEngine();
@@ -89,17 +96,15 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
-    Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, RGB(0, 0, 0));
-    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, RGB(255, 255, 255), "Loading...");
-    loadingScreen.Rect.AddRect("border", loadingScreen.CENTERED, 800, 400, 75, RGB(0, 0, 0));
-    loadingScreen.Rect["border"].SetBorder(15, RGB(255, 255, 255));
-    loadingScreen.Rect.AddRect("bar", loadingScreen.Rect["border"].GetRect().x + 20, 800+20, 20, 75-40, RGB(255, 255, 255));
+    Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, BLACK);
+    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, WHITE, "Loading...");
+    loadingScreen.Rect.AddRect("border", loadingScreen.CENTERED, 800, 400, 75, BLACK);
+    loadingScreen.Rect["border"].SetBorder(15, WHITE);
+    loadingScreen.Rect.AddRect("bar", loadingScreen.Rect["border"].GetRect().x + 20, 800+20, 0, 75-40, WHITE);
 
-    SDL_RenderClear(renderer);
-    loadingScreen.Render();
-    SDL_RenderPresent(renderer);
-    //temp pause for loading screen
-    SDL_Delay(1000);
+    const int barLen = 360;
+    const int barSegment = barLen/5;
+    UpdateLoadingBar(&loadingScreen, renderer, 0);
 
     // do all game loading here
 
@@ -107,40 +112,49 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     gameState.SetScreen(TITLE_SCREEN);
 
+    //Color not final
     Screen pauseScreen = Screen(renderer, PAUSE_SCREEN, Width / 4, Height / 4, Width / 2, Height / 2, RGB(100, 100, 255));
-    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "Lato-Bold", 80, RGB(0, 0, 0), "PAUSED");
-    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "Lato-Regular", 24, RGB(0, 0, 0), "Press ESC to resume.");
+    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "Lato-Bold", 80, BLACK, "PAUSED");
+    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "Lato-Regular", 24, BLACK, "Press ESC to resume.");
 
-    pauseScreen.Button.SetDefaultBorder(10, RGB(0, 0, 0));
-    pauseScreen.Button.SetDefaultTextAttrib(60, RGB(0, 0, 0), "Lato-Bold");
+    pauseScreen.Button.SetDefaultBorder(10, BLACK);
+    pauseScreen.Button.SetDefaultTextAttrib(60, BLACK, "Lato-Bold");
     pauseScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
-    pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, RGB(170, 170, 170), "QUIT", GotoTitle);
+    pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, GREY, "QUIT", GotoTitle);
 
-    Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, RGB(100, 100, 100));
-    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "Lato-Bold", 120, RGB(255, 255, 255), "Adventures of Cliche");
+    UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
-    titleScreen.Button.SetDefaultBorder(10, RGB(0, 0, 0));
-    titleScreen.Button.SetDefaultTextAttrib(60, RGB(0, 0, 0), "Lato-Bold");
+    Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, DARK_GREY);
+    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "Lato-Bold", 120, WHITE, "Adventures of Cliche");
+
+    titleScreen.Button.SetDefaultBorder(10, BLACK);
+    titleScreen.Button.SetDefaultTextAttrib(60, BLACK, "Lato-Bold");
     titleScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
 
     titleScreen.Button.AddButton("start", titleScreen.CENTERED, 400, 400, 100, RGB(100, 255, 100), "START", GotoGame);
-    titleScreen.Button.AddButton("options", titleScreen.CENTERED, 550, 400, 100, RGB(170, 170, 170), "OPTIONS", GotoOptions);
-    titleScreen.Button.AddButton("credits", titleScreen.CENTERED, 700, 400, 100, RGB(170, 170, 170), "CREDITS", GotoCredits);
+    titleScreen.Button.AddButton("options", titleScreen.CENTERED, 550, 400, 100, GREY, "OPTIONS", GotoOptions);
+    titleScreen.Button.AddButton("credits", titleScreen.CENTERED, 700, 400, 100, GREY, "CREDITS", GotoCredits);
     titleScreen.Button.AddButton("quit", titleScreen.CENTERED, 850, 400, 100, RGB(255, 100, 100), "QUIT", StopGame);
 
-    Screen optionsScreen = Screen(renderer, OPTIONS_SCREEN, 0, 0, Width, Height, RGB(255, 255, 255));
-    optionsScreen.Button.SetDefaultBorder(4, RGB(0, 0, 0));
-    optionsScreen.Button.SetDefaultTextAttrib(24, RGB(0, 0, 0), "Lato-Regular");
+    UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+
+    Screen optionsScreen = Screen(renderer, OPTIONS_SCREEN, 0, 0, Width, Height, WHITE);
+    optionsScreen.Button.SetDefaultBorder(4, BLACK);
+    optionsScreen.Button.SetDefaultTextAttrib(24, BLACK, "Lato-Regular");
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
-    optionsScreen.Button.AddButton("back", 200, 200, 150, 50, RGB(100, 100, 100), "BACK", GotoTitle);
+    optionsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
 
-    Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, RGB(255, 255, 255));
-    creditsScreen.Button.SetDefaultBorder(4, RGB(0, 0, 0));
-    creditsScreen.Button.SetDefaultTextAttrib(24, RGB(0, 0, 0), "Lato-Regular");
+    UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+
+    Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, WHITE);
+    creditsScreen.Button.SetDefaultBorder(4, BLACK);
+    creditsScreen.Button.SetDefaultTextAttrib(24, BLACK, "Lato-Regular");
     creditsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
-    creditsScreen.Button.AddButton("back", 200, 200, 150, 50, RGB(100, 100, 100), "BACK", GotoTitle);
+    creditsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
 
-    Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, RGB(255, 255, 255), true);
+    UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+
+    Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, WHITE, true);
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(Width / 16, Height / 9, 16, 9)); // AddLevel() will bind renderer later
 
@@ -149,9 +163,11 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameScreen.Creature["player"].Speed.x = 10;
     gameScreen.Creature["player"].Speed.y = 10;
 
+    UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+
     // purely as background if screens move
     // in the future levels will be designed so the screen always covers the entire window
-    Screen background = Screen(renderer, 0, 0, 0, Width, Height, RGB(255, 255, 255));
+    Screen background = Screen(renderer, 0, 0, 0, Width, Height, WHITE);
 
     SDL_Point mouse;
     map<char, bool> keyboard;
@@ -279,7 +295,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
-                float increase = 0.02;
+                float increase = 0.04;
 
                 if (current < 1 - increase) {
                     current = FadeIn(&pauseScreen, current, increase);

@@ -68,4 +68,13 @@ inline Color RGB(Uint8 r, Uint8 g, Uint8 b) {
     return rgb;
 }
 
+#define WHITE RGB(255, 255, 255)
+#define BLACK RGB(0, 0, 0)
+#define GREY RGB(170, 170, 170)
+#define LIGHT_GREY RGB(200, 200, 200)
+#define DARK_GREY RGB(100, 100, 100)
+#define RED RGB(255, 0 0)
+#define GREEN RGB(0, 255, 0)
+#define BLUE RGB(0, 0, 255)
+
 #endif
