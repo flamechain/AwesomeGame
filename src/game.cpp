@@ -45,6 +45,7 @@ void LightenButton(Screen * screen, string uid) {
 
 void GotoTitle(Screen * screen, string uid) {
     gameState.SetScreen(TITLE_SCREEN);
+    screen->TempShade(1);
 }
 
 void GotoGame(Screen * screen, string uid) {
@@ -295,7 +296,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
-                float increase = 0.04;
+                float increase = 0.06;
 
                 if (current < 1 - increase) {
                     current = FadeIn(&pauseScreen, current, increase);
