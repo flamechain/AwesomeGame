@@ -100,9 +100,17 @@ public:
     /// @param y    y relative
     void Move(int x, int y);
 
-    /// Sets background color
+    /// Sets permanent background color
     /// @param color    color
     void SetColor(Color color);
+
+    /// Sets temporary background color
+    /// @param color    color
+    void SetRenderColor(Color color);
+
+    /// Gets origin color (ignoring TempShade)
+    /// @return color
+    Color GetColor() const;
 
 };
 

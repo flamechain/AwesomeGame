@@ -59,3 +59,11 @@ void Screen::SetColor(Color color) {
     this->bgcolor_ = color;
     this->color_ = color;
 }
+
+void Screen::SetRenderColor(Color color) {
+    this->bgcolor_ = color;
+}
+
+Color Screen::GetColor() const {
+    return this->color_;
+}

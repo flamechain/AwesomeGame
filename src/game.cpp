@@ -45,7 +45,6 @@ void LightenButton(Screen * screen, string uid) {
 
 void GotoTitle(Screen * screen, string uid) {
     gameState.SetScreen(TITLE_SCREEN);
-    screen->TempShade(1);
 }
 
 void GotoGame(Screen * screen, string uid) {
@@ -68,10 +67,17 @@ void StopGame(Screen * screen, string uid) {
     gameState.StopGame();
 }
 
-//Function to fade in pause screen
-float FadeIn(Screen * screen, float current, float increase) {
-    screen->TempShade(increase + current);
-    return current + increase;
+float FadeIn(Screen * screen, float current, float decrease) {
+    const int newCur = current - decrease;
+    // also do with children?
+    Color origin = screen->GetColor();
+    Color next;
+    next.r = (255 - origin.r)*(newCur) + origin.r;
+    next.g = (255 - origin.g)*(newCur) + origin.g;
+    next.b = (255 - origin.b)*(newCur) + origin.b;
+    screen->SetRenderColor(next);
+
+    return newCur;
 }
 
 void UpdateLoadingBar(Screen * screen, SDL_Renderer * renderer, int change) {
@@ -172,7 +178,8 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     SDL_Point mouse;
     map<char, bool> keyboard;
-    float current = 0;
+    float fadeInLevel = 1;
+
     while (gameState.IsRunning()) {
         SDL_Event event;
         SDL_GetMouseState(&mouse.x, &mouse.y);
@@ -205,6 +212,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                         case SDL_SCANCODE_ESCAPE:
                             if (gameState.CurrentScreen() == gameScreen.GetId()) {
                                 gameState.SetScreen(pauseScreen.GetId());
+                                fadeInLevel = 1;
                             } else if (gameState.CurrentScreen() == pauseScreen.GetId()) {
                                 gameState.SetScreen(gameScreen.GetId());
                             }
@@ -296,10 +304,10 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
-                float increase = 0.06;
+                float decrease = 0.02;
 
-                if (current < 1 - increase) {
-                    current = FadeIn(&pauseScreen, current, increase);
+                if (fadeInLevel > 0) {
+                    fadeInLevel = FadeIn(&pauseScreen, fadeInLevel, decrease);
                 }
 
                 background.TempShade(0.6);
