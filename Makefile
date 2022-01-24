@@ -1,11 +1,13 @@
 VERSION=debug
 
-SOURCE_FILES:=$(wildcard src/*.cpp)
-OBJECT_FILES:=$(patsubst src/%.cpp, bin/temp/%.o, $(SOURCE_FILES))
+SOURCE_FILES=$(wildcard src/*.cpp)
+OBJECT_FILES=$(patsubst src/%.cpp, bin/temp/%.o, $(SOURCE_FILES))
 
-OUTFILE:="bin/$(VERSION)/game.exe"
+OUTFILE="bin/$(VERSION)/cliche.exe"
 
 CC=g++
+INNO=iscc
+INSTALL=$(wildcard src/*.iss)
 CCFLAGS=-Iinclude -Ilib/SDL # general
 # CCFLAGS+=-Wall -Wextra
 CCFLAGS+=-Llib/SDL/lib -Dmain=SDL_main # sdl specific
@@ -24,12 +26,17 @@ setup: dirs libs
 $(SOURCE_FILES):
 	$(CC) $(CCFLAGS) -c $@ -o $(patsubst src/%.cpp, bin/temp/%.o, $@)
 
+installer:
+	$(INNO) $(INSTALL)
+
 link:
 	$(CC) $(OBJECT_FILES) $(LDFLAGS) -o $(OUTFILE)
 
 dirs:
 	mkdir -p bin/temp
 	mkdir -p bin/debug
+	mkdir -p bin/debug/saves
+	mkdir -p bin/release/saves
 
 libs:
 	cp -u bin/release/libjpeg-9.dll bin/debug

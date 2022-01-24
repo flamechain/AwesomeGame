@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <fstream>
 #include <thread>
 #include <memory>
 #include <map>
@@ -66,6 +67,11 @@ inline Color RGB(Uint8 r, Uint8 g, Uint8 b) {
     rgb.g = g;
     rgb.b = b;
     return rgb;
+}
+
+inline bool FileExists(const string& name) {
+    std::ifstream f(name.c_str());
+    return f.good();
 }
 
 #define WHITE RGB(255, 255, 255)

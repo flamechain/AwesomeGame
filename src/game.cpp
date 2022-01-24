@@ -10,6 +10,7 @@
 #define GAME_SCREEN 3
 #define OPTIONS_SCREEN 4
 #define CREDITS_SCREEN 5
+#define SAVE_SCREEN 6
 
 extern GameState gameState;
 extern vector<SDL_Rect> tileSheet;
@@ -110,7 +111,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     loadingScreen.Rect.AddRect("bar", loadingScreen.Rect["border"].GetRect().x + 20, 800+20, 0, 75-40, WHITE);
 
     const int barLen = 360;
-    const int barSegment = barLen/5;
+    const int barSegment = barLen/6;
     UpdateLoadingBar(&loadingScreen, renderer, 0);
 
     // do all game loading here
@@ -169,6 +170,14 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
     gameScreen.Creature["player"].Speed.x = 10;
     gameScreen.Creature["player"].Speed.y = 10;
+
+    UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+
+    Screen saveScreen = Screen(renderer, SAVE_SCREEN, 0, 0, Width, Height, DARK_GREY);
+    saveScreen.Text.AddLine("title", saveScreen.CENTERED, 200, "Lato-Bold", 80, BLACK, "Select Save");
+    saveScreen.Button.SetDefaultBorder(10, BLACK);
+
+    // saveScreen.Button.AddButton("save1", saveScreen.CENTERED, 500, 800, 100, LIGHT_GREY, "New Save");
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
