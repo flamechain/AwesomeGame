@@ -1,3 +1,6 @@
+
+//This comment was made for testing of branch checkouts (testbranch2)
+
 #include "game.h"
 #include "utils.h"
 
