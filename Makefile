@@ -7,7 +7,6 @@ OUTFILE="bin/MinGW/$(VERSION)/dissension.exe"
 
 CC=g++
 INNO=iscc
-INSTALL=$(wildcard src/*.iss)
 CCFLAGS=-Iinclude -Ilib/SDL # general
 # CCFLAGS+=-Wall -Wextra
 CCFLAGS+=-Llib/MinGW -Dmain=SDL_main # sdl specific
@@ -27,7 +26,7 @@ $(SOURCE_FILES):
 	$(CC) $(CCFLAGS) -c $@ -o $(patsubst src/%.cpp, bin/MinGW/temp/%.o, $@)
 
 installer:
-	$(INNO) $(INSTALL)
+	$(INNO) src/mingw.iss
 
 link:
 	$(CC) $(OBJECT_FILES) $(LDFLAGS) -o $(OUTFILE)

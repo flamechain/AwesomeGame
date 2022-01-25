@@ -6,7 +6,9 @@
 *.dll
 
 # important binaries
-!lib/*
+!lib/**/*
 !bin/**/release/*.exe
+!install-mingw.exe
+!install-x64.exe
 
 .*/

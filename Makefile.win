@@ -8,7 +8,6 @@ OUTFILE="bin/x86-64/$(VERSION)/dissension.exe"
 CC=cl
 LD=link
 INNO=iscc
-INSTALL=$(wildcard src/*.iss)
 CCFLAGS=/I include /I lib/SDL
 LDFLAGS=/LIBPATH bin/x86-64/release SDL2_image.dll SDL2_ttf.dll libfreetype-6.dll SDL2.dll
 
@@ -21,7 +20,7 @@ $(SOURCE_FILES):
 	$(CC) $(CCFLAGS) /c $@ /Fo:$(patsubst src/%.cpp, bin/x86-64/temp/%.obj, $@)
 
 installer:
-	$(INNO) $(INSTALL)
+	$(INNO) windows.iss
 
 link:
 	$(LD) $(OBJECT_FILES) $(LDFLAGS) /OUT:$(OUTFILE)
