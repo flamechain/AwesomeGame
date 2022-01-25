@@ -105,7 +105,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
 
     Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, BLACK);
-    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "Lato-Regular", 60, WHITE, "Loading...");
+    loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "lato/regular", 60, WHITE, "Loading...");
     loadingScreen.Rect.AddRect("border", loadingScreen.CENTERED, 800, 400, 75, BLACK);
     loadingScreen.Rect["border"].SetBorder(15, WHITE);
     loadingScreen.Rect.AddRect("bar", loadingScreen.Rect["border"].GetRect().x + 20, 800+20, 0, 75-40, WHITE);
@@ -122,21 +122,21 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     //Color not final
     Screen pauseScreen = Screen(renderer, PAUSE_SCREEN, Width / 4, Height / 4, Width / 2, Height / 2, RGB(100, 100, 255));
-    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "Lato-Bold", 80, BLACK, "PAUSED");
-    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "Lato-Regular", 24, BLACK, "Press ESC to resume.");
+    pauseScreen.Text.AddLine("title", pauseScreen.CENTERED, 20, "lato/bold", 80, BLACK, "PAUSED");
+    pauseScreen.Text.AddLine("desc", pauseScreen.CENTERED, pauseScreen.Text["title"].GetRect().h + 20, "lato/regular", 24, BLACK, "Press ESC to resume.");
 
     pauseScreen.Button.SetDefaultBorder(10, BLACK);
-    pauseScreen.Button.SetDefaultTextAttrib(60, BLACK, "Lato-Bold");
+    pauseScreen.Button.SetDefaultTextAttrib(60, BLACK, "lato/bold");
     pauseScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, GREY, "QUIT", GotoTitle);
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
     Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, DARK_GREY);
-    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "Lato-Bold", 120, WHITE, "Adventures of Cliche");
+    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "lato/bold", 120, WHITE, "Adventures of Cliche");
 
     titleScreen.Button.SetDefaultBorder(10, BLACK);
-    titleScreen.Button.SetDefaultTextAttrib(60, BLACK, "Lato-Bold");
+    titleScreen.Button.SetDefaultTextAttrib(60, BLACK, "lato/bold");
     titleScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
 
     titleScreen.Button.AddButton("start", titleScreen.CENTERED, 400, 400, 100, RGB(100, 255, 100), "START", GotoGame);
@@ -148,7 +148,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     Screen optionsScreen = Screen(renderer, OPTIONS_SCREEN, 0, 0, Width, Height, WHITE);
     optionsScreen.Button.SetDefaultBorder(4, BLACK);
-    optionsScreen.Button.SetDefaultTextAttrib(24, BLACK, "Lato-Regular");
+    optionsScreen.Button.SetDefaultTextAttrib(24, BLACK, "lato/regular");
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     optionsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
 
@@ -156,7 +156,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, WHITE);
     creditsScreen.Button.SetDefaultBorder(4, BLACK);
-    creditsScreen.Button.SetDefaultTextAttrib(24, BLACK, "Lato-Regular");
+    creditsScreen.Button.SetDefaultTextAttrib(24, BLACK, "lato/regular");
     creditsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     creditsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
 
@@ -174,7 +174,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
     Screen saveScreen = Screen(renderer, SAVE_SCREEN, 0, 0, Width, Height, DARK_GREY);
-    saveScreen.Text.AddLine("title", saveScreen.CENTERED, 200, "Lato-Bold", 80, BLACK, "Select Save");
+    saveScreen.Text.AddLine("title", saveScreen.CENTERED, 200, "lato/bold", 80, BLACK, "Select Save");
     saveScreen.Button.SetDefaultBorder(10, BLACK);
 
     // saveScreen.Button.AddButton("save1", saveScreen.CENTERED, 500, 800, 100, LIGHT_GREY, "New Save");

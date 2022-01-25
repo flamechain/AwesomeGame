@@ -6,6 +6,7 @@
 *.dll
 
 # important binaries
-!bin/release/*
+!lib/*
+!bin/**/release/*.exe
 
 .*/
