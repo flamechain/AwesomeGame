@@ -29,6 +29,7 @@ SDL_Renderer * CreateRenderer(SDL_Window * Window, int Flags) {
     // triggers program that controls graphics hardware
     int renderflags = Flags & GAME_RENDERER_ACCELERATED;
     SDL_Renderer * renderer = SDL_CreateRenderer(Window, -1, renderflags);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
     errno = 0;

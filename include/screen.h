@@ -18,6 +18,7 @@ private:
     SDL_Rect rect_;
     SDL_Rect bounds_;
     bool follow_;
+    unsigned char transparent_;
 
 public:
 
@@ -31,6 +32,7 @@ public:
 
     Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
         this->renderer_ = renderer;
+        this->transparent_ = 255;
         this->uid_ = uid;
         this->rect_ = {x, y, w, h};
         this->bgcolor_ = bgcolor;
@@ -47,6 +49,7 @@ public:
         this->renderer_ = copy.renderer_;
         this->rect_ = copy.rect_;
         this->bgcolor_ = copy.bgcolor_;
+        this->transparent_ = copy.transparent_;
 
         this->Text = copy.Text;
         this->Text.SetAttrib(this, this->renderer_);
@@ -111,6 +114,10 @@ public:
     /// Gets origin color (ignoring TempShade)
     /// @return color
     Color GetColor() const;
+
+    /// Set alpha channel
+    /// @param percent  0 -> 1
+    void SetTransparency(float percent);
 
 };
 

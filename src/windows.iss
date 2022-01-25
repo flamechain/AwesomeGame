@@ -23,11 +23,11 @@ PrivilegesRequired=none
 
 [Dirs]
 Name: "{app}\saves"
-Name: "{app}\res"
-Name: "{app}\res\img"
-Name: "{app}\res\aud"
-Name: "{app}\res\vid"
-Name: "{app}\res\ttf"
+Name: "{app}\resources"
+Name: "{app}\resources\img"
+Name: "{app}\resources\audio"
+Name: "{app}\resources\video"
+Name: "{app}\resources\font"
 
 [Files]
 Source: "..\bin\x86-64\release\*"; DestDir: "{app}";

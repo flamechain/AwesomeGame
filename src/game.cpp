@@ -69,14 +69,17 @@ void StopGame(Screen * screen, string uid) {
 }
 
 float FadeIn(Screen * screen, float current, float decrease) {
-    const int newCur = current - decrease;
+    float newCur = current - decrease;
     // also do with children?
+    if (newCur < 0) newCur = 0;
     Color origin = screen->GetColor();
     Color next;
     next.r = (255 - origin.r)*(newCur) + origin.r;
     next.g = (255 - origin.g)*(newCur) + origin.g;
     next.b = (255 - origin.b)*(newCur) + origin.b;
     screen->SetRenderColor(next);
+
+    screen->SetTransparency(newCur);
 
     return newCur;
 }
@@ -133,7 +136,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
     Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, DARK_GREY);
-    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "lato/bold", 120, WHITE, "Adventures of Cliche");
+    titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "lato/bold", 120, WHITE, "Dissension");
 
     titleScreen.Button.SetDefaultBorder(10, BLACK);
     titleScreen.Button.SetDefaultTextAttrib(60, BLACK, "lato/bold");
@@ -313,7 +316,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 titleScreen.Render();
             } break;
             case PAUSE_SCREEN: {
-                float decrease = 0.02;
+                float decrease = 0.08;
 
                 if (fadeInLevel > 0) {
                     fadeInLevel = FadeIn(&pauseScreen, fadeInLevel, decrease);

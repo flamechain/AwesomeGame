@@ -14,7 +14,7 @@ void Screen::SetId(unsigned int uid) {
 
 void Screen::Render() {
     // add way to set render order, this is good default
-    SDL_SetRenderDrawColor(this->renderer_, this->bgcolor_.r, this->bgcolor_.g, this->bgcolor_.b, 255);
+    SDL_SetRenderDrawColor(this->renderer_, this->bgcolor_.r, this->bgcolor_.g, this->bgcolor_.b, this->transparent_);
     SDL_RenderFillRect(this->renderer_, &this->rect_);
     this->Level.Render(this->rect_.x, this->rect_.y, this->follow_);
     this->Rect.Render(this->rect_.x, this->rect_.y, this->follow_);
@@ -66,4 +66,9 @@ void Screen::SetRenderColor(Color color) {
 
 Color Screen::GetColor() const {
     return this->color_;
+}
+
+void Screen::SetTransparency(float percent) {
+    this->transparent_ = 255 - (255 * percent);
+    
 }
