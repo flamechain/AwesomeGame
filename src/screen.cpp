@@ -21,6 +21,7 @@ void Screen::Render() {
     this->Button.Render(this->rect_.x, this->rect_.y, this->follow_);
     this->Text.Render(this->rect_.x, this->rect_.y, this->follow_);
     this->Creature.Render(this->rect_.x, this->rect_.y, this->follow_);
+    this->Circle.Render(this->rect_.x, this->rect_.y, this->follow_);
 }
 
 void Screen::Destroy() {
@@ -29,6 +30,7 @@ void Screen::Destroy() {
     this->Button.Destroy();
     this->Text.Destroy();
     this->Creature.Destroy();
+    this->Circle.Destroy();
 }
 
 bool Screen::GetFollow() const {

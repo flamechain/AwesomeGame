@@ -7,6 +7,7 @@
 #include "rect.h"
 #include "level.h"
 #include "creature.h"
+#include "circle.h"
 
 class Screen {
 private:
@@ -29,6 +30,7 @@ public:
     RectGroup Rect;
     LevelGroup Level;
     CreatureGroup Creature;
+    CircleGroup Circle;
 
     Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
         this->renderer_ = renderer;
@@ -43,6 +45,7 @@ public:
         this->Rect.SetAttrib(this, this->renderer_);
         this->Level.SetAttrib(this, this->renderer_);
         this->Creature.SetAttrib(this, this->renderer_);
+        this->Circle.SetAttrib(this, this->renderer_);
     }
 
     Screen(const Screen& copy) {
@@ -61,6 +64,8 @@ public:
         this->Level.SetAttrib(this, this->renderer_);
         this->Creature = copy.Creature;
         this->Creature.SetAttrib(this, this->renderer_);
+        this->Circle = copy.Circle;
+        this->Circle.SetAttrib(this, this->renderer_);
     }
 
     /// Creates artifical bounds when moving
