@@ -3,6 +3,7 @@
 
 #include "tile.h"
 #include "screen.h"
+#include "mixer.h"
 
 #define LOADING_SCREEN 0
 #define PAUSE_SCREEN 1
@@ -184,6 +185,9 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
+    Mix_Chunk *testAudio = LoadWAV("resources/audio/temp.wav");
+    Mix_PlayChannel(-1, testAudio, 0);
+
     // purely as background if screens move
     // in the future levels will be designed so the screen always covers the entire window
     Screen background = Screen(renderer, 0, 0, 0, Width, Height, WHITE);
@@ -341,19 +345,20 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
         SDL_Delay(1000 / FRAMERATE);
     }
 
-    // player.Destroy();
     titleScreen.Destroy();
     pauseScreen.Destroy();
     loadingScreen.Destroy();
     gameScreen.Destroy();
     optionsScreen.Destroy();
     creditsScreen.Destroy();
+    Mix_FreeChunk(testAudio);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
     TTF_Quit();
     IMG_Quit();
+    Mix_CloseAudio();
     SDL_Quit();
 
     return 0;
