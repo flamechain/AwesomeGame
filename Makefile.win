@@ -9,7 +9,7 @@ CC=cl
 LD=link
 INNO=iscc
 CCFLAGS=-I \include -I \lib\SDL -I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include"
-LDFLAGS=-LIBPATH \bin\x86-64\release SDL2_image.dll SDL2_ttf.dll libfreetype-6.dll SDL2.dll
+LDFLAGS=-LIBPATH \bin\x86-64\release SDL2_image.dll SDL2_ttf.dll SDL2_mixer.dll libfreetype-6.dll SDL2.dll
 
 all: $(SOURCE_FILES) link
 setup: dirs libs
