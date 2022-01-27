@@ -83,15 +83,64 @@ public:
         DrawElipse(this->renderer_, this->center_.x, this->center_.y, this->r_, this->r_);
     }
 
+    /// Destroys circle
+    void Destroy() {
+        this->renderer_ = nullptr;
+    }
+
+    /// Sets circle position
+    /// @param x    x center
+    /// @param y    y center
+    void SetPosition(int x, int y) {
+        this->center_.x = x;
+        this->center_.y = y;
+    }
 };
 
 class CircleGroup {
 private:
 
+    SDL_Renderer * renderer_;
+    Screen * screen_;
+    map<string, Circle> circles_;
+    vector<string> order_;
+
 public:
 
     CircleGroup() {}
 
+    CircleGroup(const CircleGroup& copy) {
+        this->operator=(copy);
+    }
+
+    void operator=(const CircleGroup& copy);
+
+    Circle &operator[](int iterindex);
+
+    Circle &operator[](string uid);
+
+    Circle at(string uid) const;
+
+    /// Sets attributes needed not given by constructor
+    /// @param screen   parent
+    /// @param renderer global renderer
+    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+
+    /// Renders all Circles
+    /// @param x    relative x
+    /// @param y    relative y
+    /// @param f    if screen is relative or absolute
+    void Render(int x = 0, int y = 0, bool f = false);
+
+    /// Destroys all rects
+    void Destroy();
+
+    /// Creates circle
+    /// @param x        relative x
+    /// @param y        relative y
+    /// @param r        circle radius
+    /// @param color    circle color
+    void AddCircle(string uid, int x, int y, int r, Color color);
 };
 
 #endif

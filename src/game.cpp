@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "screen.h"
 #include "mixer.h"
+#include "circle.h"
 
 #define LOADING_SCREEN 0
 #define PAUSE_SCREEN 1
@@ -155,6 +156,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     optionsScreen.Button.SetDefaultTextAttrib(24, BLACK, "lato/regular");
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     optionsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
+    
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
