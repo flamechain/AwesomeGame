@@ -32,22 +32,10 @@ dirs:
 	mkdir -p bin/x86-64/release/saves
 
 libs:
-	cp -u lib/share/libjpeg-9.dll bin/x86-64/debug
-	cp -u lib/share/libpng16-16.dll bin/x86-64/debug
-	cp -u lib/share/libtiff-5.dll bin/x86-64/debug
-	cp -u lib/share/libwebp-4.dll bin/x86-64/debug
-	cp -u lib/share/libfreetype-6.dll bin/x86-64/debug
-	cp -u lib/x86-64/SDL2.dll bin/x86-64/debug
-	cp -u lib/x86-64/SDL2_image.dll bin/x86-64/debug
-	cp -u lib/x86-64/SDL2_ttf.dll bin/x86-64/debug
-	cp -u lib/share/libjpeg-9.dll bin/x86-64/release
-	cp -u lib/share/libpng16-16.dll bin/x86-64/release
-	cp -u lib/share/libtiff-5.dll bin/x86-64/release
-	cp -u lib/share/libwebp-4.dll bin/x86-64/release
-	cp -u lib/share/libfreetype-6.dll bin/x86-64/release
-	cp -u lib/x86-64/SDL2.dll bin/x86-64/release
-	cp -u lib/x86-64/SDL2_image.dll bin/x86-64/release
-	cp -u lib/x86-64/SDL2_ttf.dll bin/x86-64/release
+	cp -u -a lib/share/. bin/x86-64/debug
+	cp -u -a lib/share/. bin/x86-64/release
+	cp -u -a lib/x86-64/. bin/x86-64/debug
+	cp -u -a lib/x86-64/. bin/x86-64/release
 
 clean:
 	rm -f bin/x86-64/**/*.obj

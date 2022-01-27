@@ -38,16 +38,8 @@ dirs:
 	mkdir -p bin/MinGW/release/saves
 
 libs:
-	cp -u lib/share/libjpeg-9.dll bin/MinGW/debug
-	cp -u lib/share/libpng16-16.dll bin/MinGW/debug
-	cp -u lib/share/libtiff-5.dll bin/MinGW/debug
-	cp -u lib/share/libwebp-4.dll bin/MinGW/debug
-	cp -u lib/share/libfreetype-6.dll bin/MinGW/debug
-	cp -u lib/share/libjpeg-9.dll bin/MinGW/release
-	cp -u lib/share/libpng16-16.dll bin/MinGW/release
-	cp -u lib/share/libtiff-5.dll bin/MinGW/release
-	cp -u lib/share/libwebp-4.dll bin/MinGW/release
-	cp -u lib/share/libfreetype-6.dll bin/MinGW/release
+	cp -u -a lib/share/. bin/MinGW/debug
+	cp -u -a lib/share/. bin/MinGW/release
 
 clean:
 	rm -f bin/MinGW/**/*.o
