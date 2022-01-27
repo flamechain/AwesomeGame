@@ -186,7 +186,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
     Mix_Chunk *testAudio = LoadWAV("resources/audio/temp.wav");
-    Mix_PlayChannel(-1, testAudio, 0);
+    Mix_PlayChannel(-1, testAudio, 0); //-1 sets volume for all channels of audio
 
     // purely as background if screens move
     // in the future levels will be designed so the screen always covers the entire window
