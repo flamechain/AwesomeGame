@@ -9,7 +9,7 @@
 /// @param cy       center y
 /// @param rx       radius x
 /// @param ry       radius y
-void DrawElipse(SDL_Renderer * renderer, int cx, int cy, int rx, int ry) {
+inline void DrawElipse(SDL_Renderer * renderer, int cx, int cy, int rx, int ry) {
     float pi = 3.14159265358979323846264338327950288419716939937510;
     float pih = pi / 2.0;
 
