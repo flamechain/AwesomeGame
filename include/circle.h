@@ -61,6 +61,8 @@ private:
     int r_;
     Color color_;
     Color color_backup_;
+    int border_pt_;
+    Color border_color_;
 
 public:
 
@@ -75,12 +77,37 @@ public:
         this->r_ = r;
     }
 
+    void SetBorder(int pt, Color color) {
+        this->border_pt_ = pt;
+        this->border_color_ = color;
+    }
+
+    void Render_BiggestSquare(int x = 0, int y = 0) {
+        // biggest square inside circle to reduce amount of calls to DrawElipse
+        SDL_SetRenderDrawColor(this->renderer_, this->color_.r, this->color_.g, this->color_.b, 255);
+        double side = this->r_ * sqrt(2); // biggest square algorithm
+        SDL_Rect square = {x + this->center_.x - (int)(side / 2), y + this->center_.y - (int)(side / 2), (int)side, (int)side};
+        SDL_RenderFillRect(this->renderer_, &square);
+        for (int i=0; i<(this->r_-side); i++) {
+            DrawElipse(this->renderer_, this->center_.x, this->center_.y, this->r_ - i, this->r_);
+        }
+
+        // border (rendering on top instead of calculating inside circle to be smaller)
+        SDL_SetRenderDrawColor(this->renderer_, this->border_color_.r, this->border_color_.g, this->border_color_.b, 255);
+        for (int i=0; i<this->border_pt_; i++) {
+            DrawElipse(this->renderer_, this->center_.x, this->center_.y, this->r_-i, this->r_-i);
+        }
+    }
+
+    void Render_Triangles(int x = 0, int y = 0) {
+        
+    }
+
     /// Renders circle outline
     /// @param x    relative x
     /// @param y    relative y
     void Render(int x = 0, int y = 0) {
-        SDL_SetRenderDrawColor(this->renderer_, this->color_.r, this->color_.g, this->color_.b, 255);
-        DrawElipse(this->renderer_, this->center_.x, this->center_.y, this->r_, this->r_);
+        this->Render_Triangles(x, y);
     }
 
     /// Destroys circle

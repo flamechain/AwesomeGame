@@ -156,6 +156,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     optionsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
     optionsScreen.Circle.AddCircle("test", optionsScreen.CENTERED, optionsScreen.CENTERED, 20, RED);
+    optionsScreen.Circle["test"].SetBorder(5, BLACK);
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
