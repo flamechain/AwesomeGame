@@ -17,24 +17,39 @@ extern GameState gameState;
 extern vector<SDL_Rect> tileSheet;
 
 Level GenerateRandomLevel(int x, int y) {
-    const int padx = (WINDOW_WIDTH / TILE_SIZE);
-    const int pady = (WINDOW_HEIGHT / TILE_SIZE);
-    Level level = Level(padx + x, pady + y); // level grid size
-    level.StartPos(padx/2, pady/2);
+    Level level = Level(x + 2, y + 3); // level grid size
+    level.StartPos(1, 1);
     int posx = 0;
     int posy = 0;
 
-    for (int i=0; i<x; i++) {
-        for (int j=0; j<y; j++) {
-            level.SetTile(i, j, TileType::Floor);
-            level.SetTilePosition((padx/2)+i, (pady/2)+j, posx, posy);
-            posx += TILE_SIZE;
-
-            if (posx > TILE_SIZE * (x - 1)) {
-                posx = 0;
-                posy += TILE_SIZE;
+    for (int i=0; i<y+2; i++) {
+        for (int j=0; j<x+2; j++) {
+            if (i == 0) {
+                level.SetTile(j, i, TileType::Roof1);
+                level.RotateTile(j, i, 90);
+            } else if (i == y + 1) {
+                level.SetTile(j, i, TileType::Roof1);
+                level.RotateTile(j, i, -90);
+            } else if (j == 0) {
+                level.SetTile(j, i, TileType::Roof1);
+                level.RotateTile(j, i, 0);
+            } else if (j == x + 1) {
+                level.SetTile(j, i, TileType::Roof1);
+                level.RotateTile(j, i, 180);
+            } else {
+                level.SetTile(j, i, TileType::Floor);
             }
+            if ((i == 0 || i == y + 1) && (j == 0 || j == x + 1)) {
+                level.SetTile(j, i, TileType::Roof);
+            }
+            if ((i == 1) && !(j == 0 || j == x + 1)) {
+                level.SetTile(j, i, TileType::Brick);
+            }
+            level.SetTilePosition(j, i, posx, posy);
+            posx += TILE_SIZE;
         }
+        posy += TILE_SIZE;
+        posx = 0;
     }
 
     return level;
@@ -100,6 +115,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     InitializeEngine();
 
     string sTitle = Title;
+    printf("getting color 1\n");
 
     if (Debug) {
         sTitle = StringFormat("%s: Width: %i, Height: %i, FPS: %i", Title, Width, Height, FRAMERATE);
@@ -107,25 +123,30 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     SDL_Window * window = CreateWindow(Width, Height, sTitle, Flags);
     if (errno) ConsoleOutput("Failed creating window: %s\n", SDL_GetError());
+    printf("getting color 2\n");
 
     SDL_Renderer * renderer = CreateRenderer(window, Flags);
     if (errno) ConsoleOutput("Failed creating renderer: %s\n", SDL_GetError());
+    printf("getting color 3\n");
 
     Screen loadingScreen = Screen(renderer, LOADING_SCREEN, 0, 0, Width, Height, BLACK);
     loadingScreen.Text.AddLine("load", loadingScreen.CENTERED, loadingScreen.CENTERED, "lato/regular", 60, WHITE, "Loading...");
     loadingScreen.Rect.AddRect("border", loadingScreen.CENTERED, 800, 400, 75, BLACK);
     loadingScreen.Rect["border"].SetBorder(15, WHITE);
     loadingScreen.Rect.AddRect("bar", loadingScreen.Rect["border"].GetRect().x + 20, 800+20, 0, 75-40, WHITE);
+    printf("getting color 4\n");
 
     const int barLen = 360;
     const int barSegment = barLen/6;
-    UpdateLoadingBar(&loadingScreen, renderer, 0);
 
     // do all game loading here
 
+    printf("getting color 4.2\n");
     tileSheet = InitTiles();
 
+    printf("getting color 4.3\n");
     gameState.SetScreen(TITLE_SCREEN);
+    printf("getting color 5\n");
 
     //Color not final
     Screen pauseScreen = Screen(renderer, PAUSE_SCREEN, Width / 4, Height / 4, Width / 2, Height / 2, RGB(100, 100, 255));
@@ -160,6 +181,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     optionsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+    printf("getting color 6\n");
 
     Screen creditsScreen = Screen(renderer, CREDITS_SCREEN, 0, 0, Width, Height, WHITE);
     creditsScreen.Button.SetDefaultBorder(4, BLACK);
@@ -169,7 +191,12 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
-    Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, WHITE, true);
+    printf("getting color\n");
+    Tile bgtile = Tile(TileType::Roof, renderer);
+    printf("getting color\n");
+    Color bgcolor = bgtile.GetColor();
+    printf("got color\n");
+    Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, bgcolor, true);
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(16, 9)); // AddLevel() will bind renderer later
     gameScreen.Level.SetCurrent("default");
@@ -192,9 +219,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     Mix_Chunk *testAudio = LoadWAV("resources/audio/temp.wav");
     Mix_PlayChannel(-1, testAudio, 0); //-1 sets volume for all channels of audio
 
-    // purely as background if screens move
-    // in the future levels will be designed so the screen always covers the entire window
-    Screen background = Screen(renderer, 0, 0, 0, Width, Height, WHITE);
+    Screen background = Screen(renderer, 0, 0, 0, Width, Height, gameScreen.GetColor());
 
     SDL_Point mouse;
     map<char, bool> keyboard;

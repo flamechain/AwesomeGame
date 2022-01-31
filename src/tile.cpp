@@ -1,10 +1,10 @@
 #include "tile.h"
 
 vector<SDL_Rect> InitTiles() {
-    const int tilecount = 10;
+    const int tilecount = 14;
     vector<SDL_Rect> tiles;
     for (int i=0; i<tilecount; i++) {
-        SDL_Rect temp = {0, 0, 16, 16};
+        SDL_Rect temp = {0, 0, 32, 32};
         tiles.push_back(temp);
     }
 

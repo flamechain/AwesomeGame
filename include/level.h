@@ -66,6 +66,14 @@ public:
         this->level_[x+this->x_*y].SetPosition(px, py);
     }
 
+    /// Rotate tile around its center
+    /// @param x    x-coord
+    /// @param y    y-coord
+    /// @param d    degrees to rotate
+    void RotateTile(int x, int y, int d) {
+        this->level_[x+this->x_*y].Rotate(d);
+    }
+
     /// Resizes target tile
     /// @param x    x-coord
     /// @param y    y-coord
@@ -90,7 +98,7 @@ public:
     void Render(int x = 0, int y = 0) {
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
-                this->level_[i+this->x_*j].Render(x+(this->start_.x*TILE_SIZE), y+(this->start_.y*TILE_SIZE));
+                this->level_[i+this->x_*j].Render(x-(this->start_.x*TILE_SIZE), y-(this->start_.y*TILE_SIZE));
             }
         }
     }

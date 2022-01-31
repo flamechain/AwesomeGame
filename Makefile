@@ -18,6 +18,7 @@ LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -lsetupapi -lversion -luuid -lz # sdl specific
 
 all: $(SOURCE_FILES) link
+compile: $(SOURCE_FILES)
 setup: dirs libs
 
 .PHONY: $(SOURCE_FILES)

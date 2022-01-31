@@ -45,23 +45,29 @@ public:
     Tile() {}
 
     Tile(TileType type) {
+        this->init(type);
+    }
+
+    Tile(TileType type, SDL_Renderer * renderer) {
+        printf("tile 1\n");
+        this->init(type);
+        printf("tile 2\n");
+        this->renderer_ = renderer;
+        printf("tile 3\n");
+        this->LoadTile(type);
+        printf("tile 4\n");
+    }
+
+    void init(TileType type) {
         this->texture_ = NULL;
 
-        this->LoadTile(type);
         this->hitbox_.x = 0;
         this->hitbox_.y = 0;
+        this->hitbox_.w = 0;
+        this->hitbox_.h = 0;
         this->opacity_ = 255;
         this->rotation_ = 0;
         this->flip_ = SDL_FLIP_NONE;
-
-        if (type == TileType::None) {
-            this->hitbox_.w = 0;
-            this->hitbox_.h = 0;
-        } else {
-            this->hitbox_.w = this->src_[0].w;
-            this->hitbox_.h = this->src_[0].h;
-        }
-
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
     }
 
@@ -86,6 +92,45 @@ public:
         }
 
         this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
+    }
+
+    /// Gets color of tile (assuming its a solid color)
+    /// @param x    x-coord
+    /// @param y    y-coord
+    Color GetColor(int x = 0, int y = 0) {
+        if (this->type_ == TileType::None) return {0, 0, 0};
+        string spath = IMG_PATH;
+        spath += TILE_SHEET;
+        SDL_Surface * surface = IMG_Load(spath.c_str());
+
+        if (surface == NULL) {
+            ConsoleOutput("Failed loading image: %s\n", IMG_GetError());
+            errno = GAME_ERROR_GENERAL_FAIL;
+            return {0, 0, 0};
+        }
+
+        int bpp = surface->format->BytesPerPixel;
+        Uint8 * p = (Uint8*)surface->pixels + (tileSheet[(int)this->type_].y+y) * surface->pitch + (tileSheet[(int)this->type_].x+x) * bpp;
+        Uint32 pixel;
+
+        switch (bpp) {
+            case 1:
+                pixel = *p;
+                break;
+            case 2:
+                pixel = *(Uint16*)p;
+                break;
+            case 4:
+                pixel = *(Uint32*)p;
+                break;
+            default:
+                pixel = 0;
+                break;
+        }
+
+        Color rgb;
+        SDL_GetRGB(pixel, surface->format, &rgb.r, &rgb.g, &rgb.b);
+        return rgb;
     }
 
     /// Sets renderer
@@ -133,8 +178,8 @@ public:
 
         this->src_.clear(); // allowing layered sprites for the future
         this->src_.push_back(tileSheet[(int)type]);
-        this->hitbox_.w = 16;
-        this->hitbox_.h = 16;
+        this->hitbox_.w = 32;
+        this->hitbox_.h = 32;
     }
 
     /// Renders texture to screen
@@ -143,7 +188,11 @@ public:
     void Render(int x = 0, int y = 0) const {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
         for (int i=0; i<(int)this->src_.size(); i++) {
-            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+            if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
+                SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, NULL, this->flip_);
+            } else {
+                SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+            }
         }
     }
 
@@ -179,7 +228,7 @@ public:
     /// @param angle    degress to rotate
     /// @param axis     center of rotation
     void Rotate(int angle, SDL_Point axis = {-1, -1}) {
-        if (axis.x > -1 && axis.y > -1) this->rotate_axis_ = axis;
+        this->rotate_axis_ = axis;
         this->rotation_ = angle;
     }
 
