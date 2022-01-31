@@ -17,10 +17,12 @@ void LevelGroup::operator=(const LevelGroup& copy) {
 }
 
 void LevelGroup::Render(int x, int y, bool f) {
-    for (map<string, Level>::iterator it = this->levels_.begin(); it != this->levels_.end(); it++) {
-        if (f) this->levels_[it->first].Render(-x, -y);
-        else this->levels_[it->first].Render();
-    }
+    if (f) this->levels_[this->current_].Render(-x, -y);
+    else this->levels_[this->current_].Render();
+}
+
+void LevelGroup::SetCurrent(string uid) {
+    this->current_ = uid;
 }
 
 void LevelGroup::Destroy() {

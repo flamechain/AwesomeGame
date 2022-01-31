@@ -4,19 +4,21 @@
 #include "utils.h"
 #include "game.h"
 
-#define TILE_SHEET "TileSheet.png"
-#define IMG_PATH "resources/img/"
-
 enum class TileType {
     None,
-    Grass,
-    Path,
-    GrassPathStrait,
-    GrassPathCorner,
-    GrassPathT,
-    GrassPathCross,
-    GrassPathEnd,
-    TestPlayer
+    Floor,
+    FloorCrack1,
+    FloorCrack2,
+    FloorCrack3,
+    Roof,
+    Roof1,
+    Roof2,
+    Roof3,
+    Roof4,
+    Brick,
+    BrickCrack1,
+    BrickCrack2,
+    BrickCrack3,
 };
 
 /// Defines sizes of all tiles
@@ -129,14 +131,7 @@ public:
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         SDL_FreeSurface(surface);
 
-        this->src_.clear();
-        // order here matters because it defines the order rendering happens
-        if (type == TileType::GrassPathCorner || \
-            type == TileType::GrassPathStrait || \
-            type == TileType::GrassPathCross || \
-            type == TileType::GrassPathT || \
-            type == TileType::GrassPathEnd)
-            this->src_.push_back(tileSheet[(int)TileType::Path]);
+        this->src_.clear(); // allowing layered sprites for the future
         this->src_.push_back(tileSheet[(int)type]);
         this->hitbox_.w = 16;
         this->hitbox_.h = 16;

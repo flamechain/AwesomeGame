@@ -12,17 +12,14 @@ private:
     Tile * level_;
     int x_;
     int y_;
-    int w_;
-    int h_;
+    SDL_Point start_;
 
 public:
 
     Level() {}
 
-    Level(const int x, const int y, int w, int h) {
+    Level(const int x, const int y) {
         this->level_ = new Tile[x*y]();
-        this->w_ = w;
-        this->h_ = h;
 
         for (int i=0; i<x; i++) {
             for (int j=0; j<y; j++) {
@@ -41,9 +38,14 @@ public:
             for (int j=0; j<this->y_; j++) {
                 this->level_[i+this->x_*j].SetRenderer(renderer);
                 this->level_[i+this->x_*j].LoadTile(this->level_[i+this->x_*j].GetType()); // reload with valid renderer
-                this->level_[i+this->x_*j].Resize(this->w_, this->h_);
+                this->level_[i+this->x_*j].Resize(TILE_SIZE, TILE_SIZE);
             }
         }
+    }
+
+    /// Upper left tile coords origin to render without moving
+    void StartPos(int x, int y) {
+        this->start_ = {x, y};
     }
 
     /// Sets tiles at coord pair
@@ -88,7 +90,7 @@ public:
     void Render(int x = 0, int y = 0) {
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
-                this->level_[i+this->x_*j].Render(x, y);
+                this->level_[i+this->x_*j].Render(x+(this->start_.x*TILE_SIZE), y+(this->start_.y*TILE_SIZE));
             }
         }
     }
@@ -113,7 +115,7 @@ private:
     SDL_Renderer * renderer_;
     Screen * screen_;
     map<string, Level> levels_;
-    string level_;
+    string current_;
 
 public:
 
@@ -130,6 +132,10 @@ public:
     Level &operator[](string uid);
 
     Level at(string uid) const;
+
+    /// Sets current level
+    /// @param uid  level uid to render
+    void SetCurrent(string uid);
 
     /// Sets attributes needed not given from constructor
     /// @param screen   parent

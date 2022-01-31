@@ -10,30 +10,47 @@ vector<SDL_Rect> InitTiles() {
 
     tiles[(int)TileType::None].x = 0;
     tiles[(int)TileType::None].y = 0;
+    tiles[(int)TileType::None].w = 0;
+    tiles[(int)TileType::None].h = 0;
 
-    tiles[(int)TileType::Grass].x = 16;
-    tiles[(int)TileType::Grass].y = 0;
+    tiles[(int)TileType::Floor].x = 0;
+    tiles[(int)TileType::Floor].y = 0;
 
-    tiles[(int)TileType::Path].x = 32;
-    tiles[(int)TileType::Path].y = 0;
+    tiles[(int)TileType::FloorCrack1].x = 32;
+    tiles[(int)TileType::FloorCrack1].y = 0;
 
-    tiles[(int)TileType::GrassPathStrait].x = 48;
-    tiles[(int)TileType::GrassPathStrait].y = 0;
+    tiles[(int)TileType::FloorCrack2].x = 64;
+    tiles[(int)TileType::FloorCrack2].y = 0;
 
-    tiles[(int)TileType::GrassPathCorner].x = 64;
-    tiles[(int)TileType::GrassPathCorner].y = 0;
+    tiles[(int)TileType::FloorCrack3].x = 96;
+    tiles[(int)TileType::FloorCrack3].y = 0;
 
-    tiles[(int)TileType::GrassPathT].x = 80;
-    tiles[(int)TileType::GrassPathT].y = 0;
+    tiles[(int)TileType::Roof].x = 128;
+    tiles[(int)TileType::Roof].y = 0;
 
-    tiles[(int)TileType::GrassPathCross].x = 96;
-    tiles[(int)TileType::GrassPathCross].y = 0;
+    tiles[(int)TileType::Roof1].x = 160;
+    tiles[(int)TileType::Roof1].y = 0;
 
-    tiles[(int)TileType::GrassPathEnd].x = 112;
-    tiles[(int)TileType::GrassPathEnd].y = 0;
+    tiles[(int)TileType::Roof2].x = 192;
+    tiles[(int)TileType::Roof2].y = 0;
 
-    tiles[(int)TileType::TestPlayer].x = 0;
-    tiles[(int)TileType::TestPlayer].y = 16;
+    tiles[(int)TileType::Roof3].x = 224;
+    tiles[(int)TileType::Roof3].y = 0;
+
+    tiles[(int)TileType::Roof4].x = 256;
+    tiles[(int)TileType::Roof4].y = 0;
+
+    tiles[(int)TileType::Brick].x = 288;
+    tiles[(int)TileType::Brick].y = 0;
+
+    tiles[(int)TileType::BrickCrack1].x = 320;
+    tiles[(int)TileType::BrickCrack1].y = 0;
+
+    tiles[(int)TileType::BrickCrack2].x = 352;
+    tiles[(int)TileType::BrickCrack2].y = 0;
+
+    tiles[(int)TileType::BrickCrack3].x = 384;
+    tiles[(int)TileType::BrickCrack3].y = 0;
 
     return tiles;
 }

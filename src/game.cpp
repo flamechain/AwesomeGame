@@ -16,20 +16,23 @@
 extern GameState gameState;
 extern vector<SDL_Rect> tileSheet;
 
-Level GenerateRandomLevel(int w, int h, int x, int y) {
-    Level level = Level(x, y, w, h);
+Level GenerateRandomLevel(int x, int y) {
+    const int padx = (WINDOW_WIDTH / TILE_SIZE);
+    const int pady = (WINDOW_HEIGHT / TILE_SIZE);
+    Level level = Level(padx + x, pady + y); // level grid size
+    level.StartPos(padx/2, pady/2);
     int posx = 0;
     int posy = 0;
 
     for (int i=0; i<x; i++) {
         for (int j=0; j<y; j++) {
-            level.SetTile(i, j, TileType::Grass);
-            level.SetTilePosition(i, j, posx, posy);
-            posx += w;
+            level.SetTile(i, j, TileType::Floor);
+            level.SetTilePosition((padx/2)+i, (pady/2)+j, posx, posy);
+            posx += TILE_SIZE;
 
-            if (posx > w * (x - 1)) {
+            if (posx > TILE_SIZE * (x - 1)) {
                 posx = 0;
-                posy += h;
+                posy += TILE_SIZE;
             }
         }
     }
@@ -155,8 +158,6 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     optionsScreen.Button.SetDefaultTextAttrib(24, BLACK, "lato/regular");
     optionsScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     optionsScreen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
-    optionsScreen.Circle.AddCircle("test", optionsScreen.CENTERED, optionsScreen.CENTERED, 20, RED);
-    optionsScreen.Circle["test"].SetBorder(5, BLACK);
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
 
@@ -170,9 +171,10 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     Screen gameScreen = Screen(renderer, GAME_SCREEN, 0, 0, Width, Height, WHITE, true);
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
-    gameScreen.Level.AddLevel("default", GenerateRandomLevel(Width / 16, Height / 9, 16, 9)); // AddLevel() will bind renderer later
+    gameScreen.Level.AddLevel("default", GenerateRandomLevel(16, 9)); // AddLevel() will bind renderer later
+    gameScreen.Level.SetCurrent("default");
 
-    gameScreen.Creature.AddCreature("player", TileType::TestPlayer, gameScreen.CENTERED, gameScreen.CENTERED, Width / 16, Height / 9);
+    gameScreen.Creature.AddCreature("player", TileType::Roof, gameScreen.CENTERED, gameScreen.CENTERED, Width / 16, Height / 9);
     gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
     gameScreen.Creature["player"].Speed.x = 10;
     gameScreen.Creature["player"].Speed.y = 10;

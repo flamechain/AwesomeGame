@@ -22,6 +22,8 @@
 
 #include <math.h>
 
+#include "config.h"
+
 using std::printf;
 using std::vector;
 using std::string;
