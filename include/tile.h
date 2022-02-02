@@ -157,9 +157,22 @@ public:
         this->renderer_ = nullptr;
     }
 
+    void SetTile(TileType type) {
+        printf("tile 0\n");
+        int w = this->hitbox_.w;
+        int h = this->hitbox_.h;
+        printf("tile 1");
+        this->LoadTile(type);
+        printf("2");
+        this->Resize(w, h);
+        printf("3\n");
+    }
+
     /// Creates renderable texture from tile
     /// @param type     which tile to use
     void LoadTile(TileType type) {
+        if (this->renderer_ = nullptr) return;
+        printf("valid renderer?\n");
         this->type_ = type;
         if (type == TileType::None) return;
         string spath = IMG_PATH;
@@ -172,14 +185,19 @@ public:
             return;
         }
 
+        printf("load 1");
         if (this->texture_ != NULL) SDL_DestroyTexture(this->texture_);
+        printf("tile 1");
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
+        printf("2");
         SDL_FreeSurface(surface);
 
+        printf("3");
         this->src_.clear(); // allowing layered sprites for the future
         this->src_.push_back(tileSheet[(int)type]);
-        this->hitbox_.w = 32;
-        this->hitbox_.h = 32;
+        printf("4\n");
+        this->hitbox_.w = tileSheet[(int)type].w;
+        this->hitbox_.h = tileSheet[(int)type].h;
     }
 
     /// Renders texture to screen
@@ -189,9 +207,13 @@ public:
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
         for (int i=0; i<(int)this->src_.size(); i++) {
             if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
+                printf("rotate 1");
                 SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, NULL, this->flip_);
+                printf("2\n");
             } else {
+                printf("nrotate 1");
                 SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[i], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+                printf("2\n");
             }
         }
     }

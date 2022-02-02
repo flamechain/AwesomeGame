@@ -48,6 +48,15 @@ public:
         this->start_ = {x, y};
     }
 
+    /// Gets tiles at position
+    /// @param x    x-coord
+    /// @param y    y-coord
+    /// @return tile reference
+    Tile * GetTile(int x, int y) {
+        Tile * pt = &this->level_[x+this->x_*y];
+        return pt;
+    }
+
     /// Sets tiles at coord pair
     /// @param x    x-coord
     /// @param y    y-coord
@@ -98,7 +107,9 @@ public:
     void Render(int x = 0, int y = 0) {
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
+                printf("level 1");
                 this->level_[i+this->x_*j].Render(x-(this->start_.x*TILE_SIZE), y-(this->start_.y*TILE_SIZE));
+                printf("2\n");
             }
         }
     }
@@ -144,6 +155,10 @@ public:
     /// Sets current level
     /// @param uid  level uid to render
     void SetCurrent(string uid);
+
+    /// Gets current level
+    /// @return uid of current level
+    string GetCurrent() const;
 
     /// Sets attributes needed not given from constructor
     /// @param screen   parent

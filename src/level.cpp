@@ -63,3 +63,7 @@ void LevelGroup::TempShade(float percent) {
         this->levels_[it->first].SetExtraColor(255*percent, 255*percent, 255*percent);
     }
 }
+
+string LevelGroup::GetCurrent() const {
+    return this->current_;
+}

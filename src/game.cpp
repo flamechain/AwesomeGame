@@ -46,6 +46,7 @@ Level GenerateRandomLevel(int x, int y) {
                 level.SetTile(j, i, TileType::Brick);
             }
             level.SetTilePosition(j, i, posx, posy);
+            level.ResizeTile(j, i, TILE_SIZE, TILE_SIZE);
             posx += TILE_SIZE;
         }
         posy += TILE_SIZE;
@@ -157,22 +158,28 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     pauseScreen.Button.SetDefaultTextAttrib(60, BLACK, "lato/bold");
     pauseScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     pauseScreen.Button.AddButton("quit", pauseScreen.CENTERED, pauseScreen.GetRect().h - 120, 400, 100, GREY, "QUIT", GotoTitle);
+    printf("getting color 5\n");
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+    printf("getting color 5\n");
 
     Screen titleScreen = Screen(renderer, TITLE_SCREEN, 0, 0, Width, Height, DARK_GREY);
     titleScreen.Text.AddLine("title", titleScreen.CENTERED, 100, "lato/bold", 120, WHITE, "Dissension");
+    printf("getting color 5\n");
 
     titleScreen.Button.SetDefaultBorder(10, BLACK);
     titleScreen.Button.SetDefaultTextAttrib(60, BLACK, "lato/bold");
     titleScreen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
+    printf("getting color 5\n");
 
     titleScreen.Button.AddButton("start", titleScreen.CENTERED, 400, 400, 100, RGB(100, 255, 100), "START", GotoGame);
     titleScreen.Button.AddButton("options", titleScreen.CENTERED, 550, 400, 100, GREY, "OPTIONS", GotoOptions);
     titleScreen.Button.AddButton("credits", titleScreen.CENTERED, 700, 400, 100, GREY, "CREDITS", GotoCredits);
     titleScreen.Button.AddButton("quit", titleScreen.CENTERED, 850, 400, 100, RGB(255, 100, 100), "QUIT", StopGame);
+    printf("getting color 5\n");
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+    printf("getting color 5\n");
 
     Screen optionsScreen = Screen(renderer, OPTIONS_SCREEN, 0, 0, Width, Height, WHITE);
     optionsScreen.Button.SetDefaultBorder(4, BLACK);
@@ -200,26 +207,31 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameScreen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(16, 9)); // AddLevel() will bind renderer later
     gameScreen.Level.SetCurrent("default");
+    printf("got color 1\n");
 
     gameScreen.Creature.AddCreature("player", TileType::Roof, gameScreen.CENTERED, gameScreen.CENTERED, Width / 16, Height / 9);
-    gameScreen.Creature["player"].SetBounds(0, 0, Width, Height);
     gameScreen.Creature["player"].Speed.x = 10;
     gameScreen.Creature["player"].Speed.y = 10;
+    printf("got color 2\n");
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+    printf("got color 3\n");
 
     Screen saveScreen = Screen(renderer, SAVE_SCREEN, 0, 0, Width, Height, DARK_GREY);
     saveScreen.Text.AddLine("title", saveScreen.CENTERED, 200, "lato/bold", 80, BLACK, "Select Save");
     saveScreen.Button.SetDefaultBorder(10, BLACK);
+    printf("got color 4\n");
 
     // saveScreen.Button.AddButton("save1", saveScreen.CENTERED, 500, 800, 100, LIGHT_GREY, "New Save");
 
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
+    printf("got color 5\n");
 
     Mix_Chunk *testAudio = LoadWAV("resources/audio/temp.wav");
     Mix_PlayChannel(-1, testAudio, 0); //-1 sets volume for all channels of audio
 
     Screen background = Screen(renderer, 0, 0, 0, Width, Height, gameScreen.GetColor());
+    printf("got color 6\n");
 
     SDL_Point mouse;
     map<char, bool> keyboard;
@@ -305,6 +317,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                     }
                     break;
                 case SDL_MOUSEMOTION:
+                printf("motion 1");
                     switch (gameState.CurrentScreen()) {
                         case PAUSE_SCREEN: pauseScreen.Button.Hover(mouse); break;
                         case TITLE_SCREEN: titleScreen.Button.Hover(mouse); break;
@@ -313,6 +326,7 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                         case GAME_SCREEN: gameScreen.Button.Hover(mouse); break;
                         default: break;
                     }
+                printf("2\n");
                     break;
                 default:
                     break;
@@ -321,15 +335,18 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
         SDL_RenderClear(renderer);
         background.TempShade(1);
+                printf("bg 1\n");
         background.Render();
 
         // game code goes here
         switch (gameState.CurrentScreen()) {
             case GAME_SCREEN: {
+                printf("game 1\n");
                 gameScreen.TempShade(1);
 
                 // check player movement
                 SDL_Point offset = {0, 0};
+                printf("game 2\n");
 
                 if (keyboard['w']) offset.y = -gameScreen.Creature["player"].Speed.y;
                 if (keyboard['s']) offset.y = gameScreen.Creature["player"].Speed.y;
@@ -338,17 +355,34 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
                 if (keyboard['w'] && keyboard['s']) offset.y = 0;
                 if (keyboard['a'] && keyboard['d']) offset.x = 0;
+                printf("game 3\n");
+
+                SDL_Point gridpos;
+                printf("game 4\n");
+                gridpos.x = gameScreen.Creature["player"].GetRect().x / TILE_SIZE + TILE_SIZE;
+                printf("game 5\n");
+                gridpos.y = gameScreen.Creature["player"].GetRect().y / TILE_SIZE + TILE_SIZE;
+                printf("game 6\n");
+
+                Tile * standing = gameScreen.Level[gameScreen.Level.GetCurrent()].GetTile(gridpos.x, gridpos.y);
+                printf("game 6.1\n");
+                standing->SetTile(TileType::FloorCrack1);
+                printf("game 7\n");
 
                 if (gameScreen.Creature["player"].IsCenteredX(&gameScreen)) gameScreen.Move(offset.x, 0);
                 if (gameScreen.Creature["player"].IsCenteredY(&gameScreen)) gameScreen.Move(0, offset.y);
                 gameScreen.Creature["player"].Update(offset);
+                printf("game 8\n");
 
                 gameScreen.Render();
             } break;
             case TITLE_SCREEN: {
+                printf("t 1");
                 titleScreen.Render();
+                printf("2\n");
             } break;
             case PAUSE_SCREEN: {
+                printf("p 1");
                 float decrease = 0.08;
 
                 if (fadeInLevel > 0) {
@@ -360,18 +394,24 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 background.Render();
                 gameScreen.Render();
                 pauseScreen.Render();
+                printf("2\n");
             } break;
             case CREDITS_SCREEN: {
+                printf("c 1");
                 creditsScreen.Render();
+                printf("2\n");
             } break;
             case OPTIONS_SCREEN: {
+                printf("o 1");
                 optionsScreen.Render();
+                printf("2\n");
             } break;
         }
 
         // triggers the double buffer
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / FRAMERATE);
+                printf("end\n");
     }
 
     titleScreen.Destroy();
