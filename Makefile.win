@@ -1,17 +1,19 @@
 VERSION=debug
 
-SOURCE_FILES=$(wildcard src/*.cpp)
+SOURCE_FILES=$(wildcard src/**/*.cpp) $(wildcard src/*.cpp)
 OBJECT_FILES=$(patsubst src/%.cpp, bin/x86-64/temp/%.obj, $(SOURCE_FILES))
 
-OUTFILE="bin/x86-64/$(VERSION)/dissension.exe"
+OUTFILE="bin\x86-64\$(VERSION)\dissension.exe"
 
 CC=cl
 LD=link
 INNO=iscc
-CCFLAGS=-I \include -I \lib\SDL -I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include"
+
+CCFLAGS=-I \include -I \include\engine -I \include\game -I \lib\SDL
 LDFLAGS=-LIBPATH \bin\x86-64\release SDL2_image.dll SDL2_ttf.dll SDL2_mixer.dll libfreetype-6.dll SDL2.dll
 
 all: $(SOURCE_FILES) link
+compile: $(SOURCE_FILES)
 setup: dirs libs
 
 .PHONY: $(SOURCE_FILES)
@@ -19,14 +21,16 @@ setup: dirs libs
 $(SOURCE_FILES):
 	$(CC) $(CCFLAGS) -c $@ -Fo:$(patsubst src/%.cpp, bin/x86-64/temp/%.obj, $@)
 
-installer:
-	$(INNO) windows.iss
-
 link:
 	$(LD) $(OBJECT_FILES) $(LDFLAGS) /OUT:$(OUTFILE)
 
+installer:
+	$(INNO) windows.iss
+
 dirs:
 	mkdir -p bin/x86-64/temp
+	mkdir -p bin/x86-64/temp/engine
+	mkdir -p bin/x86-64/temp/game
 	mkdir -p bin/x86-64/debug
 	mkdir -p bin/x86-64/debug/saves
 	mkdir -p bin/x86-64/release/saves

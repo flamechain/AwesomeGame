@@ -20,6 +20,9 @@ private:
 
 public:
 
+    map<char, bool> keyboard;
+    SDL_Point mouse;
+
     GameState() {
         this->running_ = true;
     }

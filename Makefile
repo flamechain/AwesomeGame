@@ -1,13 +1,14 @@
 VERSION=debug
 
-SOURCE_FILES=$(wildcard src/*.cpp)
+SOURCE_FILES=$(wildcard src/**/*.cpp) $(wildcard src/*.cpp)
 OBJECT_FILES=$(patsubst src/%.cpp, bin/MinGW/temp/%.o, $(SOURCE_FILES))
 
 OUTFILE="bin/MinGW/$(VERSION)/dissension.exe"
 
 CC=g++
 INNO=iscc
-CCFLAGS=-Iinclude -Ilib/SDL # general
+
+CCFLAGS=-Iinclude -Iinclude/engine -Iinclude/game -Ilib/SDL # general
 # CCFLAGS+=-Wall -Wextra
 CCFLAGS+=-Llib/MinGW -Dmain=SDL_main # sdl specific
 LDFLAGS=-Llib/MinGW -Lbin/MinGW/release -lSDL2_image -lSDL2_ttf -lSDL2_mixer -llibfreetype-6 -Wl,-Bdynamic -Wall -Wextra # general
@@ -34,6 +35,8 @@ link:
 
 dirs:
 	mkdir -p bin/MinGW/temp
+	mkdir -p bin/MinGW/temp/engine
+	mkdir -p bin/MinGW/temp/game
 	mkdir -p bin/MinGW/debug
 	mkdir -p bin/MinGW/debug/saves
 	mkdir -p bin/MinGW/release/saves

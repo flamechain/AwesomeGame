@@ -32,6 +32,8 @@ public:
     CreatureGroup Creature;
     CircleGroup Circle;
 
+    Screen() {}
+
     Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
         this->renderer_ = renderer;
         this->transparent_ = 255;
