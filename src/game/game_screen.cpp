@@ -1,4 +1,4 @@
-#include "handlers.h"
+#include "game_screen.h"
 
 void HandleGameScreen(Screen * screen) {
     screen->TempShade(1);

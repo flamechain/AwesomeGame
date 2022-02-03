@@ -4,26 +4,13 @@
 #include "callbacks.h"
 #include "keyboard.h"
 #include "audio.h"
-#include "handlers.h"
+#include "game_screen.h"
+#include "options_screen.h"
+#include "credits_screen.h"
+#include "title_screen.h"
+#include "pause_screen.h"
 
 extern GameState gameState;
-extern vector<SDL_Rect> tileSheet;
-
-float FadeIn(Screen * screen, float current, float decrease) {
-    float newCur = current - decrease;
-    // also do with children?
-    if (newCur < 0) newCur = 0;
-    Color origin = screen->GetColor();
-    Color next;
-    next.r = (255 - origin.r)*(newCur) + origin.r;
-    next.g = (255 - origin.g)*(newCur) + origin.g;
-    next.b = (255 - origin.b)*(newCur) + origin.b;
-    screen->SetRenderColor(next);
-
-    screen->SetTransparency(newCur);
-
-    return newCur;
-}
 
 int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     gameState = GameState();

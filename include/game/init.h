@@ -17,6 +17,7 @@
 #define SAVE_SCREEN 6
 
 extern GameState gameState;
+extern vector<SDL_Rect> tileSheet;
 
 /// Updates loading screen bar
 /// @param screen   location of loading screen

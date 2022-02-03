@@ -1,4 +1,20 @@
-#include "handlers.h"
+#include "pause_screen.h"
+
+float FadeIn(Screen * screen, float current, float decrease) {
+    float newCur = current - decrease;
+    // also do with children?
+    if (newCur < 0) newCur = 0;
+    Color origin = screen->GetColor();
+    Color next;
+    next.r = (255 - origin.r)*(newCur) + origin.r;
+    next.g = (255 - origin.g)*(newCur) + origin.g;
+    next.b = (255 - origin.b)*(newCur) + origin.b;
+    screen->SetRenderColor(next);
+
+    screen->SetTransparency(newCur);
+
+    return newCur;
+}
 
 void HandlePauseScreen(Screen * game, Screen * pause) {
     // float decrease = 0.08;

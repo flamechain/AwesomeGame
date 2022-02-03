@@ -21,6 +21,7 @@
 #include <stdexcept>
 
 #include <math.h>
+#include <malloc.h>
 
 #include "config.h"
 
