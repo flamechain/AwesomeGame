@@ -317,7 +317,6 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                     }
                     break;
                 case SDL_MOUSEMOTION:
-                printf("motion 1");
                     switch (gameState.CurrentScreen()) {
                         case PAUSE_SCREEN: pauseScreen.Button.Hover(mouse); break;
                         case TITLE_SCREEN: titleScreen.Button.Hover(mouse); break;
@@ -326,7 +325,6 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                         case GAME_SCREEN: gameScreen.Button.Hover(mouse); break;
                         default: break;
                     }
-                printf("2\n");
                     break;
                 default:
                     break;
@@ -335,19 +333,15 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
         SDL_RenderClear(renderer);
         background.TempShade(1);
-                printf("bg 1\n");
         background.Render();
 
         // game code goes here
         switch (gameState.CurrentScreen()) {
             case GAME_SCREEN: {
-                printf("game 1\n");
                 gameScreen.TempShade(1);
 
                 // check player movement
                 SDL_Point offset = {0, 0};
-                printf("game 2\n");
-
                 if (keyboard['w']) offset.y = -gameScreen.Creature["player"].Speed.y;
                 if (keyboard['s']) offset.y = gameScreen.Creature["player"].Speed.y;
                 if (keyboard['a']) offset.x = -gameScreen.Creature["player"].Speed.x;
@@ -355,34 +349,23 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
                 if (keyboard['w'] && keyboard['s']) offset.y = 0;
                 if (keyboard['a'] && keyboard['d']) offset.x = 0;
-                printf("game 3\n");
 
                 SDL_Point gridpos;
-                printf("game 4\n");
                 gridpos.x = gameScreen.Creature["player"].GetRect().x / TILE_SIZE + TILE_SIZE;
-                printf("game 5\n");
                 gridpos.y = gameScreen.Creature["player"].GetRect().y / TILE_SIZE + TILE_SIZE;
-                printf("game 6\n");
 
-                Tile * standing = gameScreen.Level[gameScreen.Level.GetCurrent()].GetTile(gridpos.x, gridpos.y);
-                printf("game 6.1\n");
-                standing->SetTile(TileType::FloorCrack1);
-                printf("game 7\n");
+                // gameScreen.Level[gameScreen.Level.GetCurrent()].SetTile(gridpos.x, gridpos.y, TileType::FloorCrack1);
 
                 if (gameScreen.Creature["player"].IsCenteredX(&gameScreen)) gameScreen.Move(offset.x, 0);
                 if (gameScreen.Creature["player"].IsCenteredY(&gameScreen)) gameScreen.Move(0, offset.y);
                 gameScreen.Creature["player"].Update(offset);
-                printf("game 8\n");
 
                 gameScreen.Render();
             } break;
             case TITLE_SCREEN: {
-                printf("t 1");
                 titleScreen.Render();
-                printf("2\n");
             } break;
             case PAUSE_SCREEN: {
-                printf("p 1");
                 float decrease = 0.08;
 
                 if (fadeInLevel > 0) {
@@ -394,24 +377,18 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
                 background.Render();
                 gameScreen.Render();
                 pauseScreen.Render();
-                printf("2\n");
             } break;
             case CREDITS_SCREEN: {
-                printf("c 1");
                 creditsScreen.Render();
-                printf("2\n");
             } break;
             case OPTIONS_SCREEN: {
-                printf("o 1");
                 optionsScreen.Render();
-                printf("2\n");
             } break;
         }
 
         // triggers the double buffer
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / FRAMERATE);
-                printf("end\n");
     }
 
     titleScreen.Destroy();

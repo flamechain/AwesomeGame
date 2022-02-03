@@ -107,9 +107,7 @@ public:
     void Render(int x = 0, int y = 0) {
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
-                printf("level 1");
                 this->level_[i+this->x_*j].Render(x-(this->start_.x*TILE_SIZE), y-(this->start_.y*TILE_SIZE));
-                printf("2\n");
             }
         }
     }
@@ -138,9 +136,12 @@ private:
 
 public:
 
-    LevelGroup() {}
+    LevelGroup() {
+        this->current_ = "";
+    }
 
     LevelGroup(const LevelGroup& copy) {
+        this->current_ = "";
         this->operator=(copy);
     }
 
