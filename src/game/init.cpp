@@ -7,7 +7,7 @@ void UpdateLoadingBar(Screen * screen, SDL_Renderer * renderer, int change) {
     SDL_RenderPresent(renderer);
 }
 
-SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen*> screens, int Flags, SDL_Window * Window) {
+SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen*>& screens, int Flags, SDL_Window * Window) {
     string sTitle = Title;
     printf("getting color 1\n");
 
@@ -120,24 +120,25 @@ SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, v
     UpdateLoadingBar(&loadingScreen, renderer, barSegment);
     printf("got color 5\n");
 
-    for (int i=0; i<8; i++) screens.push_back(&Screen());
+    screens.resize(8);
 
     screens[GAME_SCREEN] = &gameScreen;
     screens[TITLE_SCREEN] = &titleScreen;
     screens[OPTIONS_SCREEN] = &optionsScreen;
     screens[CREDITS_SCREEN] = &creditsScreen;
     screens[PAUSE_SCREEN] = &pauseScreen;
+    screens[LOADING_SCREEN] = &loadingScreen;
 
     return renderer;
 }
 
-void DestroyGame(vector<Screen*> Screens, SDL_Renderer * Renderer, SDL_Window * Window) {
+void DestroyGame(vector<Screen*>& Screens, SDL_Renderer * Renderer, SDL_Window * Window) {
     Screens[TITLE_SCREEN]->Destroy();
     Screens[GAME_SCREEN]->Destroy();
     Screens[OPTIONS_SCREEN]->Destroy();
     Screens[CREDITS_SCREEN]->Destroy();
     Screens[PAUSE_SCREEN]->Destroy();
-    // Screens[LOADING_SCREEN]->Destroy();
+    Screens[LOADING_SCREEN]->Destroy();
 
     SDL_DestroyRenderer(Renderer);
     SDL_DestroyWindow(Window);

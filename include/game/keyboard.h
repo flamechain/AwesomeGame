@@ -9,6 +9,6 @@ extern GameState gameState;
 
 /// Handles all SDL events
 /// @param screens  all screens
-void HandleSDLEvents(Screen * screens);
+void HandleSDLEvents(vector<Screen*>& screens);
 
 #endif

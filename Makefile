@@ -18,20 +18,17 @@ LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 \
 -lsetupapi -lversion -luuid -lz # sdl specific
 
-all: $(SOURCE_FILES) link
-compile: $(SOURCE_FILES)
+all: $(OUTFILE)
 setup: dirs libs
 
-.PHONY: $(SOURCE_FILES)
-
-$(SOURCE_FILES):
-	$(CC) $(CCFLAGS) -c $@ -o $(patsubst src/%.cpp, bin/MinGW/temp/%.o, $@)
+bin/MinGW/temp/%.o: src/%.cpp
+	$(CC) $(CCFLAGS) -c $^ -o $@
 
 installer:
 	$(INNO) src/mingw.iss
 
-link:
-	$(CC) $(OBJECT_FILES) $(LDFLAGS) -o $(OUTFILE)
+$(OUTFILE): $(OBJECT_FILES)
+	$(CC) $^ $(LDFLAGS) -o $(OUTFILE)
 
 dirs:
 	mkdir -p bin/MinGW/temp
@@ -46,4 +43,5 @@ libs:
 	cp -u -a lib/share/. bin/MinGW/release
 
 clean:
-	rm -f bin/MinGW/**/*.o
+	rm -f bin/MinGW/temp/**/*.o
+	rm -f bin/MinGW/temp/*.o

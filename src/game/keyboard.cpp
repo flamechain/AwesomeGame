@@ -1,14 +1,14 @@
 #include "keyboard.h"
 
-void HandleSDLEvents(Screen * screens) {
+void HandleSDLEvents(vector<Screen*>& screens) {
     SDL_Event event;
     SDL_GetMouseState(&gameState.mouse.x, &gameState.mouse.y);
 
-    Screen * gameScreen = &screens[GAME_SCREEN];
-    Screen * pauseScreen = &screens[PAUSE_SCREEN];
-    Screen * optionsScreen = &screens[OPTIONS_SCREEN];
-    Screen * titleScreen = &screens[TITLE_SCREEN];
-    Screen * creditsScreen = &screens[CREDITS_SCREEN];
+    Screen * gameScreen = screens[GAME_SCREEN];
+    Screen * pauseScreen = screens[PAUSE_SCREEN];
+    Screen * optionsScreen = screens[OPTIONS_SCREEN];
+    Screen * titleScreen = screens[TITLE_SCREEN];
+    Screen * creditsScreen = screens[CREDITS_SCREEN];
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {

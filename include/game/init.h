@@ -34,12 +34,12 @@ void UpdateLoadingBar(Screen * screen, SDL_Renderer * renderer, int change);
 /// @param Flags    window and renderer creation data
 /// @param Window   where to store global window
 /// @return created global renderer
-SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen*> Screens, int Flags, SDL_Window * Window);
+SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen*>& Screens, int Flags, SDL_Window * Window);
 
 /// Unloads all content
 /// @param Screens  all screens
 /// @param Renderer global renderer
 /// @param Window   global window
-void DestroyGame(Screen * Screens, SDL_Renderer * Renderer, SDL_Window * Window);
+void DestroyGame(vector<Screen*>& Screens, SDL_Renderer * Renderer, SDL_Window * Window);
 
 #endif
