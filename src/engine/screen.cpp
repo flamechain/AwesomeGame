@@ -42,7 +42,17 @@ void Screen::Destroy() {
 }
 
 bool Screen::GetFollow() const {
+    printf("bruh\n");
     return this->follow_;
+}
+
+void Screen::ResetAttrib() {
+    this->Text.SetAttrib(this, this->renderer_);
+    this->Button.SetAttrib(this, this->renderer_);
+    this->Rect.SetAttrib(this, this->renderer_);
+    this->Level.SetAttrib(this, this->renderer_);
+    this->Creature.SetAttrib(this, this->renderer_);
+    this->Circle.SetAttrib(this, this->renderer_);
 }
 
 void Screen::TempShade(float percent) {

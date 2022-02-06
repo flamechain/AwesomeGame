@@ -32,7 +32,13 @@ public:
     CreatureGroup Creature;
     CircleGroup Circle;
 
-    Screen() {}
+    Screen() {
+        this->transparent_ = 255;
+        this->rect_ = {0, 0, 0, 0};
+        this->bgcolor_ = BLACK;
+        this->color_ = BLACK;
+        this->follow_ = false;
+    }
 
     Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
         this->renderer_ = renderer;
@@ -53,6 +59,7 @@ public:
     Screen(const Screen& copy) {
         this->renderer_ = copy.renderer_;
         this->rect_ = copy.rect_;
+        this->follow_ = copy.follow_;
         this->bgcolor_ = copy.bgcolor_;
         this->transparent_ = copy.transparent_;
 
@@ -69,6 +76,9 @@ public:
         this->Circle = copy.Circle;
         this->Circle.SetAttrib(this, this->renderer_);
     }
+
+    /// Sets attribs for children
+    void ResetAttrib();
 
     /// Creates artifical bounds when moving
     /// @param x    x extension

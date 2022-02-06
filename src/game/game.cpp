@@ -38,6 +38,8 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
     while (gameState.IsRunning()) {
 
         printf("events 1\n");
+        printf("%i\n", screens[TITLE_SCREEN]->GetFollow());
+        printf("events 1.1\n");
         HandleSDLEvents(screens);
         printf("events 2\n");
 

@@ -75,18 +75,23 @@ int ButtonGroup::Count() const {
 }
 
 void ButtonGroup::Hover(SDL_Point mouse) {
+    printf("hover\n");
     int x, y;
     if (this->screen_->GetFollow()) {
+    printf("hover 1\n");
         x = mouse.x;
         y = mouse.y;
     } else {
+    printf("hover 2\n");
         x = mouse.x - this->screen_->GetRect().x;
         y = mouse.y - this->screen_->GetRect().y;
     }
+    printf("hover\n");
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
         if (this->buttons_[it->first].IsInside(x, y)) this->onhovers_[it->first](this->screen_, it->first);
         else this->offhovers_[it->first](this->screen_, it->first);
     }
+    printf("hover 4\n");
 }
 
 void ButtonGroup::Click(SDL_Point mouse) {

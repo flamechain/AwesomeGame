@@ -12,17 +12,14 @@ INNO=iscc
 CCFLAGS=-I \include -I \include\engine -I \include\game -I \lib\SDL
 LDFLAGS=-LIBPATH \bin\x86-64\release SDL2_image.dll SDL2_ttf.dll SDL2_mixer.dll libfreetype-6.dll SDL2.dll
 
-all: $(SOURCE_FILES) link
-compile: $(SOURCE_FILES)
+all: $(OUTFILE)
 setup: dirs libs
 
-.PHONY: $(SOURCE_FILES)
+bin/x86-64/temp/%.o: src/%.cpp
+	$(CC) $(CCFLAGS) -c $^ -Fo:$@
 
-$(SOURCE_FILES):
-	$(CC) $(CCFLAGS) -c $@ -Fo:$(patsubst src/%.cpp, bin/x86-64/temp/%.obj, $@)
-
-link:
-	$(LD) $(OBJECT_FILES) $(LDFLAGS) /OUT:$(OUTFILE)
+$(OUTFILE): $(OBJECT_FILES)
+	$(LD) $^ $(LDFLAGS) /OUT:$(OUTFILE)
 
 installer:
 	$(INNO) windows.iss
@@ -42,4 +39,5 @@ libs:
 	cp -u -a lib/x86-64/. bin/x86-64/release
 
 clean:
-	rm -f bin/x86-64/**/*.obj
+	rm -f bin/x86-64/temp/**/*.obj
+	rm -f bin/x86-64/temp/*.obj
