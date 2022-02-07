@@ -58,10 +58,12 @@ public:
 
     Screen(const Screen& copy) {
         this->renderer_ = copy.renderer_;
-        this->rect_ = copy.rect_;
-        this->follow_ = copy.follow_;
-        this->bgcolor_ = copy.bgcolor_;
         this->transparent_ = copy.transparent_;
+        this->uid_ = copy.uid_;
+        this->rect_ = copy.rect_;
+        this->bgcolor_ = copy.bgcolor_;
+        this->color_ = copy.color_;
+        this->follow_ = copy.follow_;
 
         this->Text = copy.Text;
         this->Text.SetAttrib(this, this->renderer_);

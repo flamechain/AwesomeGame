@@ -14,8 +14,9 @@ extern GameState gameState;
 float FadeIn(Screen& screen, float current, float decrease);
 
 /// Handles pause screen events and rendering
-/// @param game   game screen
-/// @param pause  pause screen
-void HandlePauseScreen(Screen& game, Screen& pause);
+/// @param game         game screen
+/// @param pause        pause screen
+/// @param background   background screen
+void HandlePauseScreen(Screen& game, Screen& pause, Screen& background);
 
 #endif

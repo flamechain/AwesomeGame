@@ -37,19 +37,18 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
         HandleSDLEvents(screens);
 
         SDL_RenderClear(renderer);
+        background.TempShade(1);
         background.Render();
 
         switch (gameState.CurrentScreen()) {
             case GAME_SCREEN: {
-                printf("game handler\n");
                 HandleGameScreen(gameScreen);
             } break;
             case TITLE_SCREEN: {
                 HandleTitleScreen(titleScreen);
             } break;
             case PAUSE_SCREEN: {
-                printf("pause handler\n");
-                HandlePauseScreen(gameScreen, pauseScreen);
+                HandlePauseScreen(gameScreen, pauseScreen, background);
             } break;
             case CREDITS_SCREEN: {
                 HandleCreditsScreen(creditsScreen);
@@ -72,3 +71,4 @@ int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
 
     return 0;
 }
+  

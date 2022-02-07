@@ -105,11 +105,11 @@ SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, v
 
     UpdateLoadingBar(loadingScreen, renderer, barSegment);
 
+    printf("init 6\n");
     screens.push_back(Screen(renderer, SAVE_SCREEN, 0, 0, Width, Height, DARK_GREY));
     saveScreen.Text.AddLine("title", saveScreen.CENTERED, 200, "lato/bold", 80, BLACK, "Select Save");
     saveScreen.Button.SetDefaultBorder(10, BLACK);
     saveScreen.Button.AddButton("save1", saveScreen.CENTERED, 500, 800, 100, LIGHT_GREY, "New Save", nullptr);
-    printf("init 6\n");
 
     UpdateLoadingBar(loadingScreen, renderer, barSegment);
 

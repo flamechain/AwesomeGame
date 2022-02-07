@@ -16,7 +16,7 @@ float FadeIn(Screen& screen, float current, float decrease) {
     return newCur;
 }
 
-void HandlePauseScreen(Screen& game, Screen& pause) {
+void HandlePauseScreen(Screen& game, Screen& pause, Screen& background) {
     // float decrease = 0.08;
 
     // if (fadeInLevel > 0) {
@@ -24,6 +24,8 @@ void HandlePauseScreen(Screen& game, Screen& pause) {
     // }
 
     game.TempShade(0.6);
+    background.TempShade(0.6);
+    background.Render();
     game.Render();
     pause.Render();
 }

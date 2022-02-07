@@ -112,7 +112,7 @@ private:
     Color def_border_color_ = {0, 0, 0};
     int def_text_pt_ = 24;
     Color def_text_color_ = {0, 0, 0};
-    string def_text_font_ = "Lato-Regular";
+    string def_text_font_ = "lato/regular";
     screen_callback def_onhover_;
     screen_callback def_offhover_;
 
