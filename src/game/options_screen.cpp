@@ -1,5 +1,5 @@
 #include "options_screen.h"
 
-void HandleOptionsScreen(Screen * screen) {
-    screen->Render();
+void HandleOptionsScreen(Screen& screen) {
+    screen.Render();
 }

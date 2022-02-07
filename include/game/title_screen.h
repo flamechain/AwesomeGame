@@ -9,6 +9,6 @@ extern GameState gameState;
 
 /// Handles title screen events and rendering
 /// @param screen   screen
-void HandleTitleScreen(Screen * screen);
+void HandleTitleScreen(Screen& screen);
 
 #endif

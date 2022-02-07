@@ -9,6 +9,6 @@ extern GameState gameState;
 
 /// Handles credits screen events and rendering
 /// @param screen   screen
-void HandleCreditsScreen(Screen * screen);
+void HandleCreditsScreen(Screen& screen);
 
 #endif

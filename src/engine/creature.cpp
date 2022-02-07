@@ -41,13 +41,13 @@ void Creature::SetBounds(int x, int y, int w, int h) {
     this->bounds_.h = h;
 }
 
-bool Creature::IsCenteredX(Screen * screen) {
-    if (this->hitbox_.x + this->hitbox_.w / 2 == screen->GetRect().x + screen->GetRect().w / 2) return true;
+bool Creature::IsCenteredX(Screen& screen) {
+    if (this->hitbox_.x + this->hitbox_.w / 2 == screen.GetRect().x + screen.GetRect().w / 2) return true;
     return false;
 }
 
-bool Creature::IsCenteredY(Screen * screen) {
-    if (this->hitbox_.y + this->hitbox_.h / 2 == screen->GetRect().y + screen->GetRect().h / 2) return true;
+bool Creature::IsCenteredY(Screen& screen) {
+    if (this->hitbox_.y + this->hitbox_.h / 2 == screen.GetRect().y + screen.GetRect().h / 2) return true;
     return false;
 }
 

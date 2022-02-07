@@ -18,7 +18,6 @@ void LevelGroup::operator=(const LevelGroup& copy) {
 
 void LevelGroup::Render(int x, int y, bool f) {
     if (this->current_ != "") {
-        printf("level: %s\n", this->current_.c_str());
         if (f) this->levels_[this->current_].Render(-x, -y);
         else this->levels_[this->current_].Render();
     }

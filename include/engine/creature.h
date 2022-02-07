@@ -56,12 +56,12 @@ public:
     /// Checks if creature is centered in X
     /// @param screen   camera to check
     /// @return result
-    bool IsCenteredX(Screen * screen);
+    bool IsCenteredX(Screen& screen);
 
     /// Checks if creature is centered in Y
     /// @param screen   camera to check
     /// @return result
-    bool IsCenteredY(Screen * screen);
+    bool IsCenteredY(Screen& screen);
 
     /// Moves creature based on speed
     /// @param checkBounds  if to check bounds

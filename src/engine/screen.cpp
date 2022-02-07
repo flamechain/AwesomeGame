@@ -14,21 +14,13 @@ void Screen::SetId(unsigned int uid) {
 
 void Screen::Render() {
     // add way to set render order, this is good default
-    printf("  screen render 1\n");
     SDL_SetRenderDrawColor(this->renderer_, this->bgcolor_.r, this->bgcolor_.g, this->bgcolor_.b, this->transparent_);
-    printf("  screen render 2\n");
     SDL_RenderFillRect(this->renderer_, &this->rect_);
-    printf("  screen render 3\n");
     this->Level.Render(this->rect_.x, this->rect_.y, this->follow_);
-    printf("  screen render 4\n");
     this->Rect.Render(this->rect_.x, this->rect_.y, this->follow_);
-    printf("  screen render 5\n");
     this->Button.Render(this->rect_.x, this->rect_.y, this->follow_);
-    printf("  screen render 6\n");
     this->Text.Render(this->rect_.x, this->rect_.y, this->follow_);
-    printf("  screen render 7\n");
     this->Creature.Render(this->rect_.x, this->rect_.y, this->follow_);
-    printf("  screen render 8\n");
     this->Circle.Render(this->rect_.x, this->rect_.y, this->follow_);
 }
 
@@ -42,7 +34,6 @@ void Screen::Destroy() {
 }
 
 bool Screen::GetFollow() const {
-    printf("bruh\n");
     return this->follow_;
 }
 

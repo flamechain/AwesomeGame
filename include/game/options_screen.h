@@ -9,6 +9,6 @@ extern GameState gameState;
 
 /// Handles options screen events and rendering
 /// @param screen   screen
-void HandleOptionsScreen(Screen * screen);
+void HandleOptionsScreen(Screen& screen);
 
 #endif
