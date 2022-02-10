@@ -10,7 +10,7 @@
 /// @param rx       radius x
 /// @param ry       radius y
 inline void DrawElipse(SDL_Renderer * renderer, int cx, int cy, int rx, int ry) {
-    float pi = 3.14159265358979323846264338327950288419716939937510;
+    double pi = 3.14159265358979323846264338327950288419716939937510;
     float pih = pi / 2.0;
 
     // precision: 1 -> diamond; 27 -> smooth circle
@@ -18,18 +18,18 @@ inline void DrawElipse(SDL_Renderer * renderer, int cx, int cy, int rx, int ry) 
     float theta = 0;
 
     //starting point
-    int x  = (float)rx * cos(theta); // x start
-    int y  = (float)ry * sin(theta); // y start
+    int x  = static_cast<double>(rx) * cos(theta); // x start
+    int y  = static_cast<double>(ry) * sin(theta); // y start
     int x1 = x;
     int y1 = y;
 
     // repeat until theta >= 90
-    float step = pih/(float)prec; // degrees
+    float step = pih/static_cast<float>(prec); // degrees
 
     for (theta=step; theta<=pih; theta+=step) {
         // new point (+.5 is a quick rounding method)
-        x1 = (float)rx * cosf(theta) + 0.5;
-        y1 = (float)ry * sinf(theta) + 0.5;
+        x1 = static_cast<double>(rx) * cosf(theta) + 0.5;
+        y1 = static_cast<double>(ry) * sinf(theta) + 0.5;
 
         // draw line from previous point to new point, ONLY if point incremented
         if ( (x != x1) || (y != y1) ) {
@@ -86,7 +86,7 @@ public:
         // biggest square inside circle to reduce amount of calls to DrawElipse
         SDL_SetRenderDrawColor(this->renderer_, this->color_.r, this->color_.g, this->color_.b, 255);
         double side = this->r_ * sqrt(2); // biggest square algorithm
-        SDL_Rect square = {x + this->center_.x - (int)(side / 2), y + this->center_.y - (int)(side / 2), (int)side, (int)side};
+        SDL_Rect square = {x + this->center_.x - static_cast<int>(side / 2), y + this->center_.y - static_cast<int>(side / 2), static_cast<int>(side), static_cast<int>(side)};
         SDL_RenderFillRect(this->renderer_, &square);
         for (int i=0; i<(this->r_-side); i++) {
             DrawElipse(this->renderer_, this->center_.x, this->center_.y, this->r_ - i, this->r_);
@@ -142,7 +142,7 @@ public:
 
     void operator=(const CircleGroup& copy);
 
-    Circle &operator[](int iterindex);
+    Circle &operator[](long long unsigned int iterindex);
 
     Circle &operator[](string uid);
 

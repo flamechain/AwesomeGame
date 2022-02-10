@@ -34,7 +34,7 @@ public:
     /// @param text new text
     void SetText(string text) {
         if (this->font_ == NULL) return;
-        SDL_Color fontColor = {(unsigned char)this->font_color_.r, (unsigned char)this->font_color_.g, (unsigned char)this->font_color_.b, 255};
+        SDL_Color fontColor = {this->font_color_.r, this->font_color_.g, this->font_color_.b, 255};
         SDL_Surface * surface = TTF_RenderText_Solid(this->font_, text.c_str(), fontColor);
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         TTF_SizeText(this->font_, text.c_str(), &this->rect_.w, &this->rect_.h);
@@ -44,9 +44,9 @@ public:
     /// Sets opacity
     /// @param percent  0 -> 1
     void TempShade(float percent) {
-        int r = (float)this->color_backup_.r * percent;
-        int g = (float)this->color_backup_.g * percent;
-        int b = (float)this->color_backup_.b * percent;
+        int r = static_cast<float>(this->color_backup_.r) * percent;
+        int g = static_cast<float>(this->color_backup_.g) * percent;
+        int b = static_cast<float>(this->color_backup_.b) * percent;
         this->font_color_ = RGB(r, g, b);
     }
 

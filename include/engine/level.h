@@ -147,7 +147,7 @@ public:
 
     void operator=(const LevelGroup& copy);
 
-    Level &operator[](int iterindex);
+    Level &operator[](long long unsigned int iterindex);
 
     Level &operator[](string uid);
 

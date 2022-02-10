@@ -86,7 +86,7 @@ public:
 
     void operator=(const CreatureGroup& copy);
 
-    Creature &operator[](int iterindex);
+    Creature &operator[](long long unsigned int iterindex);
 
     Creature &operator[](string uid);
 

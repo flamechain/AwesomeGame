@@ -95,8 +95,8 @@ void CreatureGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
 void CreatureGroup::operator=(const CreatureGroup& copy) {
     this->creatures_.clear();
     if (copy.creatures_.size() == 0) return;
-    int i=0;
-    for (map<string, Creature>::iterator it = ((map<string, Creature>)copy.creatures_).begin(); it != copy.creatures_.end(); it++, i++) {
+    long long unsigned int i=0;
+    for (map<string, Creature>::iterator it = static_cast<map<string, Creature>>(copy.creatures_).begin(); it != copy.creatures_.end(); it++, i++) {
         if (i >= copy.creatures_.size()) break;
         this->creatures_.insert(std::make_pair(it->first, copy.creatures_.at(it->first)));
     }
@@ -132,7 +132,7 @@ void CreatureGroup::Destroy() {
     }
 }
 
-Creature & CreatureGroup::operator[](int iterindex) {
+Creature & CreatureGroup::operator[](long long unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); it++) {

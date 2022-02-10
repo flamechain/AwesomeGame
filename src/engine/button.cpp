@@ -16,8 +16,8 @@ void ButtonGroup::operator=(const ButtonGroup& copy) {
     this->def_onhover_ = copy.def_onhover_;
     this->def_offhover_ = copy.def_offhover_;
     if (copy.buttons_.size() == 0) return;
-    int i=0;
-    for (map<string, Button>::iterator it = ((map<string, Button>)copy.buttons_).begin(); it != copy.buttons_.end(); it++, i++) {
+    long long unsigned int i=0;
+    for (map<string, Button>::iterator it = static_cast<map<string, Button>>(copy.buttons_).begin(); it != copy.buttons_.end(); it++, i++) {
         if (i >= copy.buttons_.size()) break;
         this->buttons_.insert(std::make_pair(it->first, copy.buttons_.at(it->first)));
     }
@@ -83,12 +83,12 @@ void ButtonGroup::Hover(SDL_Point mouse) {
     }
 
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
-        screen_callback callback;
+        screen_callback btnCallback;
 
-        if (this->buttons_[it->first].IsInside(x, y)) callback = this->onhovers_[it->first];
-        else callback = this->offhovers_[it->first];
+        if (this->buttons_[it->first].IsInside(x, y)) btnCallback = this->onhovers_[it->first];
+        else btnCallback = this->offhovers_[it->first];
 
-        if (callback != nullptr) callback(*this->screen_, it->first);
+        if (btnCallback != nullptr) btnCallback(*this->screen_, it->first);
     }
 }
 
@@ -102,13 +102,13 @@ void ButtonGroup::Click(SDL_Point mouse) {
 
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
         if (this->buttons_[it->first].IsInside(x, y)) {
-            screen_callback callback = this->callbacks_[it->first];
-            if (callback != nullptr) callback(*this->screen_, it->first);
+            screen_callback btnCallback = this->callbacks_[it->first];
+            if (btnCallback != nullptr) btnCallback(*this->screen_, it->first);
         }
     }
 }
 
-Button & ButtonGroup::operator[](int iterindex) {
+Button & ButtonGroup::operator[](long long unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {

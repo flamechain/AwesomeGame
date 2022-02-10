@@ -9,8 +9,8 @@ void RectGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
 void RectGroup::operator=(const RectGroup& copy) {
     this->rects_.clear();
     if (copy.rects_.size() == 0) return;
-    int i=0;
-    for (map<string, Rect>::iterator it = ((map<string, Rect>)copy.rects_).begin(); it != copy.rects_.end(); it++, i++) {
+    long long unsigned int i=0;
+    for (map<string, Rect>::iterator it = static_cast<map<string, Rect>>(copy.rects_).begin(); it != copy.rects_.end(); it++, i++) {
         if (i >= copy.rects_.size()) break;
         this->rects_.insert(std::make_pair(it->first, copy.rects_.at(it->first)));
     }
@@ -44,7 +44,7 @@ void RectGroup::AddRect(string uid, int x, int y, int w, int h, Color color) {
     this->order_.push_back(uid);
 }
 
-Rect & RectGroup::operator[](int iterindex) {
+Rect & RectGroup::operator[](long long unsigned int iterindex) {
     return this->rects_[this->order_[iterindex]];
 }
 

@@ -126,7 +126,7 @@ public:
 
     void operator=(const ButtonGroup& copy);
 
-    Button &operator[](int iterindex);
+    Button &operator[](long long unsigned int iterindex);
 
     Button &operator[](string uid);
 

@@ -9,8 +9,8 @@ void LevelGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
 void LevelGroup::operator=(const LevelGroup& copy) {
     this->levels_.clear();
     if (copy.levels_.size() == 0) return;
-    int i=0;
-    for (map<string, Level>::iterator it = ((map<string, Level>)copy.levels_).begin(); it != copy.levels_.end(); it++, i++) {
+    long long unsigned int i=0;
+    for (map<string, Level>::iterator it = static_cast<map<string, Level>>(copy.levels_).begin(); it != copy.levels_.end(); it++, i++) {
         if (i >= copy.levels_.size()) break;
         this->levels_.insert(std::make_pair(it->first, copy.levels_.at(it->first)));
     }
@@ -40,7 +40,7 @@ void LevelGroup::AddLevel(string uid, Level level) {
     this->levels_[uid].SetRenderer(this->renderer_);
 }
 
-Level & LevelGroup::operator[](int iterindex) {
+Level & LevelGroup::operator[](long long unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Level>::iterator it = this->levels_.begin(); it != this->levels_.end(); it++) {

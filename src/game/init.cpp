@@ -7,7 +7,7 @@ void UpdateLoadingBar(Screen& screen, SDL_Renderer * renderer, int change) {
     SDL_RenderPresent(renderer);
 }
 
-SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen>& screens, int Flags, SDL_Window * Window) {
+SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen>& screens, int Flags, SDL_Window *&Window) {
     string sTitle = Title;
 
     if (Debug) {
@@ -117,7 +117,7 @@ SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, v
 }
 
 void DestroyGame(vector<Screen>& Screens, SDL_Renderer * Renderer, SDL_Window * Window) {
-    for (int i=0; i<Screens.size(); i++) Screens[i].Destroy();
+    for (long long unsigned int i=0; i<Screens.size(); i++) Screens[i].Destroy();
 
     SDL_DestroyRenderer(Renderer);
     SDL_DestroyWindow(Window);

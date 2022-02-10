@@ -106,7 +106,8 @@ public:
         }
 
         int bpp = surface->format->BytesPerPixel;
-        Uint8 * p = (Uint8*)surface->pixels + (tileSheet[(int)this->type_].y+y) * surface->pitch + (tileSheet[(int)this->type_].x+x) * bpp;
+        Uint8 * p = static_cast<Uint8*>(surface->pixels) + (tileSheet[static_cast<long long unsigned int>(this->type_)].y+y) * \
+            surface->pitch + (tileSheet[static_cast<long long unsigned int>(this->type_)].x+x) * bpp;
         Uint32 pixel;
 
         switch (bpp) {
@@ -114,10 +115,10 @@ public:
                 pixel = *p;
                 break;
             case 2:
-                pixel = *(Uint16*)p;
+                pixel = *reinterpret_cast<Uint16*>(p);
                 break;
             case 4:
-                pixel = *(Uint32*)p;
+                pixel = *reinterpret_cast<Uint32*>(p);
                 break;
             default:
                 pixel = 0;
@@ -158,7 +159,7 @@ public:
     void LoadTile(TileType type) {
         int oldw = this->hitbox_.w;
         int oldh = this->hitbox_.h;
-        if (this->renderer_ = nullptr) return;
+        if (this->renderer_ == nullptr) return;
         this->type_ = type;
         if (type == TileType::None) return;
         string spath = IMG_PATH;
@@ -176,7 +177,7 @@ public:
         SDL_FreeSurface(surface);
 
         this->src_.clear(); // allowing layered sprites for the future
-        this->src_.push_back(tileSheet[(int)type]);
+        this->src_.push_back(tileSheet[static_cast<long long unsigned int>(type)]);
 
         if (oldw != 0 && oldh != 0) {
             this->hitbox_.w = oldw;
@@ -189,14 +190,12 @@ public:
     /// @param y    y relative
     void Render(int x = 0, int y = 0) {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
-        dst.x = 900;
-        printf("%i -> %i :: %i,%i,%i,%i\n", this->type_, this->src_.size(), dst.x, dst.y, dst.w, dst.h);
-        // if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
-        //     SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, NULL, this->flip_);
-        // } else {
-        //     SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
-        // }
-        SDL_RenderCopy(this->renderer_, this->texture_, &this->src_[0], &dst);
+
+        if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
+            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, NULL, this->flip_);
+        } else {
+            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+        }
     }
 
     /// Resizes tiles texture
@@ -216,7 +215,7 @@ public:
     /// Flips texture on along x and y axis
     /// @param flip flip flags
     void Flip(int flip) {
-        this->flip_ = (SDL_RendererFlip)flip;
+        this->flip_ = static_cast<SDL_RendererFlip>(flip);
     }
 
     /// Moves tiles texture
@@ -258,7 +257,7 @@ public:
     /// @param r    r-channel
     /// @param g    g-channel
     /// @param b    b-channel
-    void SetExtraColor(char r, char g, char b) {
+    void SetExtraColor(unsigned char r, unsigned char g, unsigned char b) {
         SDL_SetTextureColorMod(this->texture_, r, g, b);
     }
 

@@ -9,8 +9,8 @@ void Paragraph::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
 void Paragraph::operator=(const Paragraph& copy) {
     this->lines_.clear();
     if (copy.lines_.size() == 0) return;
-    int i=0;
-    for (map<string, Text>::iterator it = ((map<string, Text>)copy.lines_).begin(); it != copy.lines_.end(); it++, i++) {
+    long long unsigned int i=0;
+    for (map<string, Text>::iterator it = static_cast<map<string, Text>>(copy.lines_).begin(); it != copy.lines_.end(); it++, i++) {
         if (i >= copy.lines_.size()) break;
         this->lines_.insert(std::make_pair(it->first, copy.lines_.at(it->first)));
     }

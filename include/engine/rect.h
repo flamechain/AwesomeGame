@@ -46,9 +46,6 @@ public:
     /// Sets r,g,b channels
     /// @param rgb  color channels (not alpha)
     void SetColor(Color rgb) {
-        if (rgb.r < 0) rgb.r = 0;
-        if (rgb.g < 0) rgb.g = 0;
-        if (rgb.b < 0) rgb.b = 0;
         this->color_ = rgb;
         this->color_backup_ = rgb;
     }
@@ -93,9 +90,9 @@ public:
     /// Changes brightness
     /// @param percent  percent to decrease, 0 -> 1
     void TempShade(float percent) {
-        int r = (float)this->color_backup_.r * percent;
-        int g = (float)this->color_backup_.g * percent;
-        int b = (float)this->color_backup_.b * percent;
+        int r = static_cast<float>(this->color_backup_.r) * percent;
+        int g = static_cast<float>(this->color_backup_.g) * percent;
+        int b = static_cast<float>(this->color_backup_.b) * percent;
         this->color_ = RGB(r, g, b);
     }
 
@@ -127,7 +124,7 @@ public:
 
     void operator=(const RectGroup& copy);
 
-    Rect &operator[](int iterindex);
+    Rect &operator[](long long unsigned int iterindex);
 
     Rect &operator[](string uid);
 

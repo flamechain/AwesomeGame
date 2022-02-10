@@ -8,10 +8,15 @@ OUTFILE="bin/MinGW/$(VERSION)/dissension.exe"
 CC=g++
 INNO=iscc
 
-CCFLAGS=-Iinclude -Iinclude/engine -Iinclude/game -Ilib/SDL # general
-# CCFLAGS+=-Wall -Wextra
+CCFLAGS=-Iinclude -Iinclude/engine -Iinclude/game -Ilib/SDL
+CCFLAGS+=-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy \
+-Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations \
+-Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual \
+-Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 \
+-Wundef -Wno-unused -Werror
+# CCFLAGS+=-Wredundant-decls -Wswitch-default # sdl headers trigger these
 CCFLAGS+=-Llib/MinGW -Dmain=SDL_main # sdl specific
-LDFLAGS=-Llib/MinGW -Lbin/MinGW/release -lSDL2_image -lSDL2_ttf -lSDL2_mixer -llibfreetype-6 -Wl,-Bdynamic -Wall -Wextra # general
+LDFLAGS=-Llib/MinGW -Lbin/MinGW/release -lSDL2_image -lSDL2_ttf -lSDL2_mixer -llibfreetype-6 -Wl,-Bdynamic
 # LDFLAGS+=-mwindows
 LDFLAGS+=-lmingw32 -lSDL2main -lSDL2 -Wl,--dynamicbase \
 -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 -ldxguid -ldxerr8 \
