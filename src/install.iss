@@ -12,7 +12,7 @@ DefaultDirName={#DEFDIR}\{#GROUPNAME}\{#APPNAME}
 DefaultGroupName={#APPNAME}
 UninstallDisplayIcon={app}\dissension.exe
 OutputDir="..\"
-OutputBaseFilename="install-x64"
+OutputBaseFilename="install"
 LicenseFile="..\LICENSE"
 Compression=lzma2
 SolidCompression=yes
@@ -30,7 +30,7 @@ Name: "{app}\resources\video"
 Name: "{app}\resources\font"
 
 [Files]
-Source: "..\bin\x86-64\release\*"; DestDir: "{app}";
+Source: "..\bin\release\*"; DestDir: "{app}";
 Source: "..\resources\font\*"; DestDir: "{app}\resources\font"; Flags: ignoreversion recursesubdirs
 Source: "..\resources\img\*"; DestDir: "{app}\resources\img"; Flags: ignoreversion recursesubdirs
 Source: "..\resources\audio\*"; DestDir: "{app}\resources\audio"; Flags: ignoreversion recursesubdirs
