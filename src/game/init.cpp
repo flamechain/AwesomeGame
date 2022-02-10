@@ -11,7 +11,7 @@ SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, v
     string sTitle = Title;
 
     if (Debug) {
-        sTitle = StringFormat("%s: Width: %i, Height: %i, FPS: %i", Title, Width, Height, FRAMERATE);
+        sTitle = StringFormat("%s: Width: %i, Height: %i, FPS: %i", Title.c_str(), Width, Height, FRAMERATE);
     }
 
     Window = CreateWindow(Width, Height, sTitle, Flags);
@@ -81,7 +81,7 @@ SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, v
     gameScreen.Level.AddLevel("default", GenerateRandomLevel(16, 9)); // AddLevel() will bind renderer later
     gameScreen.Level.SetCurrent("default");
 
-    gameScreen.Creature.AddCreature("player", TileType::Roof, gameScreen.CENTERED, gameScreen.CENTERED, Width / 16, Height / 9);
+    gameScreen.Creature.AddCreature("player", TileType::Brick, gameScreen.CENTERED, gameScreen.CENTERED, Width / 16, Height / 9);
     gameScreen.Creature["player"].Speed.x = 10;
     gameScreen.Creature["player"].Speed.y = 10;
     printf("init 4\n");

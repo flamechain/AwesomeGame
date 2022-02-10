@@ -11,7 +11,7 @@
 /// @param Debug    run in debug mode
 /// @param Flags    display flags
 /// @return error
-int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags = GAME_WINDOW_WINDOWED);
+int RunGame(int Width, int Height, string Title, bool Debug, int Flags = GAME_WINDOW_WINDOWED);
 
 class GameState {
 private:

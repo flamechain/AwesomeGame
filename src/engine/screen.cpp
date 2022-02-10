@@ -16,7 +16,9 @@ void Screen::Render() {
     // add way to set render order, this is good default
     SDL_SetRenderDrawColor(this->renderer_, this->bgcolor_.r, this->bgcolor_.g, this->bgcolor_.b, this->transparent_);
     SDL_RenderFillRect(this->renderer_, &this->rect_);
-    this->Level.Render(this->rect_.x, this->rect_.y, this->follow_);
+    if (this->uid_ == 3) {
+    }
+    // this->Level.Render(this->rect_.x, this->rect_.y, this->follow_);
     this->Rect.Render(this->rect_.x, this->rect_.y, this->follow_);
     this->Button.Render(this->rect_.x, this->rect_.y, this->follow_);
     this->Text.Render(this->rect_.x, this->rect_.y, this->follow_);

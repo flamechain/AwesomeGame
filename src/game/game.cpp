@@ -12,7 +12,7 @@
 
 extern GameState gameState;
 
-int RunGame(int Width, int Height, const char * Title, bool Debug, int Flags) {
+int RunGame(int Width, int Height, string Title, bool Debug, int Flags) {
     gameState = GameState();
     vector<Screen> screens;
 

@@ -63,21 +63,21 @@ public:
         this->hitbox_.h = 0;
         this->opacity_ = 255;
         this->rotation_ = 0;
+        this->type_ = type;
         this->flip_ = SDL_FLIP_NONE;
-        this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
+        this->rotate_axis_ = {-1, -1};
     }
 
     void operator=(const Tile& tile) {
-        this->renderer_ = tile.GetRenderer();
-        this->src_ = {};
-        this->texture_ = NULL;
-        this->type_ = tile.GetType();
+        this->renderer_ = tile.renderer_;
+        this->src_ = tile.src_;
+        this->texture_ = tile.texture_;
+        this->type_ = tile.type_;
+        this->hitbox_ = tile.hitbox_;
         this->LoadTile(this->type_);
-        this->hitbox_.x = 0;
-        this->hitbox_.y = 0;
-        this->opacity_ = 255;
-        this->rotation_ = 0;
-        this->flip_ = SDL_FLIP_NONE;
+        this->opacity_ = tile.opacity_;
+        this->rotation_ = tile.rotation_;
+        this->flip_ = tile.flip_;
 
         if (this->type_ == TileType::None) {
             this->hitbox_.w = 0;
@@ -87,7 +87,7 @@ public:
             this->hitbox_.h = this->src_[0].h;
         }
 
-        this->rotate_axis_ = {this->hitbox_.w / 2, this->hitbox_.h / 2};
+        this->rotate_axis_ = {-1, -1};
     }
 
     /// Gets color of tile (assuming its a solid color)
@@ -187,13 +187,16 @@ public:
     /// Renders texture to screen
     /// @param x    x relative
     /// @param y    y relative
-    void Render(int x = 0, int y = 0) const {
+    void Render(int x = 0, int y = 0) {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
-        if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
-            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, NULL, this->flip_);
-        } else {
-            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
-        }
+        dst.x = 900;
+        printf("%i -> %i :: %i,%i,%i,%i\n", this->type_, this->src_.size(), dst.x, dst.y, dst.w, dst.h);
+        // if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
+        //     SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, NULL, this->flip_);
+        // } else {
+        //     SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+        // }
+        SDL_RenderCopy(this->renderer_, this->texture_, &this->src_[0], &dst);
     }
 
     /// Resizes tiles texture
