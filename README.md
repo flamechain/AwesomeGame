@@ -4,6 +4,8 @@ Docs: [Index.md](./docs/Index.md)
 
 Trello: [trello.com/b/2hjanStg](https://trello.com/b/2hjanStg/awesomegame)
 
+> Project follow [Google C++ Style Guides](https://google.github.io/styleguide/cppguide.html) (with exceptions)
+
 ## Building
 
 ### MinGW

@@ -12,3 +12,20 @@ string StringFormat(const std::string& format, ...) {
     va_end(argptr);
     return string(buf.get(), buf.get() + size - 1); // remove terminator space
 }
+
+void ConsoleOutput(const char *format, ...) {
+    va_list argptr;
+    va_start(argptr, format);
+    vfprintf(stderr, format, argptr);
+    va_end(argptr);
+}
+
+void DebugOutput(bool debug, const char *format, ...) {
+    if (!debug) return;
+
+    va_list argptr;
+    va_start(argptr, format);
+    string format_s = string("Debug: ") + format;
+    vfprintf(stderr, format_s.c_str(), argptr);
+    va_end(argptr);
+}

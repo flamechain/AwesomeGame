@@ -9,49 +9,7 @@
 /// @param cy       center y
 /// @param rx       radius x
 /// @param ry       radius y
-inline void DrawElipse(SDL_Renderer *renderer, int cx, int cy, int rx, int ry) {
-    double pi = 3.14159265358979323846264338327950288419716939937510;
-    float pih = pi / 2.0;
-
-    // precision: 1 -> diamond; 27 -> smooth circle
-    const int prec = 27;
-    float theta = 0;
-
-    //starting point
-    int x  = static_cast<double>(rx) * cos(theta); // x start
-    int y  = static_cast<double>(ry) * sin(theta); // y start
-    int x1 = x;
-    int y1 = y;
-
-    // repeat until theta >= 90
-    float step = pih/static_cast<float>(prec); // degrees
-
-    for (theta=step; theta<=pih; theta+=step) {
-        // new point (+.5 is a quick rounding method)
-        x1 = static_cast<double>(rx) * cosf(theta) + 0.5;
-        y1 = static_cast<double>(ry) * sinf(theta) + 0.5;
-
-        // draw line from previous point to new point, ONLY if point incremented
-        if ( (x != x1) || (y != y1) ) {
-            SDL_RenderDrawLine(renderer, cx + x, cy - y, cx + x1, cy - y1 ); // quadrant TR
-            SDL_RenderDrawLine(renderer, cx - x, cy - y, cx - x1, cy - y1 ); // quadrant TL
-            SDL_RenderDrawLine(renderer, cx - x, cy + y, cx - x1, cy + y1 ); // quadrant BL
-            SDL_RenderDrawLine(renderer, cx + x, cy + y, cx + x1, cy + y1 ); // quadrant BR
-        }
-
-        x = x1;
-        y = y1;
-    }
-
-    // account for rounding mistakes
-    if (x != 0) {
-        x = 0;
-        SDL_RenderDrawLine(renderer, cx + x, cy - y, cx + x1, cy - y1 ); // quadrant TR
-        SDL_RenderDrawLine(renderer, cx - x, cy - y, cx - x1, cy - y1 ); // quadrant TL1
-        SDL_RenderDrawLine(renderer, cx - x, cy + y, cx - x1, cy + y1 ); // quadrant BL
-        SDL_RenderDrawLine(renderer, cx + x, cy + y, cx + x1, cy + y1 ); // quadrant BR
-    }
-}
+void DrawElipse(SDL_Renderer *renderer, int cx, int cy, int rx, int ry);
 
 class Circle {
 private:

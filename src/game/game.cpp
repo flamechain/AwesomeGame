@@ -28,8 +28,9 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
     Screen& titleScreen = screens[TITLE_SCREEN];
     Screen& creditsScreen = screens[CREDITS_SCREEN];
 
-    int samples;
-    Mix_Chunk *chunks = InitializeAudio(&samples);
+    long long unsigned int samples;
+    vector<Mix_Chunk> chunks;
+    InitializeAudio(samples, chunks);
 
     Screen background = Screen(renderer, 0, 0, 0, width, height, gameScreen.GetColor());
 
@@ -64,8 +65,10 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
         SDL_Delay(1000 / FRAMERATE);
     }
 
+    DebugOutput(debug, "audio destruction\n");
     DestroyAudio(chunks, samples);
-    DestroyGame(screens, renderer, window);
+    DebugOutput(debug, "game destruction\n");
+    DestroyGame(screens, renderer, window, debug);
     background.Destroy();
 
     SDL_Quit();

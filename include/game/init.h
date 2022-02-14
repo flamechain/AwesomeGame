@@ -23,23 +23,24 @@ extern vector<SDL_Rect> tileSheet;
 /// @param screen   location of loading screen
 /// @param renderer global renderer
 /// @param change   how much to change the bar (px)
-void UpdateLoadingBar(Screen& screen, SDL_Renderer * renderer, int change);
+void UpdateLoadingBar(Screen& screen, SDL_Renderer *renderer, int change);
 
 /// Initializes all the game content
-/// @param Title    window title
-/// @param Width    window width
-/// @param Height   window height
-/// @param Debug    if the game is running in debug mode
-/// @param Screens  where to store all the game screens
-/// @param Flags    window and renderer creation data
-/// @param Window   where to store global window
+/// @param title    window title
+/// @param width    window width
+/// @param height   window height
+/// @param debug    if the game is running in debug mode
+/// @param screens  where to store all the game screens
+/// @param flags    window and renderer creation data
+/// @param window   where to store global window
 /// @return created global renderer
-SDL_Renderer * InitializeGame(string Title, int Width, int Height, bool Debug, vector<Screen>& Screens, int Flags, SDL_Window *&Window);
+SDL_Renderer * InitializeGame(string title, int width, int height, bool debug, vector<Screen>& screens, int flags, SDL_Window *&window);
 
 /// Unloads all content
-/// @param Screens  all screens
-/// @param Renderer global renderer
-/// @param Window   global window
-void DestroyGame(vector<Screen>& Screens, SDL_Renderer * Renderer, SDL_Window * Window);
+/// @param screens  all screens
+/// @param renderer global renderer
+/// @param window   global window
+/// @param debug    if program is in debug mode
+void DestroyGame(vector<Screen>& screens, SDL_Renderer *renderer, SDL_Window *window, bool debug);
 
 #endif

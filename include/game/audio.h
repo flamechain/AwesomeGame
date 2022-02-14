@@ -5,13 +5,13 @@
 #include "mixer.h"
 
 /// Loads all audio
-/// @param Count    where to store numnber of samples
-/// @return all samples
-Mix_Chunk * InitializeAudio(int * Count);
+/// @param count    where to store numnber of samples
+/// @param data     where to store the samples
+void InitializeAudio(long long unsigned int& count, vector<Mix_Chunk>& data);
 
 /// Unloads all audio
-/// @param Chuncks  all audio
-/// @param Count    number of samples
-void DestroyAudio(Mix_Chunk * Chunks, int Count);
+/// @param data     all audio chunks
+/// @param count    number of samples
+void DestroyAudio(vector<Mix_Chunk>& data, long long unsigned int count);
 
 #endif

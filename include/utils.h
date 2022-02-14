@@ -37,14 +37,17 @@ typedef void (*callback)(void);
 typedef void (*screen_callback)(Screen&, string uid);
 
 /// Sends text output to stdout
-/// @param Format   format string (same syntax as printf)
-inline void ConsoleOutput(const char *format, ...) {
-    va_list argptr;
-    va_start(argptr, format);
-    vfprintf(stderr, format, argptr);
-    va_end(argptr);
-}
+/// @param format   format string (same syntax as printf)
+void ConsoleOutput(const char *format, ...);
 
+/// Sends text output to stdout if debug
+/// @param debug    if program is running in debug mode
+/// @param format   format string
+void DebugOutput(bool debug, const char *format, ...);
+
+/// Formats a string; safer than sprintf
+/// @param format   format string
+/// @return formatted string
 string StringFormat(const std::string& format, ...);
 
 // SDL_Color without alpha channel
