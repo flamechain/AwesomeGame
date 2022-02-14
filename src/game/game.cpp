@@ -1,4 +1,5 @@
 #include "game.h"
+
 #include "utils.h"
 #include "init.h"
 #include "callbacks.h"
@@ -12,14 +13,14 @@
 
 extern GameState gameState;
 
-int RunGame(int Width, int Height, string Title, bool Debug, int Flags) {
+int RunGame(int width, int height, string title, bool debug, int flags) {
     gameState = GameState();
     vector<Screen> screens;
 
     InitializeEngine();
 
-    SDL_Window * window;
-    SDL_Renderer * renderer = InitializeGame(Title, Width, Height, Debug, screens, Flags, window);
+    SDL_Window *window;
+    SDL_Renderer *renderer = InitializeGame(title, width, height, debug, screens, flags, window);
 
     Screen& gameScreen = screens[GAME_SCREEN];
     Screen& pauseScreen = screens[PAUSE_SCREEN];
@@ -28,9 +29,9 @@ int RunGame(int Width, int Height, string Title, bool Debug, int Flags) {
     Screen& creditsScreen = screens[CREDITS_SCREEN];
 
     int samples;
-    Mix_Chunk * chunks = InitializeAudio(&samples);
+    Mix_Chunk *chunks = InitializeAudio(&samples);
 
-    Screen background = Screen(renderer, 0, 0, 0, Width, Height, gameScreen.GetColor());
+    Screen background = Screen(renderer, 0, 0, 0, width, height, gameScreen.GetColor());
 
     while (gameState.IsRunning()) {
 
@@ -71,4 +72,3 @@ int RunGame(int Width, int Height, string Title, bool Debug, int Flags) {
 
     return 0;
 }
-  

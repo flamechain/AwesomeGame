@@ -1,9 +1,10 @@
 #include "tile.h"
 
 vector<SDL_Rect> InitTiles() {
-    const int tilecount = 14;
+    const int kTileCount = 14;
     vector<SDL_Rect> tiles;
-    for (int i=0; i<tilecount; i++) {
+
+    for (int i=0; i<kTileCount; i++) {
         SDL_Rect temp;
         temp.w = 32;
         temp.h = 32;

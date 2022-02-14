@@ -9,7 +9,7 @@
 /// @param cy       center y
 /// @param rx       radius x
 /// @param ry       radius y
-inline void DrawElipse(SDL_Renderer * renderer, int cx, int cy, int rx, int ry) {
+inline void DrawElipse(SDL_Renderer *renderer, int cx, int cy, int rx, int ry) {
     double pi = 3.14159265358979323846264338327950288419716939937510;
     float pih = pi / 2.0;
 
@@ -56,7 +56,7 @@ inline void DrawElipse(SDL_Renderer * renderer, int cx, int cy, int rx, int ry) 
 class Circle {
 private:
 
-    SDL_Renderer * renderer_;
+    SDL_Renderer *renderer_;
     SDL_Point center_;
     int r_;
     Color color_;
@@ -68,7 +68,7 @@ public:
 
     Circle() {}
 
-    Circle(SDL_Renderer * renderer, int x, int y, int r, Color rgb) {
+    Circle(SDL_Renderer *renderer, int x, int y, int r, Color rgb) {
         this->renderer_ = renderer;
         this->color_ = rgb;
         this->color_backup_ = rgb;
@@ -127,8 +127,8 @@ public:
 class CircleGroup {
 private:
 
-    SDL_Renderer * renderer_;
-    Screen * screen_;
+    SDL_Renderer *renderer_;
+    Screen *screen_;
     map<string, Circle> circles_;
     vector<string> order_;
 
@@ -142,16 +142,16 @@ public:
 
     void operator=(const CircleGroup& copy);
 
-    Circle &operator[](long long unsigned int iterindex);
+    Circle& operator[](long long unsigned int iterindex);
 
-    Circle &operator[](string uid);
+    Circle& operator[](string uid);
 
     Circle at(string uid) const;
 
     /// Sets attributes needed not given by constructor
     /// @param screen   parent
     /// @param renderer global renderer
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+    void SetAttrib(Screen *screen, SDL_Renderer *renderer);
 
     /// Renders all Circles
     /// @param x    relative x

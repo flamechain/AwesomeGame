@@ -30,10 +30,10 @@ extern vector<SDL_Rect> tileSheet;
 class Tile {
 protected:
 
-    SDL_Texture * texture_;
+    SDL_Texture *texture_;
     vector<SDL_Rect> src_;
     SDL_Rect hitbox_;
-    SDL_Renderer * renderer_;
+    SDL_Renderer *renderer_;
     SDL_Point rotate_axis_;
     int rotation_;
     unsigned char opacity_;
@@ -48,7 +48,7 @@ public:
         this->init(type);
     }
 
-    Tile(TileType type, SDL_Renderer * renderer) {
+    Tile(TileType type, SDL_Renderer *renderer) {
         this->init(type);
         this->renderer_ = renderer;
         this->LoadTile(type);
@@ -97,7 +97,7 @@ public:
         if (this->type_ == TileType::None) return {0, 0, 0};
         string spath = IMG_PATH;
         spath += TILE_SHEET;
-        SDL_Surface * surface = IMG_Load(spath.c_str());
+        SDL_Surface *surface = IMG_Load(spath.c_str());
 
         if (surface == NULL) {
             ConsoleOutput("Failed loading image: %s\n", IMG_GetError());
@@ -106,7 +106,7 @@ public:
         }
 
         int bpp = surface->format->BytesPerPixel;
-        Uint8 * p = static_cast<Uint8*>(surface->pixels) + (tileSheet[static_cast<long long unsigned int>(this->type_)].y+y) * \
+        Uint8 *p = static_cast<Uint8*>(surface->pixels) + (tileSheet[static_cast<long long unsigned int>(this->type_)].y+y) * \
             surface->pitch + (tileSheet[static_cast<long long unsigned int>(this->type_)].x+x) * bpp;
         Uint32 pixel;
 
@@ -132,13 +132,13 @@ public:
 
     /// Sets renderer
     /// @param renderer global renderer
-    void SetRenderer(SDL_Renderer * renderer) {
+    void SetRenderer(SDL_Renderer *renderer) {
         this->renderer_ = renderer;
     }
 
     /// Gets renderer
     /// @return pointer to renderer
-    SDL_Renderer * GetRenderer() const {
+    SDL_Renderer *GetRenderer() const {
         return this->renderer_;
     }
 
@@ -164,7 +164,7 @@ public:
         if (type == TileType::None) return;
         string spath = IMG_PATH;
         spath += TILE_SHEET;
-        SDL_Surface * surface = IMG_Load(spath.c_str());
+        SDL_Surface *surface = IMG_Load(spath.c_str());
 
         if (surface == NULL) {
             ConsoleOutput("Failed loading image: %s\n", IMG_GetError());

@@ -20,7 +20,7 @@ public:
 
     Button() {}
 
-    Button(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb, int bpt, Color brgb) : Rect(renderer, x, y, w, h, rgb) {
+    Button(SDL_Renderer *renderer, int x, int y, int w, int h, Color rgb, int bpt, Color brgb) : Rect(renderer, x, y, w, h, rgb) {
         this->active_ = false;
         this->SetBorder(bpt, brgb);
     }
@@ -99,8 +99,8 @@ public:
 class ButtonGroup {
 private:
 
-    SDL_Renderer * renderer_;
-    Screen * screen_;
+    SDL_Renderer *renderer_;
+    Screen *screen_;
     map<string, Button> buttons_;
     map<string, screen_callback> callbacks_;
     map<string, screen_callback> onhovers_;
@@ -126,16 +126,16 @@ public:
 
     void operator=(const ButtonGroup& copy);
 
-    Button &operator[](long long unsigned int iterindex);
+    Button& operator[](long long unsigned int iterindex);
 
-    Button &operator[](string uid);
+    Button& operator[](string uid);
 
     Button at(string uid) const;
 
     /// Sets needed attributes not gotten from constructor
     /// @param screen   parent
     /// @param renderer global renderer
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+    void SetAttrib(Screen *screen, SDL_Renderer *renderer);
 
     /// Renders all buttons
     /// @param x    relative x

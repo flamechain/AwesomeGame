@@ -8,9 +8,9 @@
 #define CHUNKSIZE 512
 
 /// Load audio chunk from file
-/// @param FileName file to open
+/// @param filename file to open
 /// @return new chunk of audio
-Mix_Chunk *LoadWAV(string FileName);
+Mix_Chunk *LoadWAV(string filename);
 
 
 #endif

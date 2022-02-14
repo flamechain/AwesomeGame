@@ -6,19 +6,19 @@
 class Text {
 private:
 
-    SDL_Renderer * renderer_;
-    TTF_Font * font_;
+    SDL_Renderer *renderer_;
+    TTF_Font *font_;
     Color color_backup_;
     Color font_color_;
     SDL_Rect rect_;
-    SDL_Texture * texture_;
+    SDL_Texture *texture_;
 
 
 public:
 
     Text() {}
 
-    Text(SDL_Renderer * renderer, string font, int pt, Color color, string text = "") {
+    Text(SDL_Renderer *renderer, string font, int pt, Color color, string text = "") {
         this->font_ = TTF_OpenFont((string("resources/font/") + font + ".ttf").c_str(), pt);
         if (this->font_ == NULL) ConsoleOutput("%s\n", TTF_GetError());
         this->font_color_ = color;
@@ -35,7 +35,7 @@ public:
     void SetText(string text) {
         if (this->font_ == NULL) return;
         SDL_Color fontColor = {this->font_color_.r, this->font_color_.g, this->font_color_.b, 255};
-        SDL_Surface * surface = TTF_RenderText_Solid(this->font_, text.c_str(), fontColor);
+        SDL_Surface *surface = TTF_RenderText_Solid(this->font_, text.c_str(), fontColor);
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         TTF_SizeText(this->font_, text.c_str(), &this->rect_.w, &this->rect_.h);
         SDL_FreeSurface(surface);
@@ -82,8 +82,8 @@ public:
 class Paragraph {
 private:
 
-    SDL_Renderer * renderer_;
-    Screen * screen_;
+    SDL_Renderer *renderer_;
+    Screen *screen_;
     map<string, Text> lines_;
 
 public:
@@ -96,16 +96,16 @@ public:
 
     void operator=(const Paragraph& copy);
 
-    Text &operator[](unsigned int iterindex);
+    Text& operator[](unsigned int iterindex);
 
-    Text &operator[](string uid);
+    Text& operator[](string uid);
 
     Text at(string uid) const;
 
     /// Sets attributes not given by constructor
     /// @param screen   parent
     /// @param renderer global renderer
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+    void SetAttrib(Screen *screen, SDL_Renderer *renderer);
 
     /// Destroys all lines
     void Destroy();

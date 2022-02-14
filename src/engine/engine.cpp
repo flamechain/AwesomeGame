@@ -25,10 +25,10 @@ int InitializeEngine() {
     return 0;
 }
 
-SDL_Renderer * CreateRenderer(SDL_Window * Window, int Flags) {
+SDL_Renderer *CreateRenderer(SDL_Window *window, int flags) {
     // triggers program that controls graphics hardware
-    Uint32 renderflags = Flags & GAME_RENDERER_ACCELERATED;
-    SDL_Renderer * renderer = SDL_CreateRenderer(Window, -1, renderflags);
+    Uint32 renderflags = flags & GAME_RENDERER_ACCELERATED;
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, renderflags);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
@@ -36,18 +36,18 @@ SDL_Renderer * CreateRenderer(SDL_Window * Window, int Flags) {
     return renderer;
 }
 
-SDL_Window * CreateWindow(int Width, int Height, string Title, int Flags) {
-    SDL_Window * window = SDL_CreateWindow(Title.c_str(),
+SDL_Window *CreateWindow(int width, int height, string title, int flags) {
+    SDL_Window *window = SDL_CreateWindow(title.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        Width, Height, SDL_WINDOW_OPENGL); // SDL_WINDOW_OPENGL replaced 0
+        width, height, SDL_WINDOW_OPENGL); // SDL_WINDOW_OPENGL replaced 0
 
     if (window == NULL) {
         errno = GAME_ERROR_WINDOW_FAIL;
         return window;
     }
 
-    if (Flags & GAME_WINDOW_FULLSCREEN) {
+    if (flags & GAME_WINDOW_FULLSCREEN) {
         if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN)) {
             errno = GAME_ERROR_WINDOW_FAIL;
             return window;

@@ -21,17 +21,17 @@
 int InitializeEngine();
 
 /// Creates a window
-/// @param Width    window width
-/// @param Height   window height
-/// @param Title    display title
-/// @param Flags    display flags
+/// @param width    window width
+/// @param height   window height
+/// @param title    display title
+/// @param flags    display flags
 /// @return window object
-SDL_Window * CreateWindow(int Width, int Height, string Title, int Flags);
+SDL_Window *CreateWindow(int width, int height, string title, int flags);
 
 /// Creates display renderer
-/// @param Window   created window
-/// @param Flags    render flags
+/// @param window   created window
+/// @param flags    render flags
 /// @return renderer object
-SDL_Renderer * CreateRenderer(SDL_Window * Window, int Flags);
+SDL_Renderer *CreateRenderer(SDL_Window *window, int flags);
 
 #endif

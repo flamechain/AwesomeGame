@@ -12,7 +12,7 @@
 class Screen {
 private:
 
-    SDL_Renderer * renderer_;
+    SDL_Renderer *renderer_;
     Color bgcolor_;
     Color color_;
     unsigned int uid_;
@@ -40,7 +40,7 @@ public:
         this->follow_ = false;
     }
 
-    Screen(SDL_Renderer * renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
+    Screen(SDL_Renderer *renderer, unsigned int uid, int x, int y, int w, int h, Color bgcolor, bool follow = false) {
         this->renderer_ = renderer;
         this->transparent_ = 255;
         this->uid_ = uid;

@@ -4,11 +4,11 @@ void HandleSDLEvents(vector<Screen>& screens) {
     SDL_Event event;
     SDL_GetMouseState(&gameState.mouse.x, &gameState.mouse.y);
 
-    Screen& gameScreen = screens[GAME_SCREEN];
-    Screen& pauseScreen = screens[PAUSE_SCREEN];
-    Screen& optionsScreen = screens[OPTIONS_SCREEN];
-    Screen& titleScreen = screens[TITLE_SCREEN];
-    Screen& creditsScreen = screens[CREDITS_SCREEN];
+    Screen& game_screen = screens[GAME_SCREEN];
+    Screen& pause_screen = screens[PAUSE_SCREEN];
+    Screen& options_screen = screens[OPTIONS_SCREEN];
+    Screen& title_screen = screens[TITLE_SCREEN];
+    Screen& credits_screen = screens[CREDITS_SCREEN];
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -35,11 +35,11 @@ void HandleSDLEvents(vector<Screen>& screens) {
                         gameState.keyboard['d'] = true;
                         break;
                     case SDL_SCANCODE_ESCAPE:
-                        if (gameState.CurrentScreen() == gameScreen.GetId()) {
-                            gameState.SetScreen(pauseScreen.GetId());
+                        if (gameState.CurrentScreen() == game_screen.GetId()) {
+                            gameState.SetScreen(pause_screen.GetId());
                             // fadeInLevel = 1;
-                        } else if (gameState.CurrentScreen() == pauseScreen.GetId()) {
-                            gameState.SetScreen(gameScreen.GetId());
+                        } else if (gameState.CurrentScreen() == pause_screen.GetId()) {
+                            gameState.SetScreen(game_screen.GetId());
                         }
                         break;
                     default:
@@ -72,11 +72,11 @@ void HandleSDLEvents(vector<Screen>& screens) {
                 switch (event.button.button) {
                     case SDL_BUTTON_LEFT:
                         switch (gameState.CurrentScreen()) {
-                            case PAUSE_SCREEN: pauseScreen.Button.Click(gameState.mouse); break;
-                            case TITLE_SCREEN: titleScreen.Button.Click(gameState.mouse); break;
-                            case OPTIONS_SCREEN: optionsScreen.Button.Click(gameState.mouse); break;
-                            case CREDITS_SCREEN: creditsScreen.Button.Click(gameState.mouse); break;
-                            case GAME_SCREEN: gameScreen.Button.Click(gameState.mouse); break;
+                            case PAUSE_SCREEN: pause_screen.Button.Click(gameState.mouse); break;
+                            case TITLE_SCREEN: title_screen.Button.Click(gameState.mouse); break;
+                            case OPTIONS_SCREEN: options_screen.Button.Click(gameState.mouse); break;
+                            case CREDITS_SCREEN: credits_screen.Button.Click(gameState.mouse); break;
+                            case GAME_SCREEN: game_screen.Button.Click(gameState.mouse); break;
                             default: break;
                         }
                         break;
@@ -86,11 +86,11 @@ void HandleSDLEvents(vector<Screen>& screens) {
                 break;
             case SDL_MOUSEMOTION:
                 switch (gameState.CurrentScreen()) {
-                    case PAUSE_SCREEN: pauseScreen.Button.Hover(gameState.mouse); break;
-                    case TITLE_SCREEN: titleScreen.Button.Hover(gameState.mouse); break;
-                    case OPTIONS_SCREEN: optionsScreen.Button.Hover(gameState.mouse); break;
-                    case CREDITS_SCREEN: creditsScreen.Button.Hover(gameState.mouse); break;
-                    case GAME_SCREEN: gameScreen.Button.Hover(gameState.mouse); break;
+                    case PAUSE_SCREEN: pause_screen.Button.Hover(gameState.mouse); break;
+                    case TITLE_SCREEN: title_screen.Button.Hover(gameState.mouse); break;
+                    case OPTIONS_SCREEN: options_screen.Button.Hover(gameState.mouse); break;
+                    case CREDITS_SCREEN: credits_screen.Button.Hover(gameState.mouse); break;
+                    case GAME_SCREEN: game_screen.Button.Hover(gameState.mouse); break;
                     default: break;
                 }
                 break;

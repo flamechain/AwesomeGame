@@ -1,7 +1,8 @@
 #include "button.h"
+
 #include "screen.h"
 
-void ButtonGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+void ButtonGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
 }
@@ -17,6 +18,7 @@ void ButtonGroup::operator=(const ButtonGroup& copy) {
     this->def_offhover_ = copy.def_offhover_;
     if (copy.buttons_.size() == 0) return;
     long long unsigned int i=0;
+
     for (map<string, Button>::iterator it = static_cast<map<string, Button>>(copy.buttons_).begin(); it != copy.buttons_.end(); it++, i++) {
         if (i >= copy.buttons_.size()) break;
         this->buttons_.insert(std::make_pair(it->first, copy.buttons_.at(it->first)));
@@ -34,6 +36,7 @@ void ButtonGroup::Destroy() {
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
         this->buttons_[it->first].Destroy();
     }
+
     this->renderer_ = nullptr;
     this->screen_ = nullptr;
 }
@@ -108,7 +111,7 @@ void ButtonGroup::Click(SDL_Point mouse) {
     }
 }
 
-Button & ButtonGroup::operator[](long long unsigned int iterindex) {
+Button& ButtonGroup::operator[](long long unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Button>::iterator it = this->buttons_.begin(); it != this->buttons_.end(); it++) {
@@ -118,7 +121,7 @@ Button & ButtonGroup::operator[](long long unsigned int iterindex) {
     return this->buttons_[keys[iterindex]];
 }
 
-Button & ButtonGroup::operator[](string uid) {
+Button& ButtonGroup::operator[](string uid) {
     if (this->buttons_.find(uid) != this->buttons_.end()) return this->buttons_[uid];
     return this->buttons_[0];
 }

@@ -1,7 +1,8 @@
 #include "circle.h"
+
 #include "screen.h"
 
-void CircleGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+void CircleGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
 }
@@ -10,17 +11,18 @@ void CircleGroup::operator=(const CircleGroup& copy) {
     this->circles_.clear();
     if (copy.circles_.size() == 0) return;
     long long unsigned int i=0;
+
     for (map<string, Circle>::iterator it = static_cast<map<string, Circle>>(copy.circles_).begin(); it != copy.circles_.end(); it++, i++) {
         if (i >= copy.circles_.size()) break;
         this->circles_.insert(std::make_pair(it->first, copy.circles_.at(it->first)));
     }
 }
 
-Circle &CircleGroup::operator[](long long unsigned int iterindex) {
+Circle& CircleGroup::operator[](long long unsigned int iterindex) {
     return this->circles_[this->order_[iterindex]];
 }
 
-Circle &CircleGroup::operator[](string uid) {
+Circle& CircleGroup::operator[](string uid) {
     if (this->circles_.find(uid) != this->circles_.end()) return this->circles_.at(uid);
     return this->circles_[0];
 }
@@ -40,6 +42,7 @@ void CircleGroup::Render(int x, int y, bool f) {
 void CircleGroup::Destroy() {
     this->renderer_ = nullptr;
     this->screen_ = nullptr;
+
     for (map<string, Circle>::iterator it = this->circles_.begin(); it != this->circles_.end(); it++) {
         this->circles_[it->first].Destroy();
     }

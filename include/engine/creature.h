@@ -72,8 +72,8 @@ public:
 class CreatureGroup {
 private:
 
-    SDL_Renderer * renderer_;
-    Screen * screen_;
+    SDL_Renderer *renderer_;
+    Screen *screen_;
     map<string, Creature> creatures_;
 
 public:
@@ -86,16 +86,16 @@ public:
 
     void operator=(const CreatureGroup& copy);
 
-    Creature &operator[](long long unsigned int iterindex);
+    Creature& operator[](long long unsigned int iterindex);
 
-    Creature &operator[](string uid);
+    Creature& operator[](string uid);
 
     Creature at(string uid) const;
 
     /// Sets needed attributes not gotten from constructor
     /// @param screen   parent
     /// @param renderer global renderer
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+    void SetAttrib(Screen *screen, SDL_Renderer *renderer);
 
     /// Sets opacity
     /// @param percent  0 -> 1

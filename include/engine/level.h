@@ -9,7 +9,7 @@ extern vector<SDL_Rect> tileSheet;
 class Level {
 private:
 
-    Tile * level_;
+    Tile *level_;
     int x_;
     int y_;
     SDL_Point start_;
@@ -52,7 +52,7 @@ public:
     /// @param x    x-coord
     /// @param y    y-coord
     /// @return tile reference
-    Tile * GetTile(int x, int y) {
+    Tile *GetTile(int x, int y) {
         Tile * pt = &this->level_[x+this->x_*y];
         return pt;
     }
@@ -129,8 +129,8 @@ public:
 class LevelGroup {
 private:
 
-    SDL_Renderer * renderer_;
-    Screen * screen_;
+    SDL_Renderer *renderer_;
+    Screen *screen_;
     map<string, Level> levels_;
     string current_;
 
@@ -147,9 +147,9 @@ public:
 
     void operator=(const LevelGroup& copy);
 
-    Level &operator[](long long unsigned int iterindex);
+    Level& operator[](long long unsigned int iterindex);
 
-    Level &operator[](string uid);
+    Level& operator[](string uid);
 
     Level at(string uid) const;
 
@@ -164,7 +164,7 @@ public:
     /// Sets attributes needed not given from constructor
     /// @param screen   parent
     /// @param renderer global renderer
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+    void SetAttrib(Screen *screen, SDL_Renderer *renderer);
 
     /// Renders all levels
     /// @param x    relative x

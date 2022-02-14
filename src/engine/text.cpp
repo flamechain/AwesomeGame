@@ -1,7 +1,8 @@
 #include "text.h"
+
 #include "screen.h"
 
-void Paragraph::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+void Paragraph::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
 }
@@ -10,6 +11,7 @@ void Paragraph::operator=(const Paragraph& copy) {
     this->lines_.clear();
     if (copy.lines_.size() == 0) return;
     long long unsigned int i=0;
+
     for (map<string, Text>::iterator it = static_cast<map<string, Text>>(copy.lines_).begin(); it != copy.lines_.end(); it++, i++) {
         if (i >= copy.lines_.size()) break;
         this->lines_.insert(std::make_pair(it->first, copy.lines_.at(it->first)));
@@ -20,6 +22,7 @@ void Paragraph::Destroy() {
     for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); it++) {
         this->lines_[it->first].Destroy();
     }
+
     this->renderer_ = nullptr;
     this->screen_ = nullptr;
 }
@@ -37,7 +40,7 @@ void Paragraph::AddLine(string uid, int x, int y, string font, int pt, Color col
     this->lines_[uid].SetPosition(x, y);
 }
 
-Text & Paragraph::operator[](unsigned int iterindex) {
+Text& Paragraph::operator[](unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Text>::iterator it = this->lines_.begin(); it != this->lines_.end(); it++) {
@@ -47,7 +50,7 @@ Text & Paragraph::operator[](unsigned int iterindex) {
     return this->lines_[keys[iterindex]];
 }
 
-Text & Paragraph::operator[](string uid) {
+Text& Paragraph::operator[](string uid) {
     if (this->lines_.find(uid) != this->lines_.end()) return this->lines_[uid];
     return this->lines_[0];
 }

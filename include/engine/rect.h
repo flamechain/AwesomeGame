@@ -6,7 +6,7 @@
 class Rect {
 protected:
 
-    SDL_Renderer * renderer_;
+    SDL_Renderer *renderer_;
     SDL_Rect rect_;
     int border_pt_;
     Color border_color_;
@@ -17,7 +17,7 @@ public:
 
     Rect() {}
 
-    Rect(SDL_Renderer * renderer, int x, int y, int w, int h, Color rgb) {
+    Rect(SDL_Renderer *renderer, int x, int y, int w, int h, Color rgb) {
         this->renderer_ = renderer;
         this->color_ = rgb;
         this->color_backup_ = rgb;
@@ -109,8 +109,8 @@ public:
 class RectGroup {
 private:
 
-    SDL_Renderer * renderer_;
-    Screen * screen_;
+    SDL_Renderer *renderer_;
+    Screen *screen_;
     map<string, Rect> rects_;
     vector<string> order_;
 
@@ -124,16 +124,16 @@ public:
 
     void operator=(const RectGroup& copy);
 
-    Rect &operator[](long long unsigned int iterindex);
+    Rect& operator[](long long unsigned int iterindex);
 
-    Rect &operator[](string uid);
+    Rect& operator[](string uid);
 
     Rect at(string uid) const;
 
     /// Sets attributes needed not given by constructor
     /// @param screen   parent
     /// @param renderer global renderer
-    void SetAttrib(Screen * screen, SDL_Renderer * renderer);
+    void SetAttrib(Screen *screen, SDL_Renderer * renderer);
 
     /// Renders all rects
     /// @param x    relative x

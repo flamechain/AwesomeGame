@@ -1,4 +1,5 @@
 #include "creature.h"
+
 #include "screen.h"
 
 void Creature::operator=(const Creature& copy) {
@@ -87,7 +88,7 @@ void Creature::Update(SDL_Point offset, bool checkBounds) {
     }
 }
 
-void CreatureGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+void CreatureGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
 }
@@ -96,6 +97,7 @@ void CreatureGroup::operator=(const CreatureGroup& copy) {
     this->creatures_.clear();
     if (copy.creatures_.size() == 0) return;
     long long unsigned int i=0;
+
     for (map<string, Creature>::iterator it = static_cast<map<string, Creature>>(copy.creatures_).begin(); it != copy.creatures_.end(); it++, i++) {
         if (i >= copy.creatures_.size()) break;
         this->creatures_.insert(std::make_pair(it->first, copy.creatures_.at(it->first)));
@@ -127,12 +129,13 @@ void CreatureGroup::Render(int x, int y, bool f) {
 void CreatureGroup::Destroy() {
     this->renderer_ = nullptr;
     this->screen_ = nullptr;
+
     for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); it++) {
         this->creatures_[it->first].Destroy();
     }
 }
 
-Creature & CreatureGroup::operator[](long long unsigned int iterindex) {
+Creature& CreatureGroup::operator[](long long unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Creature>::iterator it = this->creatures_.begin(); it != this->creatures_.end(); it++) {
@@ -142,7 +145,7 @@ Creature & CreatureGroup::operator[](long long unsigned int iterindex) {
     return this->creatures_[keys[iterindex]];
 }
 
-Creature & CreatureGroup::operator[](string uid) {
+Creature& CreatureGroup::operator[](string uid) {
     if (this->creatures_.find(uid) != this->creatures_.end()) return this->creatures_[uid];
     return this->creatures_[0];
 }

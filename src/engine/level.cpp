@@ -1,7 +1,8 @@
 #include "level.h"
+
 #include "screen.h"
 
-void LevelGroup::SetAttrib(Screen * screen, SDL_Renderer * renderer) {
+void LevelGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
 }
@@ -10,6 +11,7 @@ void LevelGroup::operator=(const LevelGroup& copy) {
     this->levels_.clear();
     if (copy.levels_.size() == 0) return;
     long long unsigned int i=0;
+
     for (map<string, Level>::iterator it = static_cast<map<string, Level>>(copy.levels_).begin(); it != copy.levels_.end(); it++, i++) {
         if (i >= copy.levels_.size()) break;
         this->levels_.insert(std::make_pair(it->first, copy.levels_.at(it->first)));
@@ -40,7 +42,7 @@ void LevelGroup::AddLevel(string uid, Level level) {
     this->levels_[uid].SetRenderer(this->renderer_);
 }
 
-Level & LevelGroup::operator[](long long unsigned int iterindex) {
+Level& LevelGroup::operator[](long long unsigned int iterindex) {
     vector<string> keys;
 
     for (map<string, Level>::iterator it = this->levels_.begin(); it != this->levels_.end(); it++) {
@@ -50,7 +52,7 @@ Level & LevelGroup::operator[](long long unsigned int iterindex) {
     return this->levels_[keys[iterindex]];
 }
 
-Level & LevelGroup::operator[](string uid) {
+Level& LevelGroup::operator[](string uid) {
     if (this->levels_.find(uid) != this->levels_.end()) return this->levels_[uid];
     return this->levels_[0];
 }
