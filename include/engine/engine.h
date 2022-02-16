@@ -15,6 +15,7 @@
 #define GAME_ERROR_RENDERER_FAIL 4
 #define GAME_ERROR_GENERAL_FAIL 5
 #define GAME_ERROR_TTF_FAIL 6
+#define GAME_ERROR_MIX_FAIL 7
 
 /// Initializes libraries
 /// @return error

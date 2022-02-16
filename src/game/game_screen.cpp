@@ -5,13 +5,13 @@ void HandleGameScreen(Screen& screen) {
 
     // check player movement
     SDL_Point offset = {0, 0};
-    if (gameState.keyboard['w']) offset.y = -screen.Creature["player"].Speed.y;
-    if (gameState.keyboard['s']) offset.y = screen.Creature["player"].Speed.y;
-    if (gameState.keyboard['a']) offset.x = -screen.Creature["player"].Speed.x;
-    if (gameState.keyboard['d']) offset.x = screen.Creature["player"].Speed.x;
+    if (game_state.keyboard['w']) offset.y = -screen.Creature["player"].Speed.y;
+    if (game_state.keyboard['s']) offset.y = screen.Creature["player"].Speed.y;
+    if (game_state.keyboard['a']) offset.x = -screen.Creature["player"].Speed.x;
+    if (game_state.keyboard['d']) offset.x = screen.Creature["player"].Speed.x;
 
-    if (gameState.keyboard['w'] && gameState.keyboard['s']) offset.y = 0;
-    if (gameState.keyboard['a'] && gameState.keyboard['d']) offset.x = 0;
+    if (game_state.keyboard['w'] && game_state.keyboard['s']) offset.y = 0;
+    if (game_state.keyboard['a'] && game_state.keyboard['d']) offset.x = 0;
 
     SDL_Point gridpos;
     gridpos.x = screen.Creature["player"].GetRect().x / TILE_SIZE + TILE_SIZE;

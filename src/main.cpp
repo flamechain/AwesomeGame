@@ -1,6 +1,6 @@
 #include "game.h"
 
-GameState gameState;
+GameState game_state;
 vector<SDL_Rect> tileSheet;
 
 int main(int argc, char **argv) {

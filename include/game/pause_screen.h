@@ -5,7 +5,7 @@
 #include "game.h"
 #include "screen.h"
 
-extern GameState gameState;
+extern GameState game_state;
 
 /// Fades in from white on bg color
 /// @param screen   screen

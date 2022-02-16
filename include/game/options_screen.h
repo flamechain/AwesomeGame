@@ -5,7 +5,7 @@
 #include "game.h"
 #include "screen.h"
 
-extern GameState gameState;
+extern GameState game_state;
 
 /// Handles options screen events and rendering
 /// @param screen   screen

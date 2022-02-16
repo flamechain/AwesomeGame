@@ -20,6 +20,12 @@ int InitializeEngine() {
         return errno;
     }
 
+    if (Mix_Init(MIX_INIT_MP3) == 0) {
+        errno = GAME_ERROR_MIX_FAIL;
+        ConsoleOutput("Failed loading SDL_Mixer: %s\n", Mix_GetError());
+        return errno;
+    }
+
     SDL_setenv("SDL_VIDEODRIVER", "directx", 1); // override
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // linear
     return 0;

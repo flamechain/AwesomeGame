@@ -2,7 +2,7 @@
 
 void HandleSDLEvents(vector<Screen>& screens) {
     SDL_Event event;
-    SDL_GetMouseState(&gameState.mouse.x, &gameState.mouse.y);
+    SDL_GetMouseState(&game_state.mouse.x, &game_state.mouse.y);
 
     Screen& game_screen = screens[GAME_SCREEN];
     Screen& pause_screen = screens[PAUSE_SCREEN];
@@ -13,33 +13,33 @@ void HandleSDLEvents(vector<Screen>& screens) {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
-                gameState.StopGame();
+                game_state.StopGame();
                 break;
 
             case SDL_KEYDOWN:
                 switch (event.key.keysym.scancode) {
                     case SDL_SCANCODE_W:
                     case SDL_SCANCODE_UP:
-                        gameState.keyboard['w'] = true;
+                        game_state.keyboard['w'] = true;
                         break;
                     case SDL_SCANCODE_A:
                     case SDL_SCANCODE_LEFT:
-                        gameState.keyboard['a'] = true;
+                        game_state.keyboard['a'] = true;
                         break;
                     case SDL_SCANCODE_S:
                     case SDL_SCANCODE_DOWN:
-                        gameState.keyboard['s'] = true;
+                        game_state.keyboard['s'] = true;
                         break;
                     case SDL_SCANCODE_D:
                     case SDL_SCANCODE_RIGHT:
-                        gameState.keyboard['d'] = true;
+                        game_state.keyboard['d'] = true;
                         break;
                     case SDL_SCANCODE_ESCAPE:
-                        if (gameState.CurrentScreen() == game_screen.GetId()) {
-                            gameState.SetScreen(pause_screen.GetId());
+                        if (game_state.CurrentScreen() == game_screen.GetId()) {
+                            game_state.SetScreen(pause_screen.GetId());
                             // fadeInLevel = 1;
-                        } else if (gameState.CurrentScreen() == pause_screen.GetId()) {
-                            gameState.SetScreen(game_screen.GetId());
+                        } else if (game_state.CurrentScreen() == pause_screen.GetId()) {
+                            game_state.SetScreen(game_screen.GetId());
                         }
                         break;
                     default:
@@ -50,19 +50,19 @@ void HandleSDLEvents(vector<Screen>& screens) {
                 switch (event.key.keysym.scancode) {
                     case SDL_SCANCODE_W:
                     case SDL_SCANCODE_UP:
-                        gameState.keyboard['w'] = false;
+                        game_state.keyboard['w'] = false;
                         break;
                     case SDL_SCANCODE_A:
                     case SDL_SCANCODE_LEFT:
-                        gameState.keyboard['a'] = false;
+                        game_state.keyboard['a'] = false;
                         break;
                     case SDL_SCANCODE_S:
                     case SDL_SCANCODE_DOWN:
-                        gameState.keyboard['s'] = false;
+                        game_state.keyboard['s'] = false;
                         break;
                     case SDL_SCANCODE_D:
                     case SDL_SCANCODE_RIGHT:
-                        gameState.keyboard['d'] = false;
+                        game_state.keyboard['d'] = false;
                         break;
                     default:
                         break;
@@ -71,12 +71,12 @@ void HandleSDLEvents(vector<Screen>& screens) {
             case SDL_MOUSEBUTTONDOWN:
                 switch (event.button.button) {
                     case SDL_BUTTON_LEFT:
-                        switch (gameState.CurrentScreen()) {
-                            case PAUSE_SCREEN: pause_screen.Button.Click(gameState.mouse); break;
-                            case TITLE_SCREEN: title_screen.Button.Click(gameState.mouse); break;
-                            case OPTIONS_SCREEN: options_screen.Button.Click(gameState.mouse); break;
-                            case CREDITS_SCREEN: credits_screen.Button.Click(gameState.mouse); break;
-                            case GAME_SCREEN: game_screen.Button.Click(gameState.mouse); break;
+                        switch (game_state.CurrentScreen()) {
+                            case PAUSE_SCREEN: pause_screen.Button.Click(game_state.mouse); break;
+                            case TITLE_SCREEN: title_screen.Button.Click(game_state.mouse); break;
+                            case OPTIONS_SCREEN: options_screen.Button.Click(game_state.mouse); break;
+                            case CREDITS_SCREEN: credits_screen.Button.Click(game_state.mouse); break;
+                            case GAME_SCREEN: game_screen.Button.Click(game_state.mouse); break;
                             default: break;
                         }
                         break;
@@ -85,12 +85,12 @@ void HandleSDLEvents(vector<Screen>& screens) {
                 }
                 break;
             case SDL_MOUSEMOTION:
-                switch (gameState.CurrentScreen()) {
-                    case PAUSE_SCREEN: pause_screen.Button.Hover(gameState.mouse); break;
-                    case TITLE_SCREEN: title_screen.Button.Hover(gameState.mouse); break;
-                    case OPTIONS_SCREEN: options_screen.Button.Hover(gameState.mouse); break;
-                    case CREDITS_SCREEN: credits_screen.Button.Hover(gameState.mouse); break;
-                    case GAME_SCREEN: game_screen.Button.Hover(gameState.mouse); break;
+                switch (game_state.CurrentScreen()) {
+                    case PAUSE_SCREEN: pause_screen.Button.Hover(game_state.mouse); break;
+                    case TITLE_SCREEN: title_screen.Button.Hover(game_state.mouse); break;
+                    case OPTIONS_SCREEN: options_screen.Button.Hover(game_state.mouse); break;
+                    case CREDITS_SCREEN: credits_screen.Button.Hover(game_state.mouse); break;
+                    case GAME_SCREEN: game_screen.Button.Hover(game_state.mouse); break;
                     default: break;
                 }
                 break;

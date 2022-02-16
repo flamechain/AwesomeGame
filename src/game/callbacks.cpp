@@ -9,25 +9,25 @@ void LightenButton(Screen& screen, string uid) {
 }
 
 void GotoTitle(Screen& screen, string uid) {
-    gameState.SetScreen(TITLE_SCREEN);
+    game_state.SetScreen(TITLE_SCREEN);
 }
 
 void GotoGame(Screen& screen, string uid) {
-    gameState.SetScreen(GAME_SCREEN);
+    game_state.SetScreen(GAME_SCREEN);
 }
 
 void GotoOptions(Screen& screen, string uid) {
-    gameState.SetScreen(OPTIONS_SCREEN);
+    game_state.SetScreen(OPTIONS_SCREEN);
 }
 
 void GotoCredits(Screen& screen, string uid) {
-    gameState.SetScreen(CREDITS_SCREEN);
+    game_state.SetScreen(CREDITS_SCREEN);
 }
 
 void GotoPause(Screen& screen, string uid) {
-    gameState.SetScreen(PAUSE_SCREEN);
+    game_state.SetScreen(PAUSE_SCREEN);
 }
 
 void StopGame(Screen& screen, string uid) {
-    gameState.StopGame();
+    game_state.StopGame();
 }

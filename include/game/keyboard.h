@@ -5,7 +5,7 @@
 #include "game.h"
 #include "init.h"
 
-extern GameState gameState;
+extern GameState game_state;
 
 /// Handles all SDL events
 /// @param screens  all screens

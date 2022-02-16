@@ -16,7 +16,7 @@
 #define CREDITS_SCREEN 5
 #define SAVE_SCREEN 6
 
-extern GameState gameState;
+extern GameState game_state;
 extern vector<SDL_Rect> tileSheet;
 
 /// Updates loading screen bar

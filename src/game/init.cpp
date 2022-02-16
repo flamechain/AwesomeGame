@@ -35,13 +35,13 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
     loading_screen.Rect.AddRect("border", loading_screen.CENTERED, 800, 400, 75, BLACK);
     loading_screen.Rect["border"].SetBorder(15, WHITE);
     loading_screen.Rect.AddRect("bar", loading_screen.Rect["border"].GetRect().x + 20, 800+20, 0, 75-40, WHITE);
-    DebugOutput(debug, "init 1\n");
+    DebugOutput(debug, "  Created loading screen\n");
 
     const int barLen = 360;
     const int barSegment = barLen/6;
 
     tileSheet = InitTiles();
-    gameState.SetScreen(TITLE_SCREEN);
+    game_state.SetScreen(TITLE_SCREEN);
 
     //Color not final
     screens.push_back(Screen(renderer, PAUSE_SCREEN, width / 4, height / 4, width / 2, height / 2, RGB(100, 100, 255)));
@@ -52,7 +52,7 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
     pause_screen.Button.SetDefaultTextAttrib(60, BLACK, "lato/bold");
     pause_screen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     pause_screen.Button.AddButton("quit", pause_screen.CENTERED, pause_screen.GetRect().h - 120, 400, 100, GREY, "QUIT", GotoTitle);
-    DebugOutput(debug, "init 2\n");
+    DebugOutput(debug, "  Created pause screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 
@@ -67,7 +67,7 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
     title_screen.Button.AddButton("options", title_screen.CENTERED, 550, 400, 100, GREY, "OPTIONS", GotoOptions);
     title_screen.Button.AddButton("credits", title_screen.CENTERED, 700, 400, 100, GREY, "CREDITS", GotoCredits);
     title_screen.Button.AddButton("quit", title_screen.CENTERED, 850, 400, 100, RGB(255, 100, 100), "QUIT", StopGame);
-    DebugOutput(debug, "init 3\n");
+    DebugOutput(debug, "  Created title screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 
@@ -82,7 +82,7 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
     game_screen.Creature.AddCreature("player", TileType::Brick, game_screen.CENTERED, game_screen.CENTERED, width / 16, height / 9);
     game_screen.Creature["player"].Speed.x = 10;
     game_screen.Creature["player"].Speed.y = 10;
-    DebugOutput(debug, "init 4\n");
+    DebugOutput(debug, "  Created game screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 
@@ -91,23 +91,24 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
     options_screen.Button.SetDefaultTextAttrib(24, BLACK, "lato/regular");
     options_screen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     options_screen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
+    DebugOutput(debug, "  Created options screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
-    DebugOutput(debug, "init 5\n");
 
     screens.push_back(Screen(renderer, CREDITS_SCREEN, 0, 0, width, height, WHITE));
     credits_screen.Button.SetDefaultBorder(4, BLACK);
     credits_screen.Button.SetDefaultTextAttrib(24, BLACK, "lato/regular");
     credits_screen.Button.SetDefaultHoverRoutine(DarkenButton, LightenButton);
     credits_screen.Button.AddButton("back", 200, 200, 150, 50, DARK_GREY, "BACK", GotoTitle);
+    DebugOutput(debug, "  Created credits screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 
-    DebugOutput(debug, "init 6\n");
     screens.push_back(Screen(renderer, SAVE_SCREEN, 0, 0, width, height, DARK_GREY));
     save_screen.Text.AddLine("title", save_screen.CENTERED, 200, "lato/bold", 80, BLACK, "Select Save");
     save_screen.Button.SetDefaultBorder(10, BLACK);
     save_screen.Button.AddButton("save1", save_screen.CENTERED, 500, 800, 100, LIGHT_GREY, "New Save", nullptr);
+    DebugOutput(debug, "  Created saves screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 
@@ -115,15 +116,14 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
 }
 
 void DestroyGame(vector<Screen>& screens, SDL_Renderer *renderer, SDL_Window *window, bool debug) {
-    DebugOutput(debug, "deconstruct 1\n");
     for (long long unsigned int i=0; i<screens.size(); i++) screens[i].Destroy();
     
-    DebugOutput(debug, "deconstruct 2\n");
+    DebugOutput(debug, "  Destroyed screens\n");
     SDL_DestroyRenderer(renderer);
-    DebugOutput(debug, "deconstruct 3\n");
+    DebugOutput(debug, "  Destroyed renderer\n");
     SDL_DestroyWindow(window);
 
-    DebugOutput(debug, "deconstruct 4\n");
+    DebugOutput(debug, "  Destroyed window\n");
     TTF_Quit();
     IMG_Quit();
 }
