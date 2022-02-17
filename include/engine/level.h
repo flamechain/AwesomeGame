@@ -16,7 +16,12 @@ private:
 
 public:
 
-    Level() {}
+    Level() {
+        this->x_ = 0;
+        this->y_ = 0;
+        this->start_.x = 0;
+        this->start_.y = 0;
+    }
 
     Level(const int x, const int y) {
         this->level_ = new Tile[x*y]();
@@ -92,6 +97,16 @@ public:
         this->level_[x+this->x_*y].Resize(px, py);
     }
 
+    /// Free and create new tile array
+    /// @param x    x length
+    /// @param y    y length
+    void Resize(int x, int y) {
+        if (this->x_ != 0 || this->y_ != 0)
+            delete[] this->level_;
+
+        this->level_ = new Tile[x*y]();
+    }
+
     /// Destroys all tiles
     void Destroy() {
         for (int i=0; i<this->x_; i++) {
@@ -105,6 +120,7 @@ public:
 
     /// Renders all tiles
     void Render(int x = 0, int y = 0) {
+        printf(" %i %i : %i %i\n", start_.x, start_.y, x_, y_);
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
                 this->level_[i+this->x_*j].Render(x-(this->start_.x*TILE_SIZE), y-(this->start_.y*TILE_SIZE));
@@ -177,8 +193,7 @@ public:
 
     /// Adds a level
     /// @param uid      map key
-    /// @param level    level (predefined)
-    void AddLevel(string uid, Level level);
+    void AddLevel(string uid);
 
     /// Sets opacity
     /// @param percent  0 -> 1

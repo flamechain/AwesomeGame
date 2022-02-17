@@ -1,6 +1,6 @@
 #include "generation.h"
 
-Level GenerateRandomLevel(int x, int y) {
+void GenerateRandomLevel(int x, int y, Level& level) {
     // Level level = Level(x + 2, y + 3); // level grid size
     // level.StartPos(1, 1);
     // int posx = 0;
@@ -36,15 +36,17 @@ Level GenerateRandomLevel(int x, int y) {
     //     posy += TILE_SIZE;
     //     posx = 0;
     // }
+    printf("r\n");
 
-    Level level = Level(5, 5);
+    level.Resize(5, 5);
+    printf("r\n");
 
     for (int i=0; i<5; i++) {
         for (int j=0; j<5; j++) {
             level.SetTile(i, j, TileType::Floor);
             level.SetTilePosition(i, j, i*TILE_SIZE, j*TILE_SIZE);
+            // level.ResizeTile(i, j, TILE_SIZE, TILE_SIZE);
         }
     }
-
-    return level;
+    printf("r\n");
 }

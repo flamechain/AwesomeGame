@@ -5,8 +5,9 @@
 #include "level.h"
 
 /// Generates a random level
-/// @param x    x grid size
-/// @param y    y grid size
-Level GenerateRandomLevel(int x, int y);
+/// @param x        x grid size
+/// @param y        y grid size
+/// @param level    level to store tiles into
+void GenerateRandomLevel(int x, int y, Level& level);
 
 #endif

@@ -76,9 +76,14 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
 
     screens.push_back(Screen(renderer, GAME_SCREEN, 0, 0, width, height, bgcolor, true));
     game_screen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
-    game_screen.Level.AddLevel("default", GenerateRandomLevel(16, 9)); // AddLevel() will bind renderer later
+    printf("1\n");
+    game_screen.Level.AddLevel("default");
+    printf("1\n");
     game_screen.Level.SetCurrent("default");
+    printf("1\n");
+    GenerateRandomLevel(16, 9, game_screen.Level["default"]);
 
+    printf("1\n");
     game_screen.Creature.AddCreature("player", TileType::Brick, game_screen.CENTERED, game_screen.CENTERED, width / 16, height / 9);
     game_screen.Creature["player"].Speed.x = 10;
     game_screen.Creature["player"].Speed.y = 10;

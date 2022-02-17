@@ -42,7 +42,9 @@ protected:
 
 public:
 
-    Tile() {}
+    Tile() {
+        this->init(TileType::None);
+    }
 
     Tile(TileType type) {
         this->init(type);
@@ -189,8 +191,9 @@ public:
     /// @param x    x relative
     /// @param y    y relative
     void Render(int x = 0, int y = 0) {
+        printf("    %i %i -> ", x, hitbox_.x);
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
-
+        printf("%i %i %i %i\n", dst.x, dst.y, dst.w, dst.h);
         if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
             SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, NULL, this->flip_);
         } else {
@@ -224,6 +227,7 @@ public:
     void SetPosition(int x, int y) {
         this->hitbox_.x = x;
         this->hitbox_.y = y;
+        printf("s %i:%i\n", hitbox_.x, hitbox_.y);
     }
 
     /// Rotates texture from an axis
