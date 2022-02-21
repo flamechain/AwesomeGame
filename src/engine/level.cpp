@@ -20,7 +20,6 @@ void LevelGroup::operator=(const LevelGroup& copy) {
 
 void LevelGroup::Render(int x, int y, bool f) {
     if (this->current_ != "") {
-        printf("%i %i\n", x, y);
         if (f) this->levels_[this->current_].Render(-x, -y);
         else this->levels_[this->current_].Render();
     }
@@ -72,4 +71,8 @@ void LevelGroup::TempShade(float percent) {
 
 string LevelGroup::GetCurrent() const {
     return this->current_;
+}
+
+void LevelGroup::Finalize(string uid) {
+    this->levels_[uid].SetRenderer(this->renderer_);
 }

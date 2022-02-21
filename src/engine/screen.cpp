@@ -83,3 +83,7 @@ Color Screen::GetColor() const {
 void Screen::SetTransparency(float percent) {
     this->transparent_ = 255 - (255 * percent);    
 }
+
+SDL_Renderer * Screen::GetRenderer() const {
+    return this->renderer_;
+}

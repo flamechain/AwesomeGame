@@ -138,6 +138,10 @@ public:
     /// @param percent  0 -> 1
     void SetTransparency(float percent);
 
+    /// Gets renderer
+    /// @return pointer to renderer, not copy
+    SDL_Renderer * GetRenderer() const;
+
 };
 
 #endif

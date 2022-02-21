@@ -34,6 +34,8 @@ public:
 
         this->x_ = x;
         this->y_ = y;
+        this->start_.x = 0;
+        this->start_.y = 0;
     }
 
     /// Sets global renderer
@@ -42,33 +44,53 @@ public:
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
                 this->level_[i+this->x_*j].SetRenderer(renderer);
-                this->level_[i+this->x_*j].LoadTile(this->level_[i+this->x_*j].GetType()); // reload with valid renderer
-                this->level_[i+this->x_*j].Resize(TILE_SIZE, TILE_SIZE);
             }
         }
     }
 
     /// Upper left tile coords origin to render without moving
     void StartPos(int x, int y) {
-        this->start_ = {x, y};
+        this->start_.x = x;
+        this->start_.y = y;
     }
 
     /// Gets tiles at position
     /// @param x    x-coord
     /// @param y    y-coord
     /// @return tile reference
-    Tile *GetTile(int x, int y) {
-        Tile * pt = &this->level_[x+this->x_*y];
-        return pt;
+    Tile& GetTile(int x, int y) {
+        return this->level_[x+this->x_*y];
+    }
+
+    /// Gets tile by 1-d index
+    /// @param i    index
+    /// @return tile reference
+    Tile& GetTileStrait(int i) {
+        return this->level_[i];
+    }
+
+    /// Gets max number of tiles
+    /// @return tiles (even if uninitialized)
+    int Count() const {
+        return this->x_ * this->y_;
     }
 
     /// Sets tiles at coord pair
     /// @param x    x-coord
     /// @param y    y-coord
-    /// @param tile object to copy
+    /// @param tile type of tile
     void SetTile(int x, int y, TileType type) {
         if (x >= this->x_ || y >= this->y_) return;
         this->level_[x+this->x_*y].LoadTile(type);
+    }
+
+    /// Resets tile (doesn't load texture)
+    /// @param x    x-coord
+    /// @param y    y-coord
+    /// @param tile type of tile
+    void InitTile(int x, int y, TileType type) {
+        if (x >= this->x_ || y >= this->y_) return;
+        this->level_[x+this->x_*y] = Tile(type);
     }
 
     /// Sets tile position
@@ -120,7 +142,6 @@ public:
 
     /// Renders all tiles
     void Render(int x = 0, int y = 0) {
-        printf(" %i %i : %i %i\n", start_.x, start_.y, x_, y_);
         for (int i=0; i<this->x_; i++) {
             for (int j=0; j<this->y_; j++) {
                 this->level_[i+this->x_*j].Render(x-(this->start_.x*TILE_SIZE), y-(this->start_.y*TILE_SIZE));
@@ -198,6 +219,10 @@ public:
     /// Sets opacity
     /// @param percent  0 -> 1
     void TempShade(float percent);
+
+    /// Finishes loading a level
+    /// @param uid  level to finish
+    void Finalize(string uid);
 
 };
 
