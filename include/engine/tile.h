@@ -19,6 +19,12 @@ enum class TileType {
     BrickCrack1,
     BrickCrack2,
     BrickCrack3,
+    PlayerLeftStill,
+    PlayerLeft1,
+    PlayerLeft2,
+    PlayerRightStill,
+    PlayerRight1,
+    PlayerRight2,
 };
 
 /// Defines sizes of all tiles
@@ -31,8 +37,9 @@ class Tile {
 protected:
 
     SDL_Texture *texture_;
-    vector<SDL_Rect> src_;
+    SDL_Rect src_;
     SDL_Rect hitbox_;
+    SDL_Rect crop_;
     SDL_Renderer *renderer_;
     SDL_Point rotate_axis_;
     int rotation_;
@@ -57,22 +64,35 @@ public:
     }
 
     void init(TileType type) {
+        printf("tile_init - ");
         this->texture_ = NULL;
 
         this->hitbox_.x = 0;
         this->hitbox_.y = 0;
         this->hitbox_.w = 0;
         this->hitbox_.h = 0;
+        printf("hit_init - ");
         this->opacity_ = 255;
         this->rotation_ = 0;
         this->type_ = type;
         this->flip_ = SDL_FLIP_NONE;
         this->rotate_axis_ = {-1, -1};
+        printf("crop_init - ");
+        this->crop_.x = 0;
+        this->crop_.y = 0;
+        this->crop_.w = 0;
+        this->crop_.h = 0;
+        printf("src_init - ");
+        this->src_.x = 0;
+        this->src_.y = 0;
+        this->src_.w = 0;
+        this->src_.h = 0;
     }
 
     void operator=(const Tile& tile) {
         this->renderer_ = tile.renderer_;
         this->src_ = tile.src_;
+        this->crop_ = tile.crop_;
         this->texture_ = tile.texture_;
         this->type_ = tile.type_;
         this->hitbox_ = tile.hitbox_;
@@ -85,11 +105,18 @@ public:
             this->hitbox_.w = 0;
             this->hitbox_.h = 0;
         } else {
-            this->hitbox_.w = this->src_[0].w;
-            this->hitbox_.h = this->src_[0].h;
+            this->hitbox_.w = this->src_.w;
+            this->hitbox_.h = this->src_.h;
         }
 
         this->rotate_axis_ = {-1, -1};
+    }
+
+    void Crop(int x, int y, int w, int h) {
+        this->crop_.x = x;
+        this->crop_.y = y;
+        this->crop_.w = w;
+        this->crop_.h = h;
     }
 
     /// Gets color of tile (assuming its a solid color)
@@ -162,6 +189,8 @@ public:
     void LoadTile(TileType type) {
         int oldw = this->hitbox_.w;
         int oldh = this->hitbox_.h;
+        int oldcw = this->crop_.w;
+        int oldch = this->crop_.h;
         if (this->renderer_ == nullptr) return;
         this->type_ = type;
         if (type == TileType::None) return;
@@ -179,12 +208,13 @@ public:
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         SDL_FreeSurface(surface);
 
-        this->src_.clear(); // allowing layered sprites for the future
-        this->src_.push_back(tileSheet[static_cast<long long unsigned int>(type)]);
+        this->src_ = tileSheet[static_cast<long long unsigned int>(type)];
 
         if (oldw != 0 && oldh != 0) {
             this->hitbox_.w = oldw;
             this->hitbox_.h = oldh;
+            this->crop_.w = oldcw;
+            this->crop_.h = oldch;
         }
     }
 
@@ -193,10 +223,19 @@ public:
     /// @param y    y relative
     void Render(int x = 0, int y = 0) {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
+        SDL_Rect src;
+        src.x = this->src_.x + this->crop_.x;
+        src.y = this->src_.y + this->crop_.y;
+        src.w = this->src_.w;
+        src.h = this->src_.h;
+
+        if (this->crop_.w != 0) src.w = this->crop_.w;
+        if (this->crop_.h != 0) src.h = this->crop_.h; 
+
         if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
-            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, NULL, this->flip_);
+            SDL_RenderCopyEx(this->renderer_, this->texture_, &src, &dst, this->rotation_, NULL, this->flip_);
         } else {
-            SDL_RenderCopyEx(this->renderer_, this->texture_, &this->src_[0], &dst, this->rotation_, &this->rotate_axis_, this->flip_);
+            SDL_RenderCopyEx(this->renderer_, this->texture_, &src, &dst, this->rotation_, &this->rotate_axis_, this->flip_);
         }
     }
 

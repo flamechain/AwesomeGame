@@ -76,15 +76,28 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
 
     screens.push_back(Screen(renderer, GAME_SCREEN, 0, 0, width, height, bgcolor, true));
     game_screen.CreateBounds(200, 200, 200, 200); // relative (this is 200 px out in all directions);
+    DebugOutput(true, "    Settings level attributes\n");
     game_screen.Level.AddLevel("default");
     game_screen.Level.SetCurrent("default");
+    DebugOutput(true, "    Generating level\n");
     game_screen.Level["default"] = GenerateRandomLevel(16, 9);
+    DebugOutput(true, "    Cleaning up level\n");
     game_screen.Level.Finalize("default");
+    DebugOutput(true, "      Done\n");
 
-    game_screen.Creature.AddCreature("player", TileType::Brick, game_screen.CENTERED, game_screen.CENTERED, width / 16, height / 9);
+    DebugOutput(debug, "    Creating player\n");
+    game_screen.Creature.AddCreature("player", TileType::PlayerLeftStill, game_screen.CENTERED, game_screen.CENTERED, width / 16, height / 9);
     game_screen.Creature["player"].Speed.x = 10;
     game_screen.Creature["player"].Speed.y = 10;
-    DebugOutput(debug, "  Created game screen\n");
+    DebugOutput(debug, "    Cropping player\n");
+    game_screen.Creature["player"].Crop(0, 0, 20, 26);
+    DebugOutput(debug, "      Done\n");
+    double mult = 32 / 26;
+    game_screen.Creature["player"].Resize(20*mult, 26*mult);
+    DebugOutput(debug, "    Resized player\n");
+    game_screen.Creature["player"].SetHitbox(0, 0, 32, 10);
+    DebugOutput(debug, "    Created player hitbox\n");
+    DebugOutput(debug, "    Created game screen\n");
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 

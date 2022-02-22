@@ -4,7 +4,7 @@
 
 void Creature::operator=(const Creature& copy) {
     this->LoadTile(copy.type_);
-    this->SetSize(0, 0, this->hitbox_.w, this->hitbox_.h);
+    this->SetHitbox(0, 0, this->hitbox_.w, this->hitbox_.h);
     this->SetPosition(copy.hitbox_.x, copy.hitbox_.y);
 }
 
@@ -12,7 +12,7 @@ SDL_Rect Creature::GetHitbox() const {
     return this->real_hitbox_;
 }
 
-void Creature::SetSize(int x, int y, int w, int h) {
+void Creature::SetHitbox(int x, int y, int w, int h) {
     this->real_offset_.x = x;
     this->real_offset_.y = y;
     this->real_hitbox_.x = this->hitbox_.x + x;
@@ -40,6 +40,7 @@ void Creature::SetBounds(int x, int y, int w, int h) {
     this->bounds_.y = y;
     this->bounds_.w = w;
     this->bounds_.h = h;
+    this->use_bounds_ = true;
 }
 
 bool Creature::IsCenteredX(Screen& screen) {
@@ -52,8 +53,8 @@ bool Creature::IsCenteredY(Screen& screen) {
     return false;
 }
 
-void Creature::Update(SDL_Point offset, bool checkBounds) {
-    if (!checkBounds) {
+void Creature::Update(SDL_Point offset, Level& level) {
+    if (!this->use_bounds_) {
         this->hitbox_.x += offset.x;
         this->hitbox_.y += offset.y;
         this->real_hitbox_.x += offset.x;
@@ -113,9 +114,13 @@ void CreatureGroup::TempShade(float percent) {
 void CreatureGroup::AddCreature(string uid, TileType type, int x, int y, int w, int h) {
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
+    DebugOutput(true, "    Initializing\n");
     this->creatures_.insert(std::make_pair(uid, Creature(type, x, y)));
+    DebugOutput(true, "    Setting renderer & reloading texture\n");
     this->creatures_[uid].SetRenderer(this->renderer_);
-    this->creatures_[uid].LoadTile(type); // reload with valid renderer
+    DebugOutput(true, "    Setting position\n");
+    this->creatures_[uid].SetPosition(x, y);
+    DebugOutput(true, "    Resizing\n");
     this->creatures_[uid].Resize(w, h);
 }
 

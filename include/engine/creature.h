@@ -4,22 +4,31 @@
 #include "utils.h"
 #include "game.h"
 #include "tile.h"
+#include "level.h"
 
 class Creature : public Tile {
 private:
 
     SDL_Rect real_hitbox_;
     SDL_Rect bounds_;
+    bool use_bounds_;
     SDL_Point real_offset_;
 
 public:
 
     SDL_Point Speed;
 
-    Creature() : Tile() {}
+    Creature() : Tile() {
+        this->real_offset_.x = 0;
+        this->real_offset_.y = 0;
+        this->use_bounds_ = false;
+    }
 
     Creature(TileType type, int x, int y) : Tile(type) {
-        this->SetSize(0, 0, this->hitbox_.w, this->hitbox_.h);
+        this->SetHitbox(0, 0, this->hitbox_.w, this->hitbox_.h);
+        this->real_offset_.x = 0;
+        this->use_bounds_ = false;
+        this->real_offset_.y = 0;
         this->SetPosition(x, y);
     }
 
@@ -34,7 +43,7 @@ public:
     /// @param y    y offset from render y
     /// @param w    width
     /// @param h    height
-    void SetSize(int x, int y, int w, int h);
+    void SetHitbox(int x, int y, int w, int h);
 
     /// Resizes tiles texture
     /// @param w    width
@@ -63,9 +72,10 @@ public:
     /// @return result
     bool IsCenteredY(Screen& screen);
 
-    /// Moves creature based on speed
-    /// @param checkBounds  if to check bounds
-    void Update(SDL_Point offset, bool checkBounds = true);
+    /// Moves creature based on speed and checks bounds & collisions
+    /// @param offset   vector for x-y movement
+    /// @param level    level to check collisions & bounds with
+    void Update(SDL_Point offset, Level& level);
 
 };
 

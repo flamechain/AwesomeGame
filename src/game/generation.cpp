@@ -1,50 +1,39 @@
 #include "generation.h"
 
-Level GenerateRandomLevel(int x, int y) {
-    // Level level = Level(x + 2, y + 3); // level grid size
-    // level.StartPos(1, 1);
-    // int posx = 0;
-    // int posy = 0;
+Level GenerateRandomLevel(long long unsigned int x, long long unsigned int y) {
 
-    // for (int i=0; i<y+2; i++) {
-    //     for (int j=0; j<x+2; j++) {
-    //         if (i == 0) {
-    //             level.SetTile(j, i, TileType::Roof1);
-    //             level.RotateTile(j, i, 90);
-    //         } else if (i == y + 1) {
-    //             level.SetTile(j, i, TileType::Roof1);
-    //             level.RotateTile(j, i, -90);
-    //         } else if (j == 0) {
-    //             level.SetTile(j, i, TileType::Roof1);
-    //             level.RotateTile(j, i, 0);
-    //         } else if (j == x + 1) {
-    //             level.SetTile(j, i, TileType::Roof1);
-    //             level.RotateTile(j, i, 180);
-    //         } else {
-    //             level.SetTile(j, i, TileType::Floor);
-    //         }
-    //         if ((i == 0 || i == y + 1) && (j == 0 || j == x + 1)) {
-    //             level.SetTile(j, i, TileType::Roof);
-    //         }
-    //         if ((i == 1) && !(j == 0 || j == x + 1)) {
-    //             level.SetTile(j, i, TileType::Brick);
-    //         }
-    //         level.SetTilePosition(j, i, posx, posy);
-    //         level.ResizeTile(j, i, TILE_SIZE, TILE_SIZE);
-    //         posx += TILE_SIZE;
-    //     }
-    //     posy += TILE_SIZE;
-    //     posx = 0;
-    // }
+    vector<vector<LevelTile>> test_level = {
+        {{TileType::Roof, 0}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof1, 90}, {TileType::Roof, 0}},
+        {{TileType::Roof1, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Brick, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof1, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Floor, 0}, {TileType::Roof1, 180}},
+        {{TileType::Roof, 0}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof1, 270}, {TileType::Roof, 0}}
+    };
 
-    Level level = Level(5, 5);
+    Level level = Level(x + 2, y + 3); // level grid size + walls
+    level.StartPos(1, 2);
+    DebugOutput(true, "      Making tiles\n");
 
-    for (int i=0; i<5; i++) {
-        for (int j=0; j<5; j++) {
-            level.InitTile(i, j, TileType::Floor);
+    for (long long unsigned int i=0; i<x+2; i++) {
+        for (long long unsigned int j=0; j<y+3; j++) {
+            DebugOutput(true, "        %i:%i: ", i, j);
+            level.InitTile(i, j, test_level[j][i].type);
+            DebugOutput(true, "init - ");
             level.SetTilePosition(i, j, i*TILE_SIZE, j*TILE_SIZE);
+            DebugOutput(true, "set - ");
             level.ResizeTile(i, j, TILE_SIZE, TILE_SIZE);
+            DebugOutput(true, "resize - ");
+            level.RotateTile(i, j, test_level[j][i].rot);   
+            DebugOutput(true, "rotate\n");
         }
     }
+
     return level;
 }

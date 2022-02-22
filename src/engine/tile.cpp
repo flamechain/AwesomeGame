@@ -1,7 +1,7 @@
 #include "tile.h"
 
 vector<SDL_Rect> InitTiles() {
-    const int kTileCount = 14;
+    const int kTileCount = 20;
     vector<SDL_Rect> tiles;
 
     for (int i=0; i<kTileCount; i++) {
@@ -54,6 +54,25 @@ vector<SDL_Rect> InitTiles() {
 
     tiles[static_cast<int>(TileType::BrickCrack3)].x = 384;
     tiles[static_cast<int>(TileType::BrickCrack3)].y = 0;
+
+    // TODO rearrange tilesheet so these values aren't all over the place
+    tiles[static_cast<int>(TileType::PlayerLeftStill)].x = 128;
+    tiles[static_cast<int>(TileType::PlayerLeftStill)].y = 32;
+
+    tiles[static_cast<int>(TileType::PlayerLeft1)].x = 0;
+    tiles[static_cast<int>(TileType::PlayerLeft1)].y = 32;
+
+    tiles[static_cast<int>(TileType::PlayerLeft2)].x = 64;
+    tiles[static_cast<int>(TileType::PlayerLeft2)].y = 32;
+
+    tiles[static_cast<int>(TileType::PlayerRightStill)].x = 160;
+    tiles[static_cast<int>(TileType::PlayerRightStill)].y = 32;
+
+    tiles[static_cast<int>(TileType::PlayerRight1)].x = 32;
+    tiles[static_cast<int>(TileType::PlayerRight1)].y = 32;
+
+    tiles[static_cast<int>(TileType::PlayerRight2)].x = 96;
+    tiles[static_cast<int>(TileType::PlayerRight2)].y = 32;
 
     return tiles;
 }
