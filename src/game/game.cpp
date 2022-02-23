@@ -35,6 +35,8 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
 
     Screen background = Screen(renderer, 0, 0, 0, width, height, game_screen.GetColor());
 
+    double fadeInLevel = 1;
+
     while (game_state.IsRunning()) {
 
         HandleSDLEvents(screens);
@@ -51,7 +53,7 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
                 HandleTitleScreen(title_screen);
             } break;
             case PAUSE_SCREEN: {
-                HandlePauseScreen(game_screen, pause_screen, background);
+                HandlePauseScreen(game_screen, pause_screen, background, fadeInLevel);
             } break;
             case CREDITS_SCREEN: {
                 HandleCreditsScreen(credits_screen);

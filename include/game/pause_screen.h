@@ -11,12 +11,13 @@ extern GameState game_state;
 /// @param screen   screen
 /// @param current  current percentage of color
 /// @param decrease percent to get closer to original color
-float FadeIn(Screen& screen, float current, float decrease);
+double FadeIn(Screen& screen, double current, double decrease);
 
 /// Handles pause screen events and rendering
 /// @param game         game screen
 /// @param pause        pause screen
 /// @param background   background screen
-void HandlePauseScreen(Screen& game, Screen& pause, Screen& background);
+/// @param fade_level   fade rate
+void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double fade_level);
 
 #endif
