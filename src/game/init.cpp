@@ -90,7 +90,7 @@ SDL_Renderer *InitializeGame(string title, int width, int height, bool debug, ve
     game_screen.Creature["player"].Speed.x = 10;
     game_screen.Creature["player"].Speed.y = 10;
     DebugOutput(debug, "    Cropping player\n");
-    game_screen.Creature["player"].Crop(0, 0, 20, 26);
+    game_screen.Creature["player"].Crop(0, 32-26, 20, 26);
     DebugOutput(debug, "      Done\n");
     double mult = 32 / 26;
     game_screen.Creature["player"].Resize(20*mult, 26*mult);

@@ -4,7 +4,7 @@
 
 void Creature::operator=(const Creature& copy) {
     this->LoadTile(copy.type_);
-    this->SetHitbox(0, 0, this->hitbox_.w, this->hitbox_.h);
+    this->SetHitbox(0, 0, copy.hitbox_.w, copy.hitbox_.h);
     this->SetPosition(copy.hitbox_.x, copy.hitbox_.y);
 }
 
