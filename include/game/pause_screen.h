@@ -18,6 +18,6 @@ double FadeIn(Screen& screen, double current, double decrease);
 /// @param pause        pause screen
 /// @param background   background screen
 /// @param fade_level   fade rate
-void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double fade_level);
+void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double& fade_level);
 
 #endif

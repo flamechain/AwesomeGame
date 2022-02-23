@@ -16,7 +16,7 @@ double FadeIn(Screen& screen, double current, double decrease) {
     return new_current;
 }
 
-void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double fade_level) {
+void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double& fade_level) {
     float decrease = 0.08;
 
     if (fade_level > 0) {

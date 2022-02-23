@@ -35,7 +35,8 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
 
     Screen background = Screen(renderer, 0, 0, 0, width, height, game_screen.GetColor());
 
-    double fadeInLevel = 1;
+    // TODO This should be moved to the pause_screen class eventually
+    double fade_level = 1;
 
     while (game_state.IsRunning()) {
 
@@ -48,12 +49,13 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
         switch (game_state.CurrentScreen()) {
             case GAME_SCREEN: {
                 HandleGameScreen(game_screen);
+                fade_level = 1;
             } break;
             case TITLE_SCREEN: {
                 HandleTitleScreen(title_screen);
             } break;
             case PAUSE_SCREEN: {
-                HandlePauseScreen(game_screen, pause_screen, background, fadeInLevel);
+                HandlePauseScreen(game_screen, pause_screen, background, fade_level);
             } break;
             case CREDITS_SCREEN: {
                 HandleCreditsScreen(credits_screen);
