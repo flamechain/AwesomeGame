@@ -64,25 +64,21 @@ public:
     }
 
     void init(TileType type) {
-        printf("tile_init - ");
         this->texture_ = NULL;
 
         this->hitbox_.x = 0;
         this->hitbox_.y = 0;
         this->hitbox_.w = 0;
         this->hitbox_.h = 0;
-        printf("hit_init - ");
         this->opacity_ = 255;
         this->rotation_ = 0;
         this->type_ = type;
         this->flip_ = SDL_FLIP_NONE;
         this->rotate_axis_ = {-1, -1};
-        printf("crop_init - ");
         this->crop_.x = 0;
         this->crop_.y = 0;
         this->crop_.w = 0;
         this->crop_.h = 0;
-        printf("src_init - ");
         this->src_.x = 0;
         this->src_.y = 0;
         this->src_.w = 0;
@@ -96,7 +92,6 @@ public:
         this->texture_ = tile.texture_;
         this->type_ = tile.type_;
         this->hitbox_ = tile.hitbox_;
-        this->LoadTile(this->type_);
         this->opacity_ = tile.opacity_;
         this->rotation_ = tile.rotation_;
         this->flip_ = tile.flip_;

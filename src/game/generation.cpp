@@ -23,15 +23,10 @@ Level GenerateRandomLevel(long long unsigned int x, long long unsigned int y) {
 
     for (long long unsigned int i=0; i<x+2; i++) {
         for (long long unsigned int j=0; j<y+3; j++) {
-            DebugOutput(true, "        %i:%i: ", i, j);
             level.InitTile(i, j, test_level[j][i].type);
-            DebugOutput(true, "init - ");
             level.SetTilePosition(i, j, i*TILE_SIZE, j*TILE_SIZE);
-            DebugOutput(true, "set - ");
             level.ResizeTile(i, j, TILE_SIZE, TILE_SIZE);
-            DebugOutput(true, "resize - ");
             level.RotateTile(i, j, test_level[j][i].rot);   
-            DebugOutput(true, "rotate\n");
         }
     }
 
