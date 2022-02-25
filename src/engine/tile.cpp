@@ -1,5 +1,7 @@
 #include "tile.h"
 
+GAME_START
+
 vector<SDL_Rect> InitTiles() {
     const int kTileCount = 20;
     vector<SDL_Rect> tiles;
@@ -76,3 +78,5 @@ vector<SDL_Rect> InitTiles() {
 
     return tiles;
 }
+
+GAME_END

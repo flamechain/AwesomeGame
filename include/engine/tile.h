@@ -4,6 +4,8 @@
 #include "utils.h"
 #include "game.h"
 
+GAME_START
+
 enum class TileType {
     None,
     Floor,
@@ -31,7 +33,7 @@ enum class TileType {
 /// @return tile sizes
 vector<SDL_Rect> InitTiles();
 
-extern vector<SDL_Rect> tileSheet;
+// extern vector<SDL_Rect> tile_sheet;
 
 class Tile {
 protected:
@@ -130,8 +132,8 @@ public:
         }
 
         int bpp = surface->format->BytesPerPixel;
-        Uint8 *p = static_cast<Uint8*>(surface->pixels) + (tileSheet[static_cast<long long unsigned int>(this->type_)].y+y) * \
-            surface->pitch + (tileSheet[static_cast<long long unsigned int>(this->type_)].x+x) * bpp;
+        Uint8 *p = static_cast<Uint8*>(surface->pixels) + (tile_sheet[static_cast<long long unsigned int>(this->type_)].y+y) * \
+            surface->pitch + (tile_sheet[static_cast<long long unsigned int>(this->type_)].x+x) * bpp;
         Uint32 pixel;
 
         switch (bpp) {
@@ -203,7 +205,7 @@ public:
         this->texture_ = SDL_CreateTextureFromSurface(this->renderer_, surface);
         SDL_FreeSurface(surface);
 
-        this->src_ = tileSheet[static_cast<long long unsigned int>(type)];
+        this->src_ = tile_sheet[static_cast<long long unsigned int>(type)];
 
         if (oldw != 0 && oldh != 0) {
             this->hitbox_.w = oldw;
@@ -298,5 +300,7 @@ public:
     }
 
 };
+
+GAME_END
 
 #endif

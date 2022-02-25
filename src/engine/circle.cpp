@@ -2,6 +2,8 @@
 
 #include "screen.h"
 
+GAME_START
+
 void DrawElipse(SDL_Renderer *renderer, int cx, int cy, int rx, int ry) {
     double pi = 3.14159265358979323846264338327950288419716939937510;
     float pih = pi / 2.0;
@@ -98,3 +100,5 @@ void CircleGroup::AddCircle(string uid, int x, int y, int r, Color color) {
     this->circles_.insert(std::make_pair(uid, Circle(this->renderer_, x, y, r, color)));
     this->order_.push_back(uid);
 }
+
+GAME_END

@@ -4,7 +4,9 @@
 #include "utils.h"
 #include "tile.h"
 
-extern vector<SDL_Rect> tileSheet;
+GAME_START
+
+// extern vector<SDL_Rect> tile_sheet;
 
 class Level {
 private:
@@ -225,5 +227,7 @@ public:
     void Finalize(string uid);
 
 };
+
+GAME_END
 
 #endif

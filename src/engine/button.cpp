@@ -2,6 +2,8 @@
 
 #include "screen.h"
 
+GAME_START
+
 void ButtonGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
@@ -130,3 +132,5 @@ Button ButtonGroup::at(string uid) const {
     if (this->buttons_.find(uid) != this->buttons_.end()) return this->buttons_.at(uid);
     return this->buttons_.at(0);
 }
+
+GAME_END

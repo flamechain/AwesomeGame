@@ -1,5 +1,7 @@
 #include "screen.h"
 
+GAME_START
+
 void Screen::CreateBounds(int x, int y, int w, int h) {
     this->bounds_ = {this->rect_.x - x, this->rect_.y - y, this->rect_.x + w, this->rect_.y + h};
 }
@@ -87,3 +89,5 @@ void Screen::SetTransparency(float percent) {
 SDL_Renderer * Screen::GetRenderer() const {
     return this->renderer_;
 }
+
+GAME_END

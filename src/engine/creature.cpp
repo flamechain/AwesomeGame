@@ -2,6 +2,8 @@
 
 #include "screen.h"
 
+GAME_START
+
 void Creature::operator=(const Creature& copy) {
     this->LoadTile(copy.type_);
     this->SetHitbox(0, 0, copy.hitbox_.w, copy.hitbox_.h);
@@ -114,13 +116,13 @@ void CreatureGroup::TempShade(float percent) {
 void CreatureGroup::AddCreature(string uid, TileType type, int x, int y, int w, int h) {
     if (x == Screen::CENTERED) x = (this->screen_->GetRect().w / 2) - (w / 2);
     if (y == Screen::CENTERED) y = (this->screen_->GetRect().h / 2) - (h / 2);
-    DebugOutput(true, "    Initializing\n");
+    DebugOutput("    Initializing\n");
     this->creatures_.insert(std::make_pair(uid, Creature(type, x, y)));
-    DebugOutput(true, "    Setting renderer & reloading texture\n");
+    DebugOutput("    Setting renderer & reloading texture\n");
     this->creatures_[uid].SetRenderer(this->renderer_);
-    DebugOutput(true, "    Setting position\n");
+    DebugOutput("    Setting position\n");
     this->creatures_[uid].SetPosition(x, y);
-    DebugOutput(true, "    Resizing\n");
+    DebugOutput("    Resizing\n");
     this->creatures_[uid].Resize(w, h);
 }
 
@@ -159,3 +161,5 @@ Creature CreatureGroup::at(string uid) const {
     if (this->creatures_.find(uid) != this->creatures_.end()) return this->creatures_.at(uid);
     return this->creatures_.at(0);
 }
+
+GAME_END

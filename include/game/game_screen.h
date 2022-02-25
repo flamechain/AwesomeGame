@@ -5,10 +5,14 @@
 #include "game.h"
 #include "screen.h"
 
-extern GameState game_state;
+GAME_START
+
+// extern GameState game_state;
 
 /// Handles game screen events and rendering
 /// @param screen   screen
 void HandleGameScreen(Screen& screen);
+
+GAME_END
 
 #endif

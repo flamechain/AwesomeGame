@@ -17,6 +17,8 @@
 #define GAME_ERROR_TTF_FAIL 6
 #define GAME_ERROR_MIX_FAIL 7
 
+GAME_START
+
 /// Initializes libraries
 /// @return error
 int InitializeEngine();
@@ -34,5 +36,7 @@ SDL_Window *CreateWindow(int width, int height, string title, int flags);
 /// @param flags    render flags
 /// @return renderer object
 SDL_Renderer *CreateRenderer(SDL_Window *window, int flags);
+
+GAME_END
 
 #endif

@@ -2,6 +2,8 @@
 
 #include "screen.h"
 
+GAME_START
+
 void Paragraph::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
@@ -66,3 +68,5 @@ void Paragraph::Render(int x, int y, bool f) {
         else this->lines_[it->first].Render(x, y);
     }
 }
+
+GAME_END

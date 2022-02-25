@@ -4,14 +4,15 @@
 #include "utils.h"
 #include "engine.h"
 
+GAME_START
+
 /// Runs game
-/// @param Width    window width
-/// @param Height   window height
-/// @param Title    display title
-/// @param Debug    run in debug mode
-/// @param Flags    display flags
+/// @param width    window width
+/// @param height   window height
+/// @param title    display title
+/// @param flags    display flags
 /// @return error
-int RunGame(int Width, int Height, string Title, bool Debug, int Flags = GAME_WINDOW_WINDOWED);
+int RunGame(int width, int height, string title, int flags = GAME_WINDOW_WINDOWED);
 
 class GameState {
 private:
@@ -51,5 +52,9 @@ public:
     }
 
 };
+
+GameState game_state;
+
+GAME_END
 
 #endif

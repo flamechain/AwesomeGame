@@ -4,6 +4,8 @@
 #include "utils.h"
 #include "level.h"
 
+GAME_START
+
 struct LevelTile {
     TileType type;
     int rot;
@@ -14,5 +16,7 @@ struct LevelTile {
 /// @param y        y grid size
 /// @return "finished" level (need to call Finalize on it after)
 Level GenerateRandomLevel(long long unsigned int x, long long unsigned int y);
+
+GAME_END
 
 #endif

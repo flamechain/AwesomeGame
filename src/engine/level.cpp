@@ -2,6 +2,8 @@
 
 #include "screen.h"
 
+GAME_START
+
 void LevelGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
@@ -76,3 +78,5 @@ string LevelGroup::GetCurrent() const {
 void LevelGroup::Finalize(string uid) {
     this->levels_[uid].SetRenderer(this->renderer_);
 }
+
+GAME_END

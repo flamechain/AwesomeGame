@@ -2,6 +2,8 @@
 
 #include "screen.h"
 
+GAME_START
+
 void RectGroup::SetAttrib(Screen *screen, SDL_Renderer *renderer) {
     this->renderer_ = renderer;
     this->screen_ = screen;
@@ -60,3 +62,5 @@ Rect& RectGroup::operator[](string uid) {
     if (this->rects_.find(uid) != this->rects_.end()) return this->rects_[uid];
     return this->rects_[0];
 }
+
+GAME_END

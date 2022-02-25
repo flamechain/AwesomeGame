@@ -1,6 +1,8 @@
 #include "utils.h"
 
-string StringFormat(const std::string& format, ...) {
+GAME_START
+
+string StringFormat(const string& format, ...) {
     va_list argptr;
     va_start(argptr, format);
     const int size_s = std::vsnprintf(nullptr, 0, format.c_str(), argptr) + 1; // +1 for terminator
@@ -20,8 +22,8 @@ void ConsoleOutput(const char *format, ...) {
     va_end(argptr);
 }
 
-void DebugOutput(bool debug, const char *format, ...) {
-    if (!debug) return;
+void DebugOutput(const char *format, ...) {
+    if (!debug_mode) return;
 
     va_list argptr;
     va_start(argptr, format);
@@ -29,3 +31,5 @@ void DebugOutput(bool debug, const char *format, ...) {
     vfprintf(stderr, format_s.c_str(), argptr);
     va_end(argptr);
 }
+
+GAME_END

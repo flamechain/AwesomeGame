@@ -3,6 +3,8 @@
 
 #include "utils.h"
 
+GAME_START
+
 class Text {
 private:
 
@@ -131,5 +133,7 @@ public:
     void Render(int x = 0, int y = 0, bool f = false);
 
 };
+
+GAME_END
 
 #endif

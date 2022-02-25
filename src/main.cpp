@@ -1,10 +1,12 @@
 #include "game.h"
 
-GameState game_state;
-vector<SDL_Rect> tileSheet;
+// GAME_START
 
 int main(int argc, char **argv) {
-    RunGame(WINDOW_WIDTH, WINDOW_HEIGHT, "Dissension", true, GAME_RENDERER_ACCELERATED);
+    game::debug_mode = true;
+    game::RunGame(WINDOW_WIDTH, WINDOW_HEIGHT, "Dissension", GAME_RENDERER_ACCELERATED);
 
     return 0;
 }
+
+// GAME_END

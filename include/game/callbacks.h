@@ -6,6 +6,8 @@
 #include "game.h"
 #include "init.h"
 
+GAME_START
+
 /// Darkens a button bg color
 /// @param screen   parent
 /// @param uid      button uid
@@ -45,5 +47,7 @@ void GotoPause(Screen& screen, string uid);
 /// @param screen   parent
 /// @param uid      button uid
 void StopGame(Screen& screen, string uid);
+
+GAME_END
 
 #endif

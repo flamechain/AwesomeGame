@@ -1,5 +1,7 @@
 #include "mixer.h"
 
+GAME_START
+
 Mix_Chunk *LoadWAV(string filename) {
     Mix_Chunk *audioFile;
 
@@ -23,3 +25,5 @@ Mix_Chunk *LoadWAV(string filename) {
 
     return audioFile;
 }
+
+GAME_END

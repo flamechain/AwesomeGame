@@ -5,7 +5,9 @@
 #include "game.h"
 #include "screen.h"
 
-extern GameState game_state;
+GAME_START
+
+// xextern GameState game_state;
 
 /// Fades in from white on bg color
 /// @param screen   screen
@@ -19,5 +21,7 @@ double FadeIn(Screen& screen, double current, double decrease);
 /// @param background   background screen
 /// @param fade_level   fade rate
 void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double& fade_level);
+
+GAME_END
 
 #endif

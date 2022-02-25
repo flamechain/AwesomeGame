@@ -1,5 +1,7 @@
 #include "engine.h"
 
+GAME_START
+
 int InitializeEngine() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         errno = GAME_ERROR_SDL_FAIL;
@@ -63,3 +65,5 @@ SDL_Window *CreateWindow(int width, int height, string title, int flags) {
     errno = 0;
     return window;
 }
+
+GAME_END

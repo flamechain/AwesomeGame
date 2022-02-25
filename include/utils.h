@@ -25,12 +25,20 @@
 
 #include "config.h"
 
+#define GAME_START namespace game {
+#define GAME_END }
+
+GAME_START
+
 using std::printf;
 using std::vector;
 using std::string;
 using std::map;
 using namespace std::this_thread;
 using namespace std::chrono;
+
+vector<SDL_Rect> tile_sheet;
+bool debug_mode;
 
 class Screen;
 typedef void (*callback)(void);
@@ -41,14 +49,13 @@ typedef void (*screen_callback)(Screen&, string uid);
 void ConsoleOutput(const char *format, ...);
 
 /// Sends text output to stdout if debug
-/// @param debug    if program is running in debug mode
 /// @param format   format string
-void DebugOutput(bool debug, const char *format, ...);
+void DebugOutput(const char *format, ...);
 
 /// Formats a string; safer than sprintf
 /// @param format   format string
 /// @return formatted string
-string StringFormat(const std::string& format, ...);
+string StringFormat(const string& format, ...);
 
 // SDL_Color without alpha channel
 struct Color {
@@ -78,5 +85,7 @@ inline bool FileExists(const string& name) {
 #define RED RGB(255, 0, 0)
 #define GREEN RGB(0, 255, 0)
 #define BLUE RGB(0, 0, 255)
+
+GAME_END
 
 #endif

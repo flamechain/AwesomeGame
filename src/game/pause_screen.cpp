@@ -1,5 +1,7 @@
 #include "pause_screen.h"
 
+GAME_START
+
 double FadeIn(Screen& screen, double current, double decrease) {
     double new_current = current - decrease;
     // also do with children?
@@ -29,3 +31,5 @@ void HandlePauseScreen(Screen& game, Screen& pause, Screen& background, double& 
     game.Render();
     pause.Render();
 }
+
+GAME_END

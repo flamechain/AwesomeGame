@@ -10,18 +10,21 @@
 #include "credits_screen.h"
 #include "title_screen.h"
 #include "pause_screen.h"
+#include "screen.h"
 
-extern GameState game_state;
+GAME_START
 
-int RunGame(int width, int height, string title, bool debug, int flags) {
+// extern GameState game_state;
+
+int RunGame(int width, int height, string title, int flags) {
     game_state = GameState();
     vector<Screen> screens;
 
     InitializeEngine();
 
     SDL_Window *window;
-    DebugOutput(debug, "Initializing game\n");
-    SDL_Renderer *renderer = InitializeGame(title, width, height, debug, screens, flags, window);
+    DebugOutput("Initializing game\n");
+    SDL_Renderer *renderer = InitializeGame(title, width, height, screens, flags, window);
 
     Screen& game_screen = screens[GAME_SCREEN];
     Screen& pause_screen = screens[PAUSE_SCREEN];
@@ -70,14 +73,16 @@ int RunGame(int width, int height, string title, bool debug, int flags) {
         SDL_Delay(1000 / FRAMERATE);
     }
 
-    DebugOutput(debug, "Game destruction\n");
-    DestroyGame(screens, renderer, window, debug);
+    DebugOutput("Game destruction\n");
+    DestroyGame(screens, renderer, window);
     background.Destroy();
 
     SDL_Quit();
 
-    DebugOutput(debug, "Audio destruction\n");
+    DebugOutput("Audio destruction\n");
     DestroyAudio(chunks, samples);
 
     return errno;
 }
+
+GAME_END

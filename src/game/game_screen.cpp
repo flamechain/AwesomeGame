@@ -1,5 +1,7 @@
 #include "game_screen.h"
 
+GAME_START
+
 void HandleGameScreen(Screen& screen) {
     screen.TempShade(1);
 
@@ -19,9 +21,17 @@ void HandleGameScreen(Screen& screen) {
 
     // screen.Level[screen.Level.GetCurrent()].SetTile(gridpos.x, gridpos.y, TileType::FloorCrack1);
 
-    if (screen.Creature["player"].IsCenteredX(screen)) screen.Move(offset.x, 0);
-    if (screen.Creature["player"].IsCenteredY(screen)) screen.Move(0, offset.y);
+    if (screen.Creature["player"].IsCenteredX(screen)) {
+        DebugOutput(" Moved on x-axis\n");
+        screen.Move(offset.x, 0);
+    }
+    if (screen.Creature["player"].IsCenteredY(screen)) {
+        DebugOutput(" Moved on y-axis\n");
+        screen.Move(0, offset.y);
+    }
     screen.Creature["player"].Update(offset, screen.Level[screen.Level.GetCurrent()]);
 
     screen.Render();
 }
+
+GAME_END

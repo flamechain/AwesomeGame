@@ -6,6 +6,8 @@
 #include "tile.h"
 #include "level.h"
 
+GAME_START
+
 class Creature : public Tile {
 private:
 
@@ -130,5 +132,7 @@ public:
     void Destroy();
 
 };
+
+GAME_END
 
 #endif

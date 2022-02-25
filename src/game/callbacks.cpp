@@ -1,5 +1,7 @@
 #include "callbacks.h"
 
+GAME_START
+
 void DarkenButton(Screen& screen, string uid) {
     screen.Button[uid].TempShade(0.7);
 }
@@ -31,3 +33,5 @@ void GotoPause(Screen& screen, string uid) {
 void StopGame(Screen& screen, string uid) {
     game_state.StopGame();
 }
+
+GAME_END

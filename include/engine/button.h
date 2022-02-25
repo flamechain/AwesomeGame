@@ -5,6 +5,7 @@
 #include "text.h"
 #include "rect.h"
 
+GAME_START
 class Button : public Rect {
 private:
 
@@ -190,5 +191,7 @@ public:
     void Click(SDL_Point mouse);
 
 };
+
+GAME_END
 
 #endif

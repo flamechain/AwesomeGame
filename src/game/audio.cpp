@@ -1,5 +1,7 @@
 #include "audio.h"
 
+GAME_START
+
 void InitializeAudio(long long unsigned int& count, vector<Mix_Chunk>& data) {
     count = 1;
     data.resize(1);
@@ -9,12 +11,14 @@ void InitializeAudio(long long unsigned int& count, vector<Mix_Chunk>& data) {
 
 void DestroyAudio(vector<Mix_Chunk>& data, long long unsigned int count) {
     Mix_HaltChannel(-1); // stops all channels
-    DebugOutput(true, "  Halted all channels\n");
+    DebugOutput("  Halted all channels\n");
 
     // for (long long unsigned int i=0; i < data.size(); i++) Mix_FreeChunk(&data[i]);
-    // DebugOutput(true, "  Freed all chunks\n");
+    // DebugOutput("  Freed all chunks\n");
 
     Mix_CloseAudio();
     Mix_Quit();
-    DebugOutput(true, "  Closed all audio\n");
+    DebugOutput("  Closed all audio\n");
 }
+
+GAME_END

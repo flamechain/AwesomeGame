@@ -3,6 +3,8 @@
 
 #include "utils.h"
 
+GAME_START
+
 /// Draws an elipse
 /// @param renderer global renderer
 /// @param cx       center x
@@ -127,5 +129,7 @@ public:
     /// @param color    circle color
     void AddCircle(string uid, int x, int y, int r, Color color);
 };
+
+GAME_END
 
 #endif

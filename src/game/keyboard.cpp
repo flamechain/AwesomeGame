@@ -1,5 +1,7 @@
 #include "keyboard.h"
 
+GAME_START
+
 void HandleSDLEvents(vector<Screen>& screens) {
     SDL_Event event;
     SDL_GetMouseState(&game_state.mouse.x, &game_state.mouse.y);
@@ -99,3 +101,5 @@ void HandleSDLEvents(vector<Screen>& screens) {
         }
     }
 }
+
+GAME_END

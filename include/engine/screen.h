@@ -9,6 +9,8 @@
 #include "creature.h"
 #include "circle.h"
 
+GAME_START
+
 class Screen {
 private:
 
@@ -143,5 +145,7 @@ public:
     SDL_Renderer * GetRenderer() const;
 
 };
+
+GAME_END
 
 #endif

@@ -5,10 +5,14 @@
 #include "game.h"
 #include "init.h"
 
-extern GameState game_state;
+GAME_START
+
+// extern GameState game_state;
 
 /// Handles all SDL events
 /// @param screens  all screens
 void HandleSDLEvents(vector<Screen>& screens);
+
+GAME_END
 
 #endif

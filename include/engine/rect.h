@@ -3,6 +3,8 @@
 
 #include "utils.h"
 
+GAME_START
+
 class Rect {
 protected:
 
@@ -158,5 +160,7 @@ public:
     void AddRect(string uid, int x, int y, int w, int h, Color color);
 
 };
+
+GAME_END
 
 #endif
