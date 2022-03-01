@@ -53,7 +53,7 @@ public:
 
 };
 
-GameState game_state;
+extern GameState game_state;
 
 GAME_END
 

@@ -1,6 +1,8 @@
 #include "game.h"
 
-// GAME_START
+std::vector<SDL_Rect> game::tile_sheet;
+bool game::debug_mode;
+game::GameState game::game_state;
 
 int main(int argc, char **argv) {
     game::debug_mode = true;
@@ -8,5 +10,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-// GAME_END

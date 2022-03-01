@@ -37,8 +37,9 @@ using std::map;
 using namespace std::this_thread;
 using namespace std::chrono;
 
-vector<SDL_Rect> tile_sheet;
-bool debug_mode;
+extern vector<SDL_Rect> tile_sheet;
+extern bool debug_mode;
+// extern GameState game_state;
 
 class Screen;
 typedef void (*callback)(void);
