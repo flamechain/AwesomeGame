@@ -92,7 +92,7 @@ SDL_Renderer *InitializeGame(string title, int width, int height, vector<Screen>
     game_screen.Creature["player"].Speed.x = 10;
     game_screen.Creature["player"].Speed.y = 10;
     DebugOutput("    Cropping player\n");
-    game_screen.Creature["player"].Crop(0, 32-26, 20, 26);
+    game_screen.Creature["player"].Crop(0, 0, -12, -8);
     DebugOutput("      Done\n");
     game_screen.Creature["player"].Resize(40, 52);
     DebugOutput("    Resized player\n");
@@ -128,12 +128,13 @@ SDL_Renderer *InitializeGame(string title, int width, int height, vector<Screen>
 
     UpdateLoadingBar(loading_screen, renderer, barSegment);
 
+    DebugOutput("  Sending back renderer\n");
     return renderer;
 }
 
 void DestroyGame(vector<Screen>& screens, SDL_Renderer *renderer, SDL_Window *window) {
     for (long long unsigned int i=0; i<screens.size(); i++) screens[i].Destroy();
-    
+
     DebugOutput("  Destroyed screens\n");
     SDL_DestroyRenderer(renderer);
     DebugOutput("  Destroyed renderer\n");

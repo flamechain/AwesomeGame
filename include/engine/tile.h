@@ -41,7 +41,6 @@ protected:
     SDL_Texture *texture_;
     SDL_Rect src_;
     SDL_Rect hitbox_;
-    SDL_Rect crop_;
     SDL_Renderer *renderer_;
     SDL_Point rotate_axis_;
     int rotation_;
@@ -77,10 +76,6 @@ public:
         this->type_ = type;
         this->flip_ = SDL_FLIP_NONE;
         this->rotate_axis_ = {-1, -1};
-        this->crop_.x = 0;
-        this->crop_.y = 0;
-        this->crop_.w = 0;
-        this->crop_.h = 0;
         this->src_.x = 0;
         this->src_.y = 0;
         this->src_.w = 0;
@@ -90,7 +85,6 @@ public:
     void operator=(const Tile& tile) {
         this->renderer_ = tile.renderer_;
         this->src_ = tile.src_;
-        this->crop_ = tile.crop_;
         this->texture_ = tile.texture_;
         this->type_ = tile.type_;
         this->hitbox_ = tile.hitbox_;
@@ -109,11 +103,11 @@ public:
         this->rotate_axis_ = {-1, -1};
     }
 
-    void Crop(int x, int y, int w, int h) {
-        this->crop_.x = x;
-        this->crop_.y = y;
-        this->crop_.w = w;
-        this->crop_.h = h;
+    void Crop(int x1, int y1, int x2, int y2) {
+        this->hitbox_.x += x1;
+        this->hitbox_.y += y1;
+        this->hitbox_.w += x2;
+        this->hitbox_.h += y2;
     }
 
     /// Gets color of tile (assuming its a solid color)
@@ -186,8 +180,6 @@ public:
     void LoadTile(TileType type) {
         int oldw = this->hitbox_.w;
         int oldh = this->hitbox_.h;
-        int oldcw = this->crop_.w;
-        int oldch = this->crop_.h;
         if (this->renderer_ == nullptr) return;
         this->type_ = type;
         if (type == TileType::None) return;
@@ -210,8 +202,6 @@ public:
         if (oldw != 0 && oldh != 0) {
             this->hitbox_.w = oldw;
             this->hitbox_.h = oldh;
-            this->crop_.w = oldcw;
-            this->crop_.h = oldch;
         }
     }
 
@@ -221,13 +211,10 @@ public:
     void Render(int x = 0, int y = 0) {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
         SDL_Rect src;
-        src.x = this->src_.x + this->crop_.x;
-        src.y = this->src_.y + this->crop_.y;
+        src.x = this->src_.x;
+        src.y = this->src_.y;
         src.w = this->src_.w;
         src.h = this->src_.h;
-
-        if (this->crop_.w != 0) src.w = this->crop_.w;
-        if (this->crop_.h != 0) src.h = this->crop_.h; 
 
         if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
             SDL_RenderCopyEx(this->renderer_, this->texture_, &src, &dst, this->rotation_, NULL, this->flip_);

@@ -26,6 +26,7 @@ int RunGame(int width, int height, string title, int flags) {
     DebugOutput("Initializing game\n");
     SDL_Renderer *renderer = InitializeGame(title, width, height, screens, flags, window);
 
+    DebugOutput("Gettings screens\n");
     Screen& game_screen = screens[GAME_SCREEN];
     Screen& pause_screen = screens[PAUSE_SCREEN];
     Screen& options_screen = screens[OPTIONS_SCREEN];
