@@ -6,5 +6,7 @@
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 #define TILE_SIZE 120
+#define SPRITE_SIZE 32
+#define FRAMERATE 60
 
 #endif

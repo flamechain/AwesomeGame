@@ -92,11 +92,12 @@ SDL_Renderer *InitializeGame(string title, int width, int height, vector<Screen>
     game_screen.Creature["player"].Speed.x = 10;
     game_screen.Creature["player"].Speed.y = 10;
     DebugOutput("    Cropping player\n");
-    game_screen.Creature["player"].Crop(0, 0, -12, -8);
+    game_screen.Creature["player"].Crop(Creature::null, 8, SPRITE_SIZE-12, Creature::null);
     DebugOutput("      Done\n");
-    game_screen.Creature["player"].Resize(40, 52);
+    double ratio = game_screen.Creature["player"].GetHitboxCropped().w / game_screen.Creature["player"].GetHitboxCropped().h;
+    game_screen.Creature["player"].Resize(64, 64);
     DebugOutput("    Resized player\n");
-    game_screen.Creature["player"].SetHitbox(0, 0, 32, 10);
+    game_screen.Creature["player"].SetHitbox(0, 0, SPRITE_SIZE, 10);
     DebugOutput("    Created player hitbox\n");
     DebugOutput("    Created game screen\n");
 

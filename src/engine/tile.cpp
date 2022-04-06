@@ -8,8 +8,8 @@ vector<SDL_Rect> InitTiles() {
 
     for (int i=0; i<kTileCount; i++) {
         SDL_Rect temp;
-        temp.w = 32;
-        temp.h = 32;
+        temp.w = SPRITE_SIZE;
+        temp.h = SPRITE_SIZE;
         tiles.push_back(temp);
     }
 
@@ -21,60 +21,60 @@ vector<SDL_Rect> InitTiles() {
     tiles[static_cast<int>(TileType::Floor)].x = 0;
     tiles[static_cast<int>(TileType::Floor)].y = 0;
 
-    tiles[static_cast<int>(TileType::FloorCrack1)].x = 32;
+    tiles[static_cast<int>(TileType::FloorCrack1)].x = SPRITE_SIZE;
     tiles[static_cast<int>(TileType::FloorCrack1)].y = 0;
 
-    tiles[static_cast<int>(TileType::FloorCrack2)].x = 64;
+    tiles[static_cast<int>(TileType::FloorCrack2)].x = SPRITE_SIZE*2;
     tiles[static_cast<int>(TileType::FloorCrack2)].y = 0;
 
-    tiles[static_cast<int>(TileType::FloorCrack3)].x = 96;
+    tiles[static_cast<int>(TileType::FloorCrack3)].x = SPRITE_SIZE*3;
     tiles[static_cast<int>(TileType::FloorCrack3)].y = 0;
 
-    tiles[static_cast<int>(TileType::Roof)].x = 128;
+    tiles[static_cast<int>(TileType::Roof)].x = SPRITE_SIZE*4;
     tiles[static_cast<int>(TileType::Roof)].y = 0;
 
-    tiles[static_cast<int>(TileType::Roof1)].x = 160;
+    tiles[static_cast<int>(TileType::Roof1)].x = SPRITE_SIZE*5;
     tiles[static_cast<int>(TileType::Roof1)].y = 0;
 
-    tiles[static_cast<int>(TileType::Roof2)].x = 192;
+    tiles[static_cast<int>(TileType::Roof2)].x = SPRITE_SIZE*6;
     tiles[static_cast<int>(TileType::Roof2)].y = 0;
 
-    tiles[static_cast<int>(TileType::Roof3)].x = 224;
+    tiles[static_cast<int>(TileType::Roof3)].x = SPRITE_SIZE*7;
     tiles[static_cast<int>(TileType::Roof3)].y = 0;
 
-    tiles[static_cast<int>(TileType::Roof4)].x = 256;
+    tiles[static_cast<int>(TileType::Roof4)].x = SPRITE_SIZE*8;
     tiles[static_cast<int>(TileType::Roof4)].y = 0;
 
-    tiles[static_cast<int>(TileType::Brick)].x = 288;
+    tiles[static_cast<int>(TileType::Brick)].x = SPRITE_SIZE*9;
     tiles[static_cast<int>(TileType::Brick)].y = 0;
 
-    tiles[static_cast<int>(TileType::BrickCrack1)].x = 320;
+    tiles[static_cast<int>(TileType::BrickCrack1)].x = SPRITE_SIZE*10;
     tiles[static_cast<int>(TileType::BrickCrack1)].y = 0;
 
-    tiles[static_cast<int>(TileType::BrickCrack2)].x = 352;
+    tiles[static_cast<int>(TileType::BrickCrack2)].x = SPRITE_SIZE*11;
     tiles[static_cast<int>(TileType::BrickCrack2)].y = 0;
 
-    tiles[static_cast<int>(TileType::BrickCrack3)].x = 384;
+    tiles[static_cast<int>(TileType::BrickCrack3)].x = SPRITE_SIZE*12;
     tiles[static_cast<int>(TileType::BrickCrack3)].y = 0;
 
     // TODO rearrange tilesheet so these values aren't all over the place
-    tiles[static_cast<int>(TileType::PlayerLeftStill)].x = 128;
-    tiles[static_cast<int>(TileType::PlayerLeftStill)].y = 32;
+    tiles[static_cast<int>(TileType::PlayerLeftStill)].x = SPRITE_SIZE*4;
+    tiles[static_cast<int>(TileType::PlayerLeftStill)].y = SPRITE_SIZE;
 
     tiles[static_cast<int>(TileType::PlayerLeft1)].x = 0;
-    tiles[static_cast<int>(TileType::PlayerLeft1)].y = 32;
+    tiles[static_cast<int>(TileType::PlayerLeft1)].y = SPRITE_SIZE;
 
-    tiles[static_cast<int>(TileType::PlayerLeft2)].x = 64;
-    tiles[static_cast<int>(TileType::PlayerLeft2)].y = 32;
+    tiles[static_cast<int>(TileType::PlayerLeft2)].x = SPRITE_SIZE*2;
+    tiles[static_cast<int>(TileType::PlayerLeft2)].y = SPRITE_SIZE;
 
-    tiles[static_cast<int>(TileType::PlayerRightStill)].x = 160;
-    tiles[static_cast<int>(TileType::PlayerRightStill)].y = 32;
+    tiles[static_cast<int>(TileType::PlayerRightStill)].x = SPRITE_SIZE*5;
+    tiles[static_cast<int>(TileType::PlayerRightStill)].y = SPRITE_SIZE;
 
-    tiles[static_cast<int>(TileType::PlayerRight1)].x = 32;
-    tiles[static_cast<int>(TileType::PlayerRight1)].y = 32;
+    tiles[static_cast<int>(TileType::PlayerRight1)].x = SPRITE_SIZE;
+    tiles[static_cast<int>(TileType::PlayerRight1)].y = SPRITE_SIZE;
 
-    tiles[static_cast<int>(TileType::PlayerRight2)].x = 96;
-    tiles[static_cast<int>(TileType::PlayerRight2)].y = 32;
+    tiles[static_cast<int>(TileType::PlayerRight2)].x = SPRITE_SIZE*3;
+    tiles[static_cast<int>(TileType::PlayerRight2)].y = SPRITE_SIZE;
 
     return tiles;
 }

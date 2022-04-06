@@ -18,6 +18,7 @@ private:
 
 public:
 
+    static const int null = 0;
     SDL_Point Speed;
 
     Creature() : Tile() {

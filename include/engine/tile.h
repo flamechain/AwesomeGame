@@ -41,6 +41,7 @@ protected:
     SDL_Texture *texture_;
     SDL_Rect src_;
     SDL_Rect hitbox_;
+    SDL_Rect cropbox_;
     SDL_Renderer *renderer_;
     SDL_Point rotate_axis_;
     int rotation_;
@@ -80,6 +81,10 @@ public:
         this->src_.y = 0;
         this->src_.w = 0;
         this->src_.h = 0;
+        this->cropbox_.x = 0;
+        this->cropbox_.y = 0;
+        this->cropbox_.w = 0;
+        this->cropbox_.h = 0;
     }
 
     void operator=(const Tile& tile) {
@@ -104,11 +109,17 @@ public:
     }
 
     void Crop(int x1, int y1, int x2, int y2) {
-        this->hitbox_.x += x1;
-        this->hitbox_.y += y1;
-        this->hitbox_.w += x2;
-        this->hitbox_.h += y2;
+        if (x1 != 0)
+            this->cropbox_.x = x1;
+        if (y1 != 0)
+            this->cropbox_.y = y1;
+        if (x2 != 0)
+            this->cropbox_.w = x2;
+        if (y2 != 0)
+            this->cropbox_.h = y2;
     }
+
+    void GetHitboxCropped() {}
 
     /// Gets color of tile (assuming its a solid color)
     /// @param x    x-coord
@@ -211,10 +222,10 @@ public:
     void Render(int x = 0, int y = 0) {
         SDL_Rect dst = {this->hitbox_.x + x, this->hitbox_.y + y, this->hitbox_.w, this->hitbox_.h};
         SDL_Rect src;
-        src.x = this->src_.x;
-        src.y = this->src_.y;
-        src.w = this->src_.w;
-        src.h = this->src_.h;
+        src.x = this->src_.x + this->cropbox_.x;
+        src.y = this->src_.y + this->cropbox_.y;
+        src.w = this->src_.w + this->cropbox_.w;
+        src.h = this->src_.h + this->cropbox_.h;
 
         if (this->rotate_axis_.x == -1 && this->rotate_axis_.y == -1) {
             SDL_RenderCopyEx(this->renderer_, this->texture_, &src, &dst, this->rotation_, NULL, this->flip_);

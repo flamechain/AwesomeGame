@@ -3,8 +3,6 @@
 
 #include "utils.h"
 
-#define FRAMERATE 60
-
 #define GAME_WINDOW_WINDOWED 0
 #define GAME_WINDOW_FULLSCREEN 1
 #define GAME_RENDERER_ACCELERATED 2
